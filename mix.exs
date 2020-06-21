@@ -13,8 +13,6 @@ defmodule GGity.MixProject do
       name: "GGity",
       source_url: "https://github.com/srowley/ggity",
       docs: [
-        # main: "README.md",
-        # logo: "path/to/logo.png",
         extras: ["README.md", "ROADMAP.md"]
       ]
     ]
@@ -32,7 +30,8 @@ defmodule GGity.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:sweet_xml, "~> 0.6.6", only: :test},
-      {:nimble_csv, "~> 0.7", only: [:dev, :test]}
+      {:nimble_csv, "~> 0.7", only: [:dev, :test]},
+      {:nimble_strftime, "~> 0.1"}
     ]
   end
 

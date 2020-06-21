@@ -11,6 +11,7 @@ defmodule GGity.Scale.X.Date do
             breaks: 5,
             x_label: :na,
             y_label: :na,
+            date_labels: "",
             tick_values: nil,
             inverse: nil,
             values: nil,

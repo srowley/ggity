@@ -93,6 +93,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     ]
     |> Plot.new(%{x: :date_time, y: :price})
     |> Plot.geom_line(size: 1)
+    |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
     |> Plot.labs(title: "DateTime data")
     |> Plot.plot()
   end

@@ -322,10 +322,17 @@ defmodule GGityPlotTest do
 
       plot =
         Plot.new(data, mapping)
-        |> Plot.geom_point()
+        |> Plot.geom_line()
         |> Plot.scale_x_date()
 
       assert %Scale.X.Date{} = plot.geom.x_scale()
+      assert plot.geom.x_scale.tick_values == [~D[2001-01-01], ~D[2001-01-02], ~D[2001-01-03]]
+
+      assert plot
+             |> Plot.scale_x_date(date_labels: "%b %d %Y")
+             |> Plot.plot()
+             |> IO.chardata_to_string()
+             |> String.contains?("Jan 01 2001")
     end
   end
 
@@ -342,6 +349,21 @@ defmodule GGityPlotTest do
         |> Plot.scale_x_datetime()
 
       assert %Scale.X.DateTime{} = plot.geom.x_scale()
+
+      assert plot.geom.x_scale.tick_values() ==
+               [
+                 ~N[2001-01-01 00:00:00],
+                 ~N[2001-01-01 12:00:00],
+                 ~N[2001-01-02 00:00:00],
+                 ~N[2001-01-02 12:00:00],
+                 ~N[2001-01-03 00:00:00]
+               ]
+
+      assert plot
+             |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
+             |> Plot.plot()
+             |> IO.chardata_to_string()
+             |> String.contains?("Jan 01 H1")
     end
   end
 

@@ -227,7 +227,7 @@ defmodule GGity.Geom.Line do
         stroke_width: "0.5",
         transform: "translate(#{interval}, 0)"
       ),
-      Draw.text(to_string(value),
+      Draw.text(format_tick(geom_line.x_scale, value),
         fill: "gray",
         y: "9",
         dy: "0.71em",
@@ -268,4 +268,17 @@ defmodule GGity.Geom.Line do
     ]
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
+
+  defp format_tick(%Scale.X.Date{date_labels: ""}, value), do: to_string(value)
+  defp format_tick(%Scale.X.DateTime{date_labels: ""}, value), do: to_string(value)
+
+  defp format_tick(%Scale.X.Date{} = scale, value) do
+    NimbleStrftime.format(value, scale.date_labels)
+  end
+
+  defp format_tick(%Scale.X.DateTime{} = scale, value) do
+    NimbleStrftime.format(value, scale.date_labels)
+  end
+
+  defp format_tick(_scale, value), do: to_string(value)
 end

@@ -488,6 +488,16 @@ defmodule GGity.Plot do
   This scale defines a mapping function that assigns a coordinate on the x axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
+
+  The format of the axis tick labels can be specified with the `:date_labels` option,
+  with a format string value that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html).
+
+  ```
+    data
+    |> Plot.new(%{x: :date_variable, y: :other_variable})
+    |> Plot.geom_line()
+    |> Plot.scale_x_date(date_labels: "%b %d %Y") # Label format "Jan 01 2001"
+  ```
   """
   @spec scale_x_date(Plot.t(), keyword()) :: Plot.t()
   def scale_x_date(%Plot{} = plot, options \\ []) do
@@ -506,6 +516,15 @@ defmodule GGity.Plot do
   This scale defines a mapping function that assigns a coordinate on the x axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
+
+  The format of the axis tick labels can be specified with the `:date_labels` option,
+  with a format string value that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html).
+
+  ```
+    data
+    |> Plot.new(%{x: :datetime_variable, y: :other_variable})
+    |> Plot.geom_line()
+    |> Plot.scale_x_datetime(date_labels: "%b %d H%H") # Label format "Jan 01 H01"
   """
   @spec scale_x_datetime(Plot.t(), keyword()) :: Plot.t()
   def scale_x_datetime(%Plot{} = plot, options \\ []) do
