@@ -25,7 +25,5 @@ defmodule GGity.Scale.Alpha.Continuous do
     struct(scale,
       transform: fn value -> scale.alpha_min + (value - value_min) / range * domain end
     )
-
-    # %{transform: fn value -> scale.alpha_min + (value - value_min) / range * domain end}
   end
 end

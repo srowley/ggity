@@ -5,5 +5,5 @@ defmodule GGity.Geom.Blank do
             labels: %{}
 
   @spec draw() :: iolist()
-  def draw, do: [""]
+  def draw, do: []
 end

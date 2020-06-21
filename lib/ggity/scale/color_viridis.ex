@@ -1,7 +1,7 @@
 defmodule GGity.Scale.Color.Viridis do
   @moduledoc false
 
-  alias GGity.{Draw, Geom}
+  alias GGity.Draw
   alias GGity.Scale.Color
 
   @palettes %{
@@ -1304,7 +1304,6 @@ defmodule GGity.Scale.Color.Viridis do
             levels: nil
 
   @type t() :: %__MODULE__{}
-  @type geom() :: %Geom.Point{}
 
   @spec new(list(any()), keyword()) :: Color.Viridis.t()
   def new(values, options \\ []) do
@@ -1313,13 +1312,14 @@ defmodule GGity.Scale.Color.Viridis do
       |> Enum.sort()
 
     palette = get_palette(options)
+    number_of_levels = length(levels)
 
     interval_size =
-      case length(levels) > 1 do
-        true ->
-          div(length(palette), length(levels) - 1) - 1
+      case number_of_levels do
+        number_of_levels when number_of_levels > 1 ->
+          div(length(palette), number_of_levels - 1) - 1
 
-        false ->
+        _otherwise ->
           1
       end
 

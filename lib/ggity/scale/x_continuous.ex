@@ -24,7 +24,7 @@ defmodule GGity.Scale.X.Continuous do
     struct(scale, transformations(scale, values))
   end
 
-  # Many parts of this library are influenced by Contex, but this part (which is itself copied
+  # Many parts of this library are influenced by ContEx, but this part (which is itself copied
   # in GGity.Scale.Y.Continuous) is more or less flat-out copied - license acknowledgement below:
 
   # Copyright (c) 2020 John Jessop (mindOk)

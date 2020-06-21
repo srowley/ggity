@@ -29,12 +29,12 @@ Mappings can also be specified when a geom is added:
     |> Plot.new(%{x: :wt, y: :mpg})
     |> Plot.geom_point(%{shape: :cyl})
     |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
-    |> Plot.plot(
+    |> Plot.plot()
 ```
 
 ![](./examples/geom_point_shape_mapping.svg)
 
-Legends are currently only supported for discrete scales, without customizations for labelling (yet). Custom axis and tick labels are also pending.
+Legends are currently only supported for discrete scales, without format customizations for labelling (yet). Custom axis and tick labels are also pending.
 
 Aesthetics can be set to fixed values without specifying a mapping:
 
@@ -47,7 +47,7 @@ Aesthetics can be set to fixed values without specifying a mapping:
     |> Plot.labs(title: "Magma, alpha: 0.4")
     |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
     |> Plot.scale_color_viridis(option: :magma)
-    |> Plot.plot(
+    |> Plot.plot()
 ```
 
 ![](./examples/geom_point_fixed_aesthetics.svg)
@@ -89,7 +89,7 @@ With that said, I would welcome and do my best to respond promptly to PRs for th
 
 ## Alternatives
 
-[ContEx](https://github.com/mindok/contex) - built with LiveView in mind, actually being used, supports bar charts, Gannt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
+[ContEx](https://github.com/mindok/contex) - built with LiveView in mind, actually being used, supports bar charts, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
 
 [Plotex](https://github.com/elcritch/plotex) - focused on time series. Dates/times are hard, and while I have not looked at it in detail I bet Plotex does them better than GGity.
 
@@ -136,7 +136,7 @@ The library also includes an alias (```mix checks```) that runs Credo, Dialyzer,
 
 ## Acknowledgements
 
-I am very grateful to @mindok, the author of ContEx, who graciously accepted and provided feedback on contributions to that library, which in turn inspired me to write this (and flat out copy some a few parts of ContEx in so doing). I do not view GGity as a replacement for ContEx; it as a personal opportunity for me to learn a lot at my own pace. I made it public in case it might be helpful to others as an example.
+I am very grateful to @mindok, the author of ContEx, who graciously accepted and provided feedback on contributions to that library, which in turn inspired me to write this (and flat out copy some a few parts of ContEx in so doing). I do not view GGity as a replacement for ContEx; it is a personal opportunity for me to learn a lot at my own pace. I made it public in case it might be helpful to others as an example.
 
 Acknowledgement is also due to Hadley Wickham and others who have built [ggplot2](https://ggplot2.tidyverse.org/); the library is great, but Wickham's grammar of graphics is really an excellent piece of academic work in its own right. Along with Edward Tufte's book I think it is safe to say a golden age of visualization ensued.
 
