@@ -334,6 +334,42 @@ defmodule GGityPlotTest do
              |> IO.chardata_to_string()
              |> String.contains?("Jan 01 2001")
     end
+
+    test "passes date_label options to NimbleStrftime if passed a date_label tuple", %{
+      data: data,
+      mapping: mapping
+    } do
+      mapping = Map.put(mapping, :x, :date)
+
+      plot =
+        Plot.new(data, mapping)
+        |> Plot.geom_line()
+        |> Plot.scale_x_date()
+
+      assert %Scale.X.Date{} = plot.geom.x_scale()
+      assert plot.geom.x_scale.tick_values == [~D[2001-01-01], ~D[2001-01-02], ~D[2001-01-03]]
+
+      assert plot
+             |> Plot.scale_x_date(
+               date_labels:
+                 {"%A",
+                  day_of_week_names: fn day_of_week ->
+                    {
+                      "Monday",
+                      "Tuesday",
+                      "Hump Day",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday"
+                    }
+                    |> elem(day_of_week - 1)
+                  end}
+             )
+             |> Plot.plot()
+             |> IO.chardata_to_string()
+             |> String.contains?("Hump Day")
+    end
   end
 
   describe "scale_x_datetime/2" do

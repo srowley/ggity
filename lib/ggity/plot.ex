@@ -490,7 +490,7 @@ defmodule GGity.Plot do
   function that is used to generate axis tick labels.
 
   The format of the axis tick labels can be specified with the `:date_labels` option,
-  with a format string value that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html).
+  with either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
 
   ```
     data
@@ -498,6 +498,30 @@ defmodule GGity.Plot do
     |> Plot.geom_line()
     |> Plot.scale_x_date(date_labels: "%b %d %Y") # Label format "Jan 01 2001"
   ```
+
+  or a tuple `{format, options}` where `format` is the pattern and `options` is a keyword
+  list of options accepted by `NimbleStrftime.format/3`:
+
+  ```
+    rename_weekdays = fn day_of_week ->
+                    {
+                      "Monday",
+                      "Tuesday",
+                      "Hump Day",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday"
+                    }
+                    |> elem(day_of_week - 1)
+                  end
+    data
+    |> Plot.new(%{x: :date_variable, y: :other_variable})
+    |> Plot.geom_line()
+    |> Plot.scale_x_date(date_labels: {"%A", day_of_week_names: rename_weekdays})
+    # Ticks are just weekday names, Wednesday is Hump Day
+  ```
+
   """
   @spec scale_x_date(Plot.t(), keyword()) :: Plot.t()
   def scale_x_date(%Plot{} = plot, options \\ []) do
@@ -518,13 +542,16 @@ defmodule GGity.Plot do
   function that is used to generate axis tick labels.
 
   The format of the axis tick labels can be specified with the `:date_labels` option,
-  with a format string value that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html).
-
+  with either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html),
+  or a tuple `{format, options}` where `format` is the pattern and `options` is a keyword
+  list of options accepted by `NimbleStrftime.format/3` (see [`Plot.scale_x_date/2`](`GGity.Plot.scale_x_date/2`)
+  for an example of this usage).
   ```
     data
     |> Plot.new(%{x: :datetime_variable, y: :other_variable})
     |> Plot.geom_line()
     |> Plot.scale_x_datetime(date_labels: "%b %d H%H") # Label format "Jan 01 H01"
+  ```
   """
   @spec scale_x_datetime(Plot.t(), keyword()) :: Plot.t()
   def scale_x_datetime(%Plot{} = plot, options \\ []) do

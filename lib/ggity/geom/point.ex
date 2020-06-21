@@ -272,16 +272,20 @@ defmodule GGity.Geom.Point do
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
 
-  defp format_tick(%Scale.X.Date{date_labels: ""}, value), do: to_string(value)
-  defp format_tick(%Scale.X.DateTime{date_labels: ""}, value), do: to_string(value)
-
-  defp format_tick(%Scale.X.Date{} = scale, value) do
-    NimbleStrftime.format(value, scale.date_labels)
+  defp format_tick(%scale_type{date_labels: ""}, value)
+       when scale_type in [Scale.X.Date, Scale.X.DateTime] do
+    to_string(value)
   end
 
-  defp format_tick(%Scale.X.DateTime{} = scale, value) do
-    NimbleStrftime.format(value, scale.date_labels)
+  defp format_tick(%scale_type{date_labels: {pattern, options}}, value)
+       when scale_type in [Scale.X.Date, Scale.X.DateTime] do
+    NimbleStrftime.format(value, pattern, options)
   end
 
-  defp format_tick(_scale, value), do: Float.to_string(value)
+  defp format_tick(%scale_type{date_labels: pattern}, value)
+       when scale_type in [Scale.X.Date, Scale.X.DateTime] and is_binary(pattern) do
+    NimbleStrftime.format(value, pattern)
+  end
+
+  defp format_tick(_scale, value), do: to_string(value)
 end
