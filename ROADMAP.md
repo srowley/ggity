@@ -1,7 +1,7 @@
 # Roadmap
 
 ## v0.2 
-* Better formatting of axis numbers and dates
+* [COMPLETE] Better formatting of axis numbers and dates
 * Allow selective inclusion of legends (for some scales and not others)
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Bar charts
