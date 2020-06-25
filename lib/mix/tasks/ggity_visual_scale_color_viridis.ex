@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
 
   use Mix.Task
 
-  alias GGity.{Examples, Plot}
+  alias GGity.{Examples, Labels, Plot}
 
   @default_browser "firefox"
 
@@ -86,9 +86,11 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
       record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
     end)
     |> Plot.new(%{x: "sales", y: "median"})
-    |> Plot.labs(title: "Magma, alpha: 0.4")
+    |> Plot.labs(title: "Custom labels, fixed alpha")
     |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
-    |> Plot.scale_color_viridis(option: :magma)
+    |> Plot.scale_x_continuous(labels: :commas)
+    |> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
+    |> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
     |> Plot.plot()
   end
 

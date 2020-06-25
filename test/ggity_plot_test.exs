@@ -1,7 +1,7 @@
 defmodule GGityPlotTest do
   use ExUnit.Case
 
-  alias GGity.{Geom, Plot, Scale}
+  alias GGity.{Geom, Labels, Plot, Scale}
 
   setup do
     data = [
@@ -12,7 +12,12 @@ defmodule GGityPlotTest do
     # TODO: Use this fixture to test zero-length data range
     # data = [%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3}]
     mapping = %{x: :a, y: :b}
-    %{data: data, mapping: mapping}
+
+    plot =
+      Plot.new(data, mapping)
+      |> Plot.geom_point()
+
+    %{plot: plot, data: data, mapping: mapping}
   end
 
   describe "new/3" do
@@ -170,18 +175,29 @@ defmodule GGityPlotTest do
   end
 
   describe "scale_alpha_discrete/1" do
-    test "sets the alpha scale on the plot geom to an discrete scale", %{
-      data: data,
-      mapping: mapping
-    } do
+    setup %{data: data, mapping: mapping} do
       mapping = Map.put(mapping, :alpha, :c)
 
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point()
-        |> Plot.scale_alpha_discrete()
 
+      %{plot: plot}
+    end
+
+    test "sets the alpha scale on the plot geom to an discrete scale", %{plot: plot} do
+      plot = Plot.scale_alpha_discrete(plot)
       assert %Scale.Alpha.Discrete{} = plot.geom.alpha_scale()
+    end
+
+    test "labels legend breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_alpha_discrete(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.alpha_scale, 1.0) == "foo"
+    end
+
+    test "sets legend labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_alpha_discrete(plot, labels: nil)
+      assert Labels.format(plot.geom.alpha_scale, 1.0) == ""
     end
   end
 
@@ -231,21 +247,42 @@ defmodule GGityPlotTest do
 
       assert %Scale.Color.Viridis{} = plot.geom.color_scale()
     end
+
+    test "labels legend breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_color_viridis(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.color_scale, 1.0) == "foo"
+    end
+
+    test "sets legend labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_color_viridis(plot, labels: nil)
+      assert Labels.format(plot.geom.color_scale, 1.0) == ""
+    end
   end
 
   describe "scale_shape/2" do
-    test "sets the shape scale on the plot geom", %{
-      data: data,
-      mapping: mapping
-    } do
+    setup %{data: data, mapping: mapping} do
       mapping = Map.put(mapping, :shape, :c)
 
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point()
-        |> Plot.scale_shape()
 
+      %{plot: plot}
+    end
+
+    test "sets the shape scale on the plot geom", %{plot: plot} do
+      plot = Plot.scale_shape(plot)
       assert %Scale.Shape{} = plot.geom.shape_scale()
+    end
+
+    test "labels legend breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_shape(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.shape_scale, 1.0) == "foo"
+    end
+
+    test "sets legend labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_shape(plot, labels: nil)
+      assert Labels.format(plot.geom.shape_scale, 1.0) == ""
     end
   end
 
@@ -266,17 +303,18 @@ defmodule GGityPlotTest do
   end
 
   describe "scale_size_discrete/2" do
-    test "sets the size scale on the plot geom to an discrete scale", %{
-      data: data,
-      mapping: mapping
-    } do
+    setup %{data: data, mapping: mapping} do
       mapping = Map.put(mapping, :size, :c)
 
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point()
-        |> Plot.scale_size_discrete()
 
+      %{plot: plot}
+    end
+
+    test "sets the size scale on the plot geom to an discrete scale", %{plot: plot} do
+      plot = Plot.scale_size_discrete(plot)
       assert %Scale.Size.Discrete{} = plot.geom.size_scale()
     end
   end
@@ -298,10 +336,7 @@ defmodule GGityPlotTest do
   end
 
   describe "scale_x_continuous/2" do
-    test "sets the x scale on the plot geom to continuous", %{
-      data: data,
-      mapping: mapping
-    } do
+    test "sets the x scale on the plot geom to continuous", %{data: data, mapping: mapping} do
       mapping = Map.put(mapping, :x, :c)
 
       plot =
@@ -310,6 +345,21 @@ defmodule GGityPlotTest do
         |> Plot.scale_x_continuous()
 
       assert %Scale.X.Continuous{} = plot.geom.x_scale()
+    end
+
+    test "labels x breaks using built-in function", %{plot: plot} do
+      plot = Plot.scale_x_continuous(plot, labels: :dollar)
+      assert Labels.format(plot.geom.x_scale, 1.0) == "$1.00"
+    end
+
+    test "labels x breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_x_continuous(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.x_scale, 1.0) == "foo"
+    end
+
+    test "sets labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_x_continuous(plot, labels: nil)
+      assert Labels.format(plot.geom.x_scale, 1.0) == ""
     end
   end
 
@@ -404,7 +454,7 @@ defmodule GGityPlotTest do
   end
 
   describe "scale_y_continuous/2" do
-    test "sets the x scale on the plot geom to continuous", %{
+    test "sets the y scale on the plot geom to continuous", %{
       data: data,
       mapping: mapping
     } do
@@ -416,6 +466,21 @@ defmodule GGityPlotTest do
         |> Plot.scale_y_continuous()
 
       assert %Scale.Y.Continuous{} = plot.geom.y_scale()
+    end
+
+    test "labels y breaks using built-in function", %{plot: plot} do
+      plot = Plot.scale_y_continuous(plot, labels: :dollar)
+      assert Labels.format(plot.geom.y_scale, 1.0) == "$1.00"
+    end
+
+    test "labels y breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_y_continuous(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.y_scale, 1.0) == "foo"
+    end
+
+    test "sets labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_y_continuous(plot, labels: nil)
+      assert Labels.format(plot.geom.y_scale, 1.0) == ""
     end
   end
 end

@@ -1,7 +1,7 @@
 defmodule GGity.Scale.Color.Viridis do
   @moduledoc false
 
-  alias GGity.Draw
+  alias GGity.{Draw, Labels}
   alias GGity.Scale.Color
 
   @palettes %{
@@ -1301,7 +1301,8 @@ defmodule GGity.Scale.Color.Viridis do
   @default_palette :viridis
 
   defstruct transform: nil,
-            levels: nil
+            levels: nil,
+            labels: :waivers
 
   @type t() :: %__MODULE__{}
 
@@ -1328,7 +1329,9 @@ defmodule GGity.Scale.Color.Viridis do
       |> Enum.map(&to_hex/1)
 
     color_map = Enum.zip(levels, colors) |> Enum.into(%{})
-    struct(Color.Viridis, levels: levels, transform: fn value -> color_map[value] end)
+
+    struct(Color.Viridis, options)
+    |> struct(levels: levels, transform: fn value -> color_map[value] end)
   end
 
   @spec draw_legend(Color.Viridis.t(), binary()) :: iolist()
@@ -1347,11 +1350,11 @@ defmodule GGity.Scale.Color.Viridis do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale.transform, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
     ]
   end
 
-  defp draw_legend_item(transform, {level, index}) do
+  defp draw_legend_item(scale, {level, index}) do
     [
       Draw.rect(
         x: "0",
@@ -1366,11 +1369,11 @@ defmodule GGity.Scale.Color.Viridis do
         :circle,
         {7.5, 7.5 + 15 * index},
         5,
-        fill: "#{transform.(level)}",
+        fill: "#{scale.transform.(level)}",
         fill_opacity: "1"
       ),
       Draw.text(
-        "#{level}",
+        "#{Labels.format(scale, level)}",
         x: "20",
         y: "#{10 + 15 * index}",
         font_size: "8",

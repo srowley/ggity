@@ -11,9 +11,10 @@ defmodule GGity.Scale.X.Continuous do
 
   defstruct width: 200,
             breaks: 5,
+            labels: :waivers,
+            tick_values: nil,
             x_label: :na,
             y_label: :na,
-            tick_values: nil,
             inverse: nil,
             values: nil,
             transform: nil

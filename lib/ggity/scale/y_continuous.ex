@@ -13,6 +13,7 @@ defmodule GGity.Scale.Y.Continuous do
             breaks: 5,
             x_label: :na,
             y_label: :na,
+            labels: :waivers,
             tick_values: nil,
             inverse: nil,
             values: nil,

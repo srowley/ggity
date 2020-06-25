@@ -3,7 +3,7 @@ defmodule GGity.Plot do
   Configures and generates an iolist representing an SVG plot.
 
   The Plot module is GGity's public interface. A Plot struct is created
-  with [`Plot.new/3`](`GGity.Plot.new/3`), specifying the data and aesthetic mappings to be used,
+  with `new/3`, specifying the data and aesthetic mappings to be used,
   along with options associated with the plot's general appearance.
 
   Data must be provided as a list of maps, where each map in the list
@@ -28,14 +28,14 @@ defmodule GGity.Plot do
   ```
 
   A geom struct (GGity supports points and lines in this version) is added
-  to the plot using using [`Plot.geom_point/3`](`GGity.Plot.geom_point/3`) or [`Plot.geom_line/3`](`GGity.Plot.geom_line/3`). The
+  to the plot using using `geom_point/3` or `geom_line/3`. The
   geom struct contains the scales for each variable assigned to an aesthetic.
   Scales generate functions that transform data into an aesthetic value (e.g,
   an x coordinate or a color) and functions that transform an aesthetic value
   back into an observation (for the purpose of drawing axes or legends).integer()
 
   Each geom uses default scales, but these can be overridden by passing the Plot
-  struct to `Plot.scale[scale_type]/2`. With respect to x values, GGity will
+  struct to `scale[scale_type]/2`. With respect to x values, GGity will
   try to guess if the data is numeric or date/datetime-typed and assign a
   scale accordingly.
 
@@ -46,7 +46,7 @@ defmodule GGity.Plot do
     |> Plot.plot()
   ```
 
-  [`Plot.plot/1`](`GGity.Plot.plot/1`) generates an iolist that represents the plot. None of the data
+  `plot/1` generates an iolist that represents the plot. None of the data
   is sanitized, so users will need to be mindful of the risks of generating
   plots using user-supplied data or parameters.
   """
@@ -80,10 +80,10 @@ defmodule GGity.Plot do
 
   Mappings tie variables to aesthetics, i.e. visual characteristics of the plot.
   A mapping is specified using a map, with key-value pairs representing the assignment of
-  variables to available aesthetics. Mappings passed to [`Plot.new/3`](`GGity.Plot.new/3`) must include key-value
+  variables to available aesthetics. Mappings passed to `new/3` must include key-value
   pairs for the `:x` aesthetic and the `:y` aesthetic.
 
-  [`Plot.new/3`](`GGity.Plot.new/3`) also supports several options that shortcut plot creation or alter the
+  `new/3` also supports several options that shortcut plot creation or alter the
   appearance of the plot. All graphical size units are in pixels.
 
   * `:width` - the width of the plot area. Defaults to `200`.
@@ -299,6 +299,11 @@ defmodule GGity.Plot do
   palette is generated such that the difference between each opacity value is
   maximized. The set of unique data values are sorted for the purpose of assigning
   them to an opacity and ordering the legend.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how legend item names (levels of the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_alpha_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_alpha_discrete(%Plot{} = plot, options \\ []) do
@@ -316,7 +321,7 @@ defmodule GGity.Plot do
   Can be used to manually assign opacity to individual data points by including an
   value with each observation.
 
-  See [`Plot.scale_color_identity/1`](`GGity.Plot.scale_color_identity/1`) for an example of identity scale use.
+  See `scale_color_identity/1` for an example of identity scale use.
   """
   @spec scale_alpha_identity(Plot.t()) :: Plot.t()
   def scale_alpha_identity(%Plot{} = plot) do
@@ -365,11 +370,15 @@ defmodule GGity.Plot do
   data values are sorted for the purpose of assigning them to a color and ordering the
   legend.
 
-  Accepts an `:option` option that specifies which palette to use. Available
-  palettes are `:viridis` (the default), `:plasma`, `:magma`, `:inferno` and
-  `:cividis`.
+  This function also takes the following options:
 
-  Examples of each option can be generated using `mix ggity.visual.scale_color_viridis`.
+  - `:labels` - specifies how legend item names (levels of the data mapped to the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+  - `:option` - specifies which palette to use. Available palettes are  `:magma`, `:inferno`,
+  `:plasma`, `:viridis` (the default) and `:cividis`. These palettes can also be specified via their
+  letter codes - `:a`, `:b`, `:c`, `:d` and `:e`, respectively.
+
+  Examples of each color palette option can be generated using `mix ggity.visual.scale_color_viridis`.
   """
   @spec scale_color_viridis(Plot.t(), keyword()) :: Plot.t()
   def scale_color_viridis(%Plot{} = plot, options \\ []) do
@@ -392,6 +401,11 @@ defmodule GGity.Plot do
 
   If there are greater than four unique values in the data, the shapes are recycled
   per the order above.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how legend item names (levels of the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_shape(Plot.t(), keyword()) :: Plot.t()
   def scale_shape(%Plot{} = plot, options \\ []) do
@@ -436,6 +450,11 @@ defmodule GGity.Plot do
 
   Note that "size" is the marker diameter, not marker area (which is generally
   preferable but not yet implemented).
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how legend item names (levels of the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_size_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_size_discrete(%Plot{} = plot, options \\ []) do
@@ -456,7 +475,7 @@ defmodule GGity.Plot do
   Note that "size" is the marker diameter, not marker area (which is generally
   preferable but not yet implemented).
 
-  See [`Plot.scale_color_identity/1`](`GGity.Plot.scale_color_identity/1`) for an example of identity scale use.
+  See `scale_color_identity/1` for an example of identity scale use.
   """
   @spec scale_size_identity(Plot.t()) :: Plot.t()
   def scale_size_identity(%Plot{} = plot) do
@@ -465,11 +484,16 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Sets geom point x coordinate for continuous numerical data.
+  Sets geom x coordinate for continuous numerical data.
 
   This scale defines a mapping function that assigns a coordinate on the x axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how break names (tick labels calculated by the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_x_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_x_continuous(%Plot{} = plot, options \\ []) do
@@ -483,14 +507,20 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Sets geom point x coordinate for continuous `Date` data.
+  Sets geom x coordinate for continuous `Date` data.
 
   This scale defines a mapping function that assigns a coordinate on the x axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
 
-  The format of the axis tick labels can be specified with the `:date_labels` option,
-  with either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
+  This function also takes the following options:
+
+  - `:labels` - specifies how break names (tick labels calculated by the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+  -`:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
+  the value of the `:labels` option will be overridden.
+
+  `:date_labels` can be either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
 
   ```
     data
@@ -535,17 +565,23 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Sets geom point x coordinate for continuous `DateTime` data.
+  Sets geom x coordinate for continuous `DateTime` data.
 
   This scale defines a mapping function that assigns a coordinate on the x axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
 
-  The format of the axis tick labels can be specified with the `:date_labels` option,
-  with either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html),
-  or a tuple `{format, options}` where `format` is the pattern and `options` is a keyword
-  list of options accepted by `NimbleStrftime.format/3` (see [`Plot.scale_x_date/2`](`GGity.Plot.scale_x_date/2`)
-  for an example of this usage).
+  This function also takes the following options:
+
+  - `:labels` - specifies how break names (tick labels calculated by the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+  -`:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
+  the value of the `:labels` option will be overridden.
+
+  `:date_labels` can be either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
+
+  See `scale_x_date/2` for more usage examples.
+
   ```
     data
     |> Plot.new(%{x: :datetime_variable, y: :other_variable})
@@ -565,11 +601,16 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Sets geom point y coordinate for continuous numerical data.
+  Sets geom y coordinate for continuous numerical data.
 
   This scale defines a mapping function that assigns a coordinate on the y axis
   to the value of the mapped variable. The scale also defines an inverse of this
   function that is used to generate axis tick labels.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how break names (tick labels calculated by the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_y_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_y_continuous(%Plot{} = plot, options \\ []) do

@@ -34,9 +34,10 @@ Mappings can also be specified when a geom is added:
 
 ![](./examples/geom_point_shape_mapping.svg)
 
-Legends are currently only supported for discrete scales, without format customizations for labelling (yet). Custom axis and tick labels are also pending.
+Legends are currently only supported for discrete scales.
 
-Aesthetics can be set to fixed values without specifying a mapping:
+Aesthetics can be assigned a fixed value (not tied to a variable), and both legend
+and axis labels support custom formatting.
 
 ```elixir
     Examples.tx_housing()
@@ -44,13 +45,15 @@ Aesthetics can be set to fixed values without specifying a mapping:
       record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
     end)
     |> Plot.new(%{x: "sales", y: "median"})
-    |> Plot.labs(title: "Magma, alpha: 0.4")
+    |> Plot.labs(title: "Custom labels, fixed alpha")
     |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
-    |> Plot.scale_color_viridis(option: :magma)
+    |> Plot.scale_x_continuous(labels: :commas)
+    |> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
+    |> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
     |> Plot.plot()
 ```
 
-![](./examples/geom_point_fixed_aesthetics.svg)
+![](./examples/geom_point_custom.svg)
 
 The table below illustrates which scales are available for different aesthetics.
 

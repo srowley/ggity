@@ -1,7 +1,7 @@
 defmodule GGity.Geom.Point do
   @moduledoc false
 
-  alias GGity.{Draw, Geom, Scale}
+  alias GGity.{Draw, Geom, Labels, Scale}
 
   @type t() :: %__MODULE__{}
   @type record() :: map()
@@ -230,7 +230,7 @@ defmodule GGity.Geom.Point do
         stroke_width: "0.5",
         transform: "translate(#{interval}, 0)"
       ),
-      Draw.text(format_tick(geom_point.x_scale, value),
+      Draw.text(Labels.format(geom_point.x_scale, value),
         fill: "gray",
         y: "9",
         dy: "0.71em",
@@ -267,25 +267,13 @@ defmodule GGity.Geom.Point do
         stroke_width: "0.5",
         transform: "translate(0, -#{interval})"
       ),
-      Draw.text(Float.to_string(value), fill: "gray", x: "-9", dy: "0.32em", font_size: "8")
+      Draw.text(Labels.format(geom_point.y_scale, value),
+        fill: "gray",
+        x: "-9",
+        dy: "0.32em",
+        font_size: "8"
+      )
     ]
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
-
-  defp format_tick(%scale_type{date_labels: ""}, value)
-       when scale_type in [Scale.X.Date, Scale.X.DateTime] do
-    to_string(value)
-  end
-
-  defp format_tick(%scale_type{date_labels: {pattern, options}}, value)
-       when scale_type in [Scale.X.Date, Scale.X.DateTime] do
-    NimbleStrftime.format(value, pattern, options)
-  end
-
-  defp format_tick(%scale_type{date_labels: pattern}, value)
-       when scale_type in [Scale.X.Date, Scale.X.DateTime] and is_binary(pattern) do
-    NimbleStrftime.format(value, pattern)
-  end
-
-  defp format_tick(_scale, value), do: to_string(value)
 end

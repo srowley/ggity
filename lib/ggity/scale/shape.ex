@@ -1,18 +1,19 @@
 defmodule GGity.Scale.Shape do
   @moduledoc false
 
-  alias GGity.Draw
+  alias GGity.{Draw, Labels}
   alias GGity.Scale.Shape
 
   @palette [:circle, :square, :diamond, :triangle]
 
   defstruct transform: nil,
-            levels: nil
+            levels: nil,
+            labels: :waivers
 
   @type t() :: %__MODULE__{}
 
   @spec new(list(any()), keyword()) :: Shape.t()
-  def new(values, _options \\ []) do
+  def new(values, options \\ []) do
     levels =
       values
       |> Enum.sort()
@@ -35,7 +36,12 @@ defmodule GGity.Scale.Shape do
       end)
       |> Enum.into(%{})
 
-    struct(Shape, levels: levels, transform: fn value -> values_map[to_string(value)] end)
+    options = [
+      {:levels, levels},
+      {:transform, fn value -> values_map[to_string(value)] end} | options
+    ]
+
+    struct(Shape, options)
   end
 
   @spec draw_legend(Shape.t(), binary()) :: iolist()
@@ -54,11 +60,11 @@ defmodule GGity.Scale.Shape do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale.transform, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
     ]
   end
 
-  defp draw_legend_item(transform, {level, index}) do
+  defp draw_legend_item(scale, {level, index}) do
     [
       Draw.rect(
         x: "0",
@@ -70,14 +76,14 @@ defmodule GGity.Scale.Shape do
         stroke_width: "0.5"
       ),
       Draw.marker(
-        transform.(level),
+        scale.transform.(level),
         {7.5, 7.5 + 15 * index},
         5,
         fill: "black",
         fill_opacity: "1"
       ),
       Draw.text(
-        "#{level}",
+        "#{Labels.format(scale, level)}",
         x: "20",
         y: "#{10 + 15 * index}",
         font_size: "8",

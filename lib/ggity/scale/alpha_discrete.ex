@@ -1,7 +1,7 @@
 defmodule GGity.Scale.Alpha.Discrete do
   @moduledoc false
 
-  alias GGity.Draw
+  alias GGity.{Draw, Labels}
   alias GGity.Scale.Alpha
 
   @palette_min 0.1
@@ -9,20 +9,22 @@ defmodule GGity.Scale.Alpha.Discrete do
   @palette_range @palette_max - @palette_min
 
   defstruct transform: nil,
-            levels: nil
+            levels: nil,
+            labels: :waivers
 
   @type t() :: %__MODULE__{}
 
   @spec new(list(any()), keyword()) :: Alpha.Discrete.t()
   def new(values, options \\ [])
 
-  def new([value], _options) do
+  def new([value], options) do
     levels = [to_string(value)]
     transform = fn _value -> @palette_min + @palette_range / 2 end
-    struct(Alpha.Discrete, levels: levels, transform: transform)
+    options = [{:levels, levels}, {:transform, transform} | options]
+    struct(Alpha.Discrete, options)
   end
 
-  def new(values, _options) do
+  def new(values, options) do
     levels =
       values
       |> Stream.map(&Kernel.to_string/1)
@@ -40,7 +42,12 @@ defmodule GGity.Scale.Alpha.Discrete do
       end)
       |> Enum.into(%{})
 
-    struct(Alpha.Discrete, levels: levels, transform: fn value -> values_map[to_string(value)] end)
+    options = [
+      {:levels, levels},
+      {:transform, fn value -> values_map[to_string(value)] end} | options
+    ]
+
+    struct(Alpha.Discrete, options)
   end
 
   @spec draw_legend(Alpha.Discrete.t(), binary()) :: iolist()
@@ -59,11 +66,11 @@ defmodule GGity.Scale.Alpha.Discrete do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale.transform, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
     ]
   end
 
-  defp draw_legend_item(transform, {level, index}) do
+  defp draw_legend_item(scale, {level, index}) do
     [
       Draw.rect(
         x: "0",
@@ -79,10 +86,10 @@ defmodule GGity.Scale.Alpha.Discrete do
         {7.5, 7.5 + 15 * index},
         5,
         fill: "black",
-        fill_opacity: transform.(level)
+        fill_opacity: scale.transform.(level)
       ),
       Draw.text(
-        "#{level}",
+        "#{Labels.format(scale, level)}",
         x: "20",
         y: "#{10 + 15 * index}",
         font_size: "8",
