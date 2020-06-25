@@ -79,7 +79,7 @@ Line geoms also support setting a custom value for line type.
 ![](./examples/geom_line_linetype.svg)
 
 ## Goals
-I am interested in data visualization and after learning a lot from the work being done [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
+I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
 
 ## Non-Goals
 * Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed  and validations that should be happening but are not. I'm open to addressing these things; they just might not pop up unless someone else finds a problem.
