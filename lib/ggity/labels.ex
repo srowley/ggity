@@ -63,11 +63,6 @@ defmodule GGity.Labels do
 
   @doc false
   @spec format(map(), tick_value()) :: String.t()
-  def format(%scale_type{date_labels: :waivers}, value)
-      when scale_type in [Scale.X.Date, Scale.X.DateTime] do
-    to_string(value)
-  end
-
   def format(%scale_type{date_labels: {pattern, options}}, value)
       when scale_type in [Scale.X.Date, Scale.X.DateTime] do
     NimbleStrftime.format(value, pattern, options)
