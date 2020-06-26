@@ -502,7 +502,7 @@ defmodule GGityPlotTest do
       assert neither_legend.geom.color_scale.guide == :none
       assert neither_legend.geom.size_scale.guide == :none
 
-      color_only = Plot.guides(plot, color: :legend)
+      color_only = Plot.guides(neither_legend, color: :legend)
       assert color_only.geom.color_scale.guide == :legend
       assert color_only.geom.size_scale.guide == :none
     end

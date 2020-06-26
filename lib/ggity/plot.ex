@@ -694,22 +694,19 @@ defmodule GGity.Plot do
           |> scale_for_aesthetic(aesthetic)
           |> struct(guide: value)
 
-        scale_key =
-          Atom.to_string(aesthetic) <> "_scale"
-          |> String.to_existing_atom()
-
-        [{scale_key, new_scale} | scales_list]
+        [{scale_key_for_aesthetic(aesthetic), new_scale} | scales_list]
       end)
 
       %Plot{plot | geom: struct(plot.geom, updated_scales)}
   end
 
   defp scale_for_aesthetic(plot, aesthetic) do
-    scale =
-      (Atom.to_string(aesthetic) <> "_scale")
-      |> String.to_existing_atom()
+    Map.get(plot.geom, scale_key_for_aesthetic(aesthetic))
+  end
 
-    Map.get(plot.geom, scale)
+  defp scale_key_for_aesthetic(aesthetic) do
+    Atom.to_string(aesthetic) <> "_scale"
+    |> String.to_existing_atom()
   end
 
   @doc """
