@@ -483,4 +483,28 @@ defmodule GGityPlotTest do
       assert Labels.format(plot.geom.y_scale, 1.0) == ""
     end
   end
+
+  describe "guides/2" do
+    test "sets the legends for the specified scales", %{
+      data: data,
+      mapping: mapping
+    } do
+
+      plot =
+        Plot.new(data, mapping)
+        |> Plot.geom_point(%{color: :c, size: :c})
+        |> Plot.scale_size_discrete()
+
+      assert plot.geom.color_scale.guide == :legend
+      assert plot.geom.size_scale.guide == :legend
+
+      neither_legend = Plot.guides(plot, color: :none, size: :none)
+      assert neither_legend.geom.color_scale.guide == :none
+      assert neither_legend.geom.size_scale.guide == :none
+
+      color_only = Plot.guides(plot, color: :legend)
+      assert color_only.geom.color_scale.guide == :legend
+      assert color_only.geom.size_scale.guide == :none
+    end
+  end
 end

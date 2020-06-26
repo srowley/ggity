@@ -1302,7 +1302,8 @@ defmodule GGity.Scale.Color.Viridis do
 
   defstruct transform: nil,
             levels: nil,
-            labels: :waivers
+            labels: :waivers,
+            guide: :legend
 
   @type t() :: %__MODULE__{}
 
@@ -1335,6 +1336,8 @@ defmodule GGity.Scale.Color.Viridis do
   end
 
   @spec draw_legend(Color.Viridis.t(), binary()) :: iolist()
+  def draw_legend(%Color.Viridis{guide: :none}, _label), do: []
+
   def draw_legend(%Color.Viridis{levels: []}, _label), do: []
 
   def draw_legend(%Color.Viridis{levels: [_]}, _label), do: []
@@ -1384,6 +1387,8 @@ defmodule GGity.Scale.Color.Viridis do
   end
 
   @spec legend_height(Color.Viridis.t()) :: non_neg_integer()
+  def legend_height(%Color.Viridis{guide: :none}), do: 0
+
   def legend_height(%Color.Viridis{levels: []}), do: 0
 
   def legend_height(%Color.Viridis{levels: [_]}), do: 0

@@ -10,7 +10,8 @@ defmodule GGity.Scale.Alpha.Discrete do
 
   defstruct transform: nil,
             levels: nil,
-            labels: :waivers
+            labels: :waivers,
+            guide: :legend
 
   @type t() :: %__MODULE__{}
 
@@ -51,6 +52,8 @@ defmodule GGity.Scale.Alpha.Discrete do
   end
 
   @spec draw_legend(Alpha.Discrete.t(), binary()) :: iolist()
+  def draw_legend(%Alpha.Discrete{guide: :none}, _label), do: []
+
   def draw_legend(%Alpha.Discrete{levels: []}, _label), do: []
 
   def draw_legend(%Alpha.Discrete{levels: [_]}, _label), do: []
@@ -100,6 +103,8 @@ defmodule GGity.Scale.Alpha.Discrete do
   end
 
   @spec legend_height(Alpha.Discrete.t()) :: non_neg_integer()
+  def legend_height(%Alpha.Discrete{guide: :none}), do: 0
+
   def legend_height(%Alpha.Discrete{levels: []}), do: 0
 
   def legend_height(%Alpha.Discrete{levels: [_]}), do: 0

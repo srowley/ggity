@@ -668,6 +668,51 @@ defmodule GGity.Plot do
   end
 
   @doc """
+  Manually sets the type of guide used for specified scales.
+
+  Accepts a keyword list of aesthetics and values for the `:guide` options
+  for the associated scales.
+
+  Currently this is only used to turn legends on or off. Valid values are
+  `:legend` (draw a legend) and `:none` (do not draw a legend).
+
+  ## Example
+
+  ```
+  Plot.new(%{x: "x", y: "y"})
+  |> Plot.geom_point(color: "color", shape: "shape", size: "size")
+  # By default all three legends will be drawn
+  |> Plot.guides(shape: :none, size: :none) # Plot will only draw a legend for the color scale
+  """
+  @spec guides(Plot.t(), keyword()) :: Plot.t()
+  def guides(plot, guides) do
+    updated_scales =
+      Keyword.take(guides, [:alpha, :color, :size, :shape])
+      |> Enum.reduce([], fn {aesthetic, value}, scales_list ->
+        new_scale =
+          plot
+          |> scale_for_aesthetic(aesthetic)
+          |> struct(guide: value)
+
+        scale_key =
+          Atom.to_string(aesthetic) <> "_scale"
+          |> String.to_existing_atom()
+
+        [{scale_key, new_scale} | scales_list]
+      end)
+
+      %Plot{plot | geom: struct(plot.geom, updated_scales)}
+  end
+
+  defp scale_for_aesthetic(plot, aesthetic) do
+    scale =
+      (Atom.to_string(aesthetic) <> "_scale")
+      |> String.to_existing_atom()
+
+    Map.get(plot.geom, scale)
+  end
+
+  @doc """
   Saves the plot to a file at the given path.
   """
   @spec to_file(Plot.t(), list(binary)) :: :ok

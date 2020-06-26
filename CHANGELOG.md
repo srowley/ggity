@@ -6,6 +6,8 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Legends can be toggled on and off with `Plot.guides/2` or by passing `guide: :none`/`guide: :legend`
+to a scale constructor.
 - Added robust axis and legend item label formatting via `:labels` option passed to scale constructors. This
 supports the same options as the ggplot2 scales except for passing a vector (list) of values
 to replace the calculated labels.

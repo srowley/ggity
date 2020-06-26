@@ -10,7 +10,8 @@ defmodule GGity.Scale.Size.Discrete do
 
   defstruct transform: nil,
             levels: nil,
-            labels: :waivers
+            labels: :waivers,
+            guide: :legend
 
   @type t() :: %__MODULE__{}
 
@@ -50,6 +51,8 @@ defmodule GGity.Scale.Size.Discrete do
   end
 
   @spec draw_legend(Size.Discrete.t(), binary()) :: iolist()
+  def draw_legend(%Size.Discrete{guide: :none}, _label), do: []
+
   def draw_legend(%Size.Discrete{levels: []}, _label), do: []
 
   def draw_legend(%Size.Discrete{levels: [_]}, _label), do: []
@@ -99,6 +102,8 @@ defmodule GGity.Scale.Size.Discrete do
   end
 
   @spec legend_height(Size.Discrete.t()) :: non_neg_integer()
+  def legend_height(%Size.Discrete{guide: :none}), do: 0
+
   def legend_height(%Size.Discrete{levels: []}), do: 0
 
   def legend_height(%Size.Discrete{levels: [_]}), do: 0

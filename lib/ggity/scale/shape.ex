@@ -8,7 +8,8 @@ defmodule GGity.Scale.Shape do
 
   defstruct transform: nil,
             levels: nil,
-            labels: :waivers
+            labels: :waivers,
+            guide: :legend
 
   @type t() :: %__MODULE__{}
 
@@ -45,6 +46,8 @@ defmodule GGity.Scale.Shape do
   end
 
   @spec draw_legend(Shape.t(), binary()) :: iolist()
+  def draw_legend(%Shape{guide: :none}, _label), do: []
+
   def draw_legend(%Shape{levels: []}, _label), do: []
 
   def draw_legend(%Shape{levels: [_]}, _label), do: []
@@ -94,6 +97,8 @@ defmodule GGity.Scale.Shape do
   end
 
   @spec legend_height(Shape.t()) :: non_neg_integer()
+  def legend_height(%Shape{guide: :none}), do: 0
+
   def legend_height(%Shape{levels: []}), do: 0
 
   def legend_height(%Shape{levels: [_]}), do: 0
