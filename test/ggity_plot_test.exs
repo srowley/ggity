@@ -453,6 +453,34 @@ defmodule GGityPlotTest do
     end
   end
 
+  describe "scale_x_discrete/2" do
+    test "sets the x scale on the plot geom to continuous", %{data: data, mapping: mapping} do
+      mapping = Map.put(mapping, :x, :c)
+
+      plot =
+        Plot.new(data, mapping)
+        |> Plot.geom_point()
+        |> Plot.scale_x_discrete()
+
+      assert %Scale.X.Discrete{} = plot.geom.x_scale()
+    end
+
+    test "labels x breaks using built-in function", %{plot: plot} do
+      plot = Plot.scale_x_discrete(plot, labels: :dollar)
+      assert Labels.format(plot.geom.x_scale, 1.0) == "$1.00"
+    end
+
+    test "labels x breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_x_discrete(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.x_scale, 1.0) == "foo"
+    end
+
+    test "sets labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_x_discrete(plot, labels: nil)
+      assert Labels.format(plot.geom.x_scale, 1.0) == ""
+    end
+  end
+
   describe "scale_y_continuous/2" do
     test "sets the y scale on the plot geom to continuous", %{
       data: data,
@@ -489,7 +517,6 @@ defmodule GGityPlotTest do
       data: data,
       mapping: mapping
     } do
-
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point(%{color: :c, size: :c})

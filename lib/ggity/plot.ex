@@ -601,6 +601,29 @@ defmodule GGity.Plot do
   end
 
   @doc """
+  Sets geom x coordinate for discrete (categorical) data.
+
+  This scale defines a mapping function that assigns a coordinate on the x axis
+  to the value of the mapped variable. In the discrete case, this is equivalent to
+  evenly distributing geoms across the x axis.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how break names (tick labels calculated by the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+  """
+  @spec scale_x_discrete(Plot.t(), keyword()) :: Plot.t()
+  def scale_x_discrete(%Plot{} = plot, options \\ []) do
+    x_scale =
+      plot.data
+      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:x]) end)
+      |> Scale.X.Discrete.new(options)
+
+    updated_geom = struct(plot.geom, x_scale: x_scale)
+    struct(plot, geom: updated_geom)
+  end
+
+  @doc """
   Sets geom y coordinate for continuous numerical data.
 
   This scale defines a mapping function that assigns a coordinate on the y axis
@@ -697,7 +720,7 @@ defmodule GGity.Plot do
         [{scale_key_for_aesthetic(aesthetic), new_scale} | scales_list]
       end)
 
-      %Plot{plot | geom: struct(plot.geom, updated_scales)}
+    %Plot{plot | geom: struct(plot.geom, updated_scales)}
   end
 
   defp scale_for_aesthetic(plot, aesthetic) do
@@ -705,7 +728,7 @@ defmodule GGity.Plot do
   end
 
   defp scale_key_for_aesthetic(aesthetic) do
-    Atom.to_string(aesthetic) <> "_scale"
+    (Atom.to_string(aesthetic) <> "_scale")
     |> String.to_existing_atom()
   end
 

@@ -54,6 +54,9 @@ defmodule GGity.Geom.Point do
         %date_time{} when date_time in [DateTime, NaiveDateTime] ->
           Scale.X.DateTime.new(values)
 
+        value when is_binary(value) ->
+          Scale.X.Discrete.new(values)
+
         _value ->
           Scale.X.Continuous.new(values)
       end
@@ -221,15 +224,23 @@ defmodule GGity.Geom.Point do
   defp x_tick(%Geom.Point{} = geom_point, value, interval) do
     gridline_length = geom_point.width / geom_point.aspect_ratio + geom_point.area_padding * 2
     coord = geom_point.x_scale.inverse.(value)
+    %scale_type{} = geom_point.x_scale
+
+    minor_break =
+      if scale_type == Scale.X.Discrete do
+        []
+      else
+        Draw.line(
+          y2: "-#{gridline_length}",
+          stroke: "white",
+          stroke_width: "0.5",
+          transform: "translate(#{interval}, 0)"
+        )
+      end
 
     [
       Draw.line(y2: "-#{gridline_length}", stroke: "white", stroke_width: "1"),
-      Draw.line(
-        y2: "-#{gridline_length}",
-        stroke: "white",
-        stroke_width: "0.5",
-        transform: "translate(#{interval}, 0)"
-      ),
+      minor_break,
       Draw.text(Labels.format(geom_point.x_scale, value),
         fill: "gray",
         y: "9",

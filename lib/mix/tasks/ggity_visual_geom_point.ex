@@ -24,7 +24,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
           add_size_aesthetic(),
           fixed_aesthetics(),
           diamonds_alpha_tenth(),
-          two_legends()
+          two_legends(),
+          discrete_scale()
         ],
         "\n"
       )
@@ -123,6 +124,14 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
     |> Plot.new(%{x: :wt, y: :mpg})
     |> Plot.geom_point(%{color: :cyl, shape: :vs})
     |> Plot.labs(title: "Two Category Scales")
+    |> Plot.plot()
+  end
+
+  defp discrete_scale do
+    Examples.mpg()
+    |> Plot.new(%{x: "manufacturer", y: "cty"})
+    |> Plot.geom_point()
+    |> Plot.labs(title: "Discrete X")
     |> Plot.plot()
   end
 end
