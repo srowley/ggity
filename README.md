@@ -59,7 +59,7 @@ The table below illustrates which scales are available for different aesthetics.
 
 | Aesthetic | Continuous | Discrete | Identity | Date/DateTime |
 | :-------: | :--------: | :------: | :------: | :-----------: |
-| x | Yes | No | Yes | Yes |
+| x | Yes | Yes | Yes | Yes |
 | y | Yes | No | Yes | No |
 | alpha | Yes | Yes | Yes | No |
 | color | No | Yes | Yes | No |
