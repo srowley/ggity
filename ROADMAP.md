@@ -5,7 +5,7 @@
 * [COMPLETE] Allow selective inclusion of legends (for some scales and not others)
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Bar charts
-* Allow text to be used as shape (i.e., geom_text)
+* [COMPLETE] Allow text to be used as shape <s>(i.e., geom_text)</s>
 * Add other non-fillable shapes to shapes palette
 * Add fillable shapes to shapes palette
 

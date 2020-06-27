@@ -73,6 +73,18 @@ defmodule GGity.Draw do
   def marker(:diamond, coords, size, options), do: diamond(coords, size, options)
   def marker(:circle, coords, size, options), do: circle(coords, size / 2, options)
 
+  def marker(character, coords, size, options) when is_binary(character) do
+    {x, y} = coords
+
+    text(character, [
+      {:x, x},
+      {:y, y},
+      {:font_size, size},
+      {:text_anchor, "middle"},
+      {:dominant_baseline, "middle"} | options
+    ])
+  end
+
   @spec circle({number(), number()}, number(), keyword()) :: iolist()
   def circle({x, y}, radius, options) do
     [

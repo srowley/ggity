@@ -57,14 +57,14 @@ and axis labels support custom formatting.
 
 The table below illustrates which scales are available for different aesthetics.
 
-| Aesthetic | Continuous | Discrete | Identity | Date/DateTime |
-| :-------: | :--------: | :------: | :------: | :-----------: |
-| x | Yes | Yes | Yes | Yes |
-| y | Yes | No | Yes | No |
-| alpha | Yes | Yes | Yes | No |
-| color | No | Yes | Yes | No |
-| shape | No | Yes | Yes | No |
-| size | Yes | Yes | Yes | No |
+| Aesthetic | Continuous | Discrete | Identity | Date/DateTime | Manual |
+| :-------: | :--------: | :------: | :------: | :-----------: | :----: |
+| x | Yes | Yes | Yes | Yes | No |
+| y | Yes | No | Yes | No | No |
+| alpha | Yes | Yes | Yes | No | No |
+| color | No | Yes | Yes | No | No |
+| shape | No | Yes | Yes | No | Yes |
+| size | Yes | Yes | Yes | No | No |
 
 Line geoms also support setting a custom value for line type.
 

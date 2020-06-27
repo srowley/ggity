@@ -411,8 +411,45 @@ defmodule GGity.Plot do
   def scale_shape(%Plot{} = plot, options \\ []) do
     shape_scale =
       plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:size]) end)
+      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:shape]) end)
       |> Scale.Shape.new(options)
+
+    updated_geom = struct(plot.geom, shape_scale: shape_scale)
+    struct(plot, geom: updated_geom)
+  end
+
+  @doc """
+  Sets geom point marker shape for categorical data using a custom palette.
+
+  This scale requires a `:values` option be passed, which must contain a list
+  of characters or valid shape names (`:circle`, `:square`, `:diamond` or `:triangle`)
+  to be used as markers. These values are mapped to the unique values of the mapped variable
+  in term order. The list must have as many values as there are unique values in the data.
+
+  This function also takes the following (optional) options:
+
+  - `:labels` - specifies how legend item names (levels of the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+
+  ```
+  [
+    %{x: 6, y: 4, mood: "happy"},
+    %{x: 5, y: 3, mood: "ok"},
+    %{x: 8, y: 4, mood: "sad"},
+    %{x: 7, y: 4, mood: "sad"},
+  ]
+  |> Plot.new(%{x: :x, y: :y})
+  |> Plot.geom_point(%{shape: :mood}, size: 7)
+  |> Plot.scale_shape_manual(values: ["😀", "😐", "☹️"])
+  |> Plot.plot()
+  ```
+  """
+  @spec scale_shape_manual(Plot.t(), keyword()) :: Plot.t()
+  def scale_shape_manual(%Plot{} = plot, options \\ []) do
+    shape_scale =
+      plot.data
+      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:shape]) end)
+      |> Scale.Shape.Manual.new(options)
 
     updated_geom = struct(plot.geom, shape_scale: shape_scale)
     struct(plot, geom: updated_geom)

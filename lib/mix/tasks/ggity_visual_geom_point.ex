@@ -18,7 +18,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
         [
           basic(),
           add_color_aesthetic(),
-          add_shape_aesthetic(),
+          add_shape_fixed(),
+          add_shape_manual(),
           add_discrete_alpha(),
           add_discrete_size(),
           add_size_aesthetic(),
@@ -69,11 +70,20 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
     |> Plot.plot()
   end
 
-  defp add_shape_aesthetic do
+  defp add_shape_fixed do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{shape: :cyl})
+    |> Plot.geom_point(%{shape: :cyl}, size: 8)
     |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
+    |> Plot.plot()
+  end
+
+  defp add_shape_manual do
+    Examples.mtcars()
+    |> Plot.new(%{x: :wt, y: :mpg})
+    |> Plot.geom_point(%{shape: :cyl}, size: 7)
+    |> Plot.scale_shape_manual(values: ["🐌", "🤷", "💪"])
+    |> Plot.labs(title: "Emoji Support", shape: "Cylinders")
     |> Plot.plot()
   end
 

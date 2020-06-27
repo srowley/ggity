@@ -25,6 +25,11 @@ defimpl GGity.Legend, for: GGity.Scale.Shape do
   def legend_height(scale), do: GGity.Scale.Shape.legend_height(scale)
 end
 
+defimpl GGity.Legend, for: GGity.Scale.Shape.Manual do
+  def draw_legend(scale, label), do: GGity.Scale.Shape.Manual.draw_legend(scale, label)
+  def legend_height(scale), do: GGity.Scale.Shape.Manual.legend_height(scale)
+end
+
 defimpl GGity.Legend, for: GGity.Scale.Size.Discrete do
   def draw_legend(scale, label), do: GGity.Scale.Size.Discrete.draw_legend(scale, label)
   def legend_height(scale), do: GGity.Scale.Size.Discrete.legend_height(scale)
