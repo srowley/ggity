@@ -9,8 +9,12 @@ defmodule Mix.Tasks.Ggity.Visual do
   @doc false
   @spec run(list(any)) :: any
   def run(argv) do
-    Visual.Geom.Point.run(argv)
-    Visual.Geom.Line.run(argv)
-    Visual.Scale.Color.Viridis.run(argv)
+    [
+      Visual.Geom.Point,
+      Visual.Geom.Line,
+      Visual.Geom.Bar,
+      Visual.Scale.Color.Viridis
+    ]
+    |> Enum.each(fn module -> apply(module, :run, [argv]) end)
   end
 end

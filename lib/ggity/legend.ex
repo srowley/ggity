@@ -15,6 +15,11 @@ defimpl GGity.Legend, for: GGity.Scale.Alpha.Discrete do
   def legend_height(scale), do: GGity.Scale.Alpha.Discrete.legend_height(scale)
 end
 
+defimpl GGity.Legend, for: GGity.Scale.Fill.Viridis do
+  def draw_legend(scale, label), do: GGity.Scale.Fill.Viridis.draw_legend(scale, label)
+  def legend_height(scale), do: GGity.Scale.Fill.Viridis.legend_height(scale)
+end
+
 defimpl GGity.Legend, for: GGity.Scale.Color.Viridis do
   def draw_legend(scale, label), do: GGity.Scale.Color.Viridis.draw_legend(scale, label)
   def legend_height(scale), do: GGity.Scale.Color.Viridis.legend_height(scale)

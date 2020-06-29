@@ -102,13 +102,27 @@ defmodule GGity.Plot do
   plot margins. Default is `%{left: 30, top: 10, right: 0, bottom: 0}`.
   """
   @spec new(list(record()), mapping(), options()) :: Plot.t()
-  def new(data, %{x: x_name, y: y_name} = mapping, options \\ []) do
+  def new(data, mapping, options \\ [])
+
+  def new(data, %{x: x_name, y: y_name} = mapping, options) do
     geom =
       Keyword.get(options, :geom, Geom.Blank)
       |> struct()
       |> Geom.new(data, mapping, options)
 
     labels = %{title: nil, x: x_name, y: y_name}
+
+    struct(Plot, options)
+    |> struct(%{data: data, mapping: mapping, geom: geom, labels: labels})
+  end
+
+  def new(data, %{x: x_name} = mapping, options) do
+    geom =
+      Keyword.get(options, :geom, Geom.Blank)
+      |> struct()
+      |> Geom.new(data, mapping, options)
+
+    labels = %{title: nil, x: x_name, y: "count"}
 
     struct(Plot, options)
     |> struct(%{data: data, mapping: mapping, geom: geom, labels: labels})
@@ -231,6 +245,21 @@ defmodule GGity.Plot do
 
   def geom_line(%Plot{} = plot, mapping, options) do
     add_geom(plot, Geom.Line, mapping, options)
+  end
+
+  @spec geom_bar(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_bar(plot, mapping \\ [], options \\ [])
+
+  def geom_bar(%Plot{} = plot, [], []) do
+    add_geom(plot, Geom.Bar)
+  end
+
+  def geom_bar(%Plot{} = plot, mapping_or_options, []) do
+    add_geom(plot, Geom.Bar, mapping_or_options)
+  end
+
+  def geom_bar(%Plot{} = plot, mapping, options) do
+    add_geom(plot, Geom.Bar, mapping, options)
   end
 
   defp add_geom(%Plot{} = plot, geom_type) do
@@ -388,6 +417,22 @@ defmodule GGity.Plot do
       |> Scale.Color.Viridis.new(options)
 
     updated_geom = struct(plot.geom, color_scale: color_scale)
+    struct(plot, geom: updated_geom)
+  end
+
+  @doc """
+  Sets fill color for fillable shapes (e.g., bars).
+
+  Accepts the same options as `scale_color_viridis/2`.
+  """
+  @spec scale_fill_viridis(Plot.t(), keyword()) :: Plot.t()
+  def scale_fill_viridis(%Plot{} = plot, options \\ []) do
+    fill_scale =
+      plot.data
+      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:fill]) end)
+      |> Scale.Fill.Viridis.new(options)
+
+    updated_geom = struct(plot.geom, fill_scale: fill_scale)
     struct(plot, geom: updated_geom)
   end
 
@@ -825,7 +870,7 @@ defmodule GGity.Plot do
   defp draw_legend_group(plot) do
     {legend_group, legend_group_height} =
       Enum.reduce(
-        [:alpha_scale, :color_scale, :shape_scale, :size_scale],
+        [:alpha_scale, :color_scale, :fill_scale, :shape_scale, :size_scale],
         {[], 0},
         fn scale, {legends, offset_acc} ->
           {[draw_legend(plot, scale, offset_acc) | legends],

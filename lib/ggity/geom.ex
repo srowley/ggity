@@ -16,6 +16,14 @@ defimpl GGity.Geom, for: GGity.Geom.Point do
   def draw(geom, data), do: GGity.Geom.Point.draw(geom, data)
 end
 
+defimpl GGity.Geom, for: GGity.Geom.Bar do
+  def new(_geom, data, mapping, options) do
+    GGity.Geom.Bar.new(data, mapping, options)
+  end
+
+  def draw(geom, data), do: GGity.Geom.Bar.draw(geom, data)
+end
+
 defimpl GGity.Geom, for: GGity.Geom.Line do
   def new(_geom, data, mapping, options) do
     GGity.Geom.Line.new(data, mapping, options)

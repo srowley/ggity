@@ -6,7 +6,6 @@ defmodule GGity.Scale.X.Continuous do
   @base_axis_intervals [0.1, 0.2, 0.25, 0.4, 0.5, 0.75, 1.0, 2.0, 2.5, 4.0, 5.0, 7.5, 10]
 
   @type t() :: %__MODULE__{}
-  @type record() :: map()
   @type mapping() :: map()
 
   defstruct width: 200,
@@ -19,7 +18,7 @@ defmodule GGity.Scale.X.Continuous do
             values: nil,
             transform: nil
 
-  @spec new(list(record()), keyword()) :: X.Continuous.t()
+  @spec new(list(number()), keyword()) :: X.Continuous.t()
   def new(values, options \\ []) do
     scale = struct(X.Continuous, options)
     struct(scale, transformations(scale, values))
