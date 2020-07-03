@@ -75,11 +75,11 @@ defmodule GGityGeomLineTest do
     end
   end
 
-  describe "line/2" do
+  describe "lines/2" do
     test "draws the line correctly", %{data: data} do
       line =
         Geom.Line.new(data, %{x: :wt, y: :mpg}, linetype: :dashed)
-        |> Geom.Line.line(data)
+        |> Geom.Line.lines(data)
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

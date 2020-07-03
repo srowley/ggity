@@ -865,8 +865,6 @@ defmodule GGity.Plot do
     |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
   end
 
-  defp draw_legend_group(%Plot{geom: %Geom.Line{}}), do: []
-
   defp draw_legend_group(plot) do
     {legend_group, legend_group_height} =
       Enum.reduce(
@@ -902,7 +900,7 @@ defmodule GGity.Plot do
         []
 
       _positive ->
-        Legend.draw_legend(scale, label)
+        Legend.draw_legend(scale, label, plot.geom.key_glyph)
         |> Draw.g(transform: "translate(0, #{offset})")
     end
   end

@@ -10,6 +10,7 @@ defmodule GGity.Geom.Line do
   defstruct mapping: nil,
             width: 200,
             aspect_ratio: 1.5,
+            key_glyph: :path,
             x_scale: nil,
             y_scale: nil,
             color_scale: nil,
@@ -23,7 +24,7 @@ defmodule GGity.Geom.Line do
 
   @spec new(list(record()), mapping(), keyword()) :: Geom.Line.t()
   def new(data, %{x: x_name, y: y_name} = mapping, options \\ []) do
-    [x_values, y_values, _size_values, _alpha_values, _color_values] =
+    [x_values, y_values, _size_values, _alpha_values, color_values] =
       data
       |> Enum.map(fn row ->
         {row[x_name], row[y_name], row[mapping[:size]], row[mapping[:alpha]],
@@ -40,28 +41,28 @@ defmodule GGity.Geom.Line do
     |> assign_x_scale(x_values)
     |> assign_y_scale(y_values)
     |> assign_alpha_scale(fixed_scales)
-    |> assign_color_scale(fixed_scales)
+    |> assign_color_scale(fixed_scales, color_values)
     |> assign_linetype_scale(fixed_scales)
     |> assign_size_scale(fixed_scales)
   end
 
   defp assign_x_scale(geom_line, values) do
-    scale =
+    {scale, key_glyph} =
       case hd(values) do
         %Date{} ->
-          Scale.X.Date.new(values)
+          {Scale.X.Date.new(values), :timeseries}
 
         %date_time{} when date_time in [DateTime, NaiveDateTime] ->
-          Scale.X.DateTime.new(values)
+          {Scale.X.DateTime.new(values), :timeseries}
 
         value when is_binary(value) ->
-          Scale.X.Discrete.new(values)
+          {Scale.X.Discrete.new(values), :path}
 
         _value ->
-          Scale.X.Continuous.new(values)
+          {Scale.X.Continuous.new(values), :path}
       end
 
-    %{geom_line | x_scale: scale}
+    %{geom_line | x_scale: scale, key_glyph: key_glyph}
   end
 
   defp assign_y_scale(geom_line, values) do
@@ -81,14 +82,18 @@ defmodule GGity.Geom.Line do
     %{geom_line | alpha_scale: scale}
   end
 
-  defp assign_color_scale(geom_line, fixed_scales) do
+  defp assign_color_scale(geom_line, fixed_scales, values) do
     scale =
-      case Keyword.get(fixed_scales, :color) do
-        nil ->
+      cond do
+        hd(values) != nil ->
+          Scale.Color.Viridis.new(values)
+
+        Keyword.get(fixed_scales, :color) == nil ->
           Scale.Color.Manual.new()
 
-        color ->
-          Scale.Color.Manual.new(color)
+        true ->
+          Keyword.get(fixed_scales, :color)
+          |> Scale.Color.Manual.new()
       end
 
     %{geom_line | color_scale: scale}
@@ -125,12 +130,18 @@ defmodule GGity.Geom.Line do
     [
       x_axis(geom_line),
       y_axis(geom_line),
-      line(geom_line, data)
+      lines(geom_line, data)
     ]
   end
 
-  @spec line(Geom.Line.t(), list(map())) :: iolist()
-  def line(%Geom.Line{} = geom_line, data) do
+  @spec lines(Geom.Line.t(), list(record())) :: iolist()
+  def lines(%Geom.Line{} = geom_line, data) do
+    # group the data by color scale level
+    Enum.group_by(data, fn row -> row[geom_line.mapping[:color]] end)
+    |> Enum.map(fn {_value, group} -> line(geom_line, group) end)
+  end
+
+  defp line(%Geom.Line{} = geom_line, data) do
     coords =
       data
       |> sort_by_x(geom_line)
@@ -147,7 +158,7 @@ defmodule GGity.Geom.Line do
       |> Enum.map(fn row -> {row.x + geom_line.area_padding, row.y + geom_line.area_padding} end)
 
     {color, size, alpha, linetype} = {
-      geom_line.color_scale.transform.(nil),
+      geom_line.color_scale.transform.(hd(data)[geom_line.mapping[:color]]),
       geom_line.size_scale.transform.(nil),
       geom_line.alpha_scale.transform.(nil),
       geom_line.linetype_scale.transform.(nil)

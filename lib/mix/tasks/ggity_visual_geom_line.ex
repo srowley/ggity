@@ -19,7 +19,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
           basic(),
           add_linetype_aesthetic(),
           fixed_aesthetics(),
-          date_time()
+          date_time(),
+          group()
         ],
         "\n"
       )
@@ -95,6 +96,14 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.geom_line(size: 1)
     |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
     |> Plot.labs(title: "DateTime data")
+    |> Plot.plot()
+  end
+
+  def group do
+    Examples.economics_long()
+    |> Plot.new(%{x: "date", y: "value01"})
+    |> Plot.labs(title: "Group by discrete variable")
+    |> Plot.geom_line(%{color: "variable"})
     |> Plot.plot()
   end
 end

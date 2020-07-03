@@ -10,6 +10,7 @@ defmodule GGity.Geom.Bar do
   defstruct mapping: nil,
             width: 200,
             aspect_ratio: 1.5,
+            key_glyph: :rect,
             stat_count: %{},
             count_levels: 0,
             bar_padding: 5,

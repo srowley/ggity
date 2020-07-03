@@ -10,6 +10,7 @@ defmodule GGity.Geom.Point do
   defstruct mapping: nil,
             width: 200,
             aspect_ratio: 1.5,
+            key_glyph: :point,
             x_scale: nil,
             y_scale: nil,
             color_scale: nil,

@@ -30,16 +30,16 @@ defmodule GGityScaleColorViridisTest do
     test "returns an empty list if scale has one or zero levels" do
       assert [] ==
                Color.Viridis.new([])
-               |> Color.Viridis.draw_legend("Nothing Here")
+               |> Color.Viridis.draw_legend("Nothing Here", :point)
 
       assert [] ==
                Color.Viridis.new(["fish"])
-               |> Color.Viridis.draw_legend("Nothing Here")
+               |> Color.Viridis.draw_legend("Nothing Here", :point)
     end
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Color.Viridis.draw_legend(scale, "Fine Meats")
+        Color.Viridis.draw_legend(scale, "Fine Meats", :point)
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

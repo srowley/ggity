@@ -1335,14 +1335,14 @@ defmodule GGity.Scale.Color.Viridis do
     |> struct(levels: levels, transform: fn value -> color_map[value] end)
   end
 
-  @spec draw_legend(Color.Viridis.t(), binary()) :: iolist()
-  def draw_legend(%Color.Viridis{guide: :none}, _label), do: []
+  @spec draw_legend(Color.Viridis.t(), binary(), atom()) :: iolist()
+  def draw_legend(%Color.Viridis{guide: :none}, _label, _key_glyph), do: []
 
-  def draw_legend(%Color.Viridis{levels: []}, _label), do: []
+  def draw_legend(%Color.Viridis{levels: []}, _label, _key_glyph), do: []
 
-  def draw_legend(%Color.Viridis{levels: [_]}, _label), do: []
+  def draw_legend(%Color.Viridis{levels: [_]}, _label, _key_glyph), do: []
 
-  def draw_legend(%Color.Viridis{levels: levels} = scale, label) do
+  def draw_legend(%Color.Viridis{levels: levels} = scale, label, key_glyph) do
     [
       Draw.text(
         "#{label}",
@@ -1353,11 +1353,11 @@ defmodule GGity.Scale.Color.Viridis do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_glyph) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_glyph) do
     [
       Draw.rect(
         x: "0",
@@ -1368,13 +1368,7 @@ defmodule GGity.Scale.Color.Viridis do
         stroke: "#eeeeee",
         stroke_width: "0.5"
       ),
-      Draw.marker(
-        :circle,
-        {7.5, 7.5 + 15 * index},
-        5,
-        fill: "#{scale.transform.(level)}",
-        fill_opacity: "1"
-      ),
+      draw_key_glyph(scale, level, index, key_glyph),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "20",
@@ -1384,6 +1378,39 @@ defmodule GGity.Scale.Color.Viridis do
         text_anchor: "left"
       )
     ]
+  end
+
+  defp draw_key_glyph(scale, level, index, :path) do
+    Draw.line(
+      x1: 1,
+      y1: 7.5 + 15 * index,
+      x2: 14,
+      y2: 7.5 + 15 * index,
+      stroke: "#{scale.transform.(level)}",
+      stroke_opacity: "1"
+    )
+  end
+
+  defp draw_key_glyph(scale, level, index, :point) do
+    Draw.marker(
+      :circle,
+      {7.5, 7.5 + 15 * index},
+      5,
+      fill: "#{scale.transform.(level)}",
+      fill_opacity: "1"
+    )
+  end
+
+  defp draw_key_glyph(scale, level, index, :timeseries) do
+    offset = 15 * index
+
+    Draw.polyline(
+      [{1, 14 + offset}, {6, 6 + offset}, {9, 9 + offset}, {14, 1 + offset}],
+      scale.transform.(level),
+      1,
+      1,
+      ""
+    )
   end
 
   @spec legend_height(Color.Viridis.t()) :: non_neg_integer()

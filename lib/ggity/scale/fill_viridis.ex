@@ -20,14 +20,14 @@ defmodule GGity.Scale.Fill.Viridis do
     struct(Fill.Viridis, color_scale)
   end
 
-  @spec draw_legend(Fill.Viridis.t(), binary()) :: iolist()
-  def draw_legend(%Fill.Viridis{guide: :none}, _label), do: []
+  @spec draw_legend(Fill.Viridis.t(), binary(), atom()) :: iolist()
+  def draw_legend(%Fill.Viridis{guide: :none}, _label, _key_glyph), do: []
 
-  def draw_legend(%Fill.Viridis{levels: []}, _label), do: []
+  def draw_legend(%Fill.Viridis{levels: []}, _label, _key_glyph), do: []
 
-  def draw_legend(%Fill.Viridis{levels: [_]}, _label), do: []
+  def draw_legend(%Fill.Viridis{levels: [_]}, _label, _key_glyph), do: []
 
-  def draw_legend(%Fill.Viridis{levels: levels} = scale, label) do
+  def draw_legend(%Fill.Viridis{levels: levels} = scale, label, key_glyph) do
     [
       Draw.text(
         "#{label}",
@@ -38,21 +38,13 @@ defmodule GGity.Scale.Fill.Viridis do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_glyph) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_glyph) do
     [
-      Draw.rect(
-        x: "0",
-        y: "#{15 * index}",
-        height: "15",
-        width: "15",
-        fill: "#{scale.transform.(level)}",
-        stroke: "white",
-        stroke_width: "0.5"
-      ),
+      draw_key_glyph(scale, level, index, key_glyph),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "20",
@@ -62,6 +54,18 @@ defmodule GGity.Scale.Fill.Viridis do
         text_anchor: "left"
       )
     ]
+  end
+
+  defp draw_key_glyph(scale, level, index, :rect) do
+    Draw.rect(
+      x: "0",
+      y: "#{15 * index}",
+      height: "15",
+      width: "15",
+      fill: "#{scale.transform.(level)}",
+      stroke: "white",
+      stroke_width: "0.5"
+    )
   end
 
   @spec legend_height(Fill.Viridis.t()) :: non_neg_integer()

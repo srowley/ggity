@@ -58,6 +58,29 @@ defmodule GGity.Examples do
     |> Enum.map(fn list -> Enum.into(list, %{}) end)
   end
 
+  def economics_long do
+    file_name = Path.join([File.cwd!(), "datasets", "economics_long.csv"])
+
+    ["" | headers] =
+      File.stream!(file_name)
+      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
+      |> Enum.take(1)
+      |> hd()
+
+    File.stream!(file_name)
+    |> NimbleCSV.RFC4180.parse_stream()
+    |> Stream.map(fn [_row_num, date, variable, value, value01] ->
+      [
+        Date.from_iso8601!(date),
+        variable,
+        elem(Float.parse(value), 0),
+        elem(Float.parse(value01), 0)
+      ]
+    end)
+    |> Stream.map(fn line -> Enum.zip(headers, line) end)
+    |> Enum.map(fn list -> Enum.into(list, %{}) end)
+  end
+
   def mtcars do
     headers = [:model, :mpg, :cyl, :disp, :hp, :drat, :wt, :qsec, :vs, :am, :gear, :carb]
 
