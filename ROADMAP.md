@@ -3,14 +3,15 @@
 ## v0.2 
 * [COMPLETE] Better formatting of axis numbers and dates
 * [COMPLETE] Allow selective inclusion of legends (for some scales and not others)
-* Draw legend on any side of the plot (top/left/bottom/right)
-* Bar charts
+* [Partially Complete] Bar charts (supports fill aesthetic and `stat_count`; other aesthetics and `stat_identity` pending)
 * [COMPLETE] Allow text to be used as shape <s>(i.e., geom_text)</s>
-* Add other non-fillable shapes to shapes palette
-* Add fillable shapes to shapes palette
+* [Partially Complete] Support grouping, legends for line charts (this works for the color aesthetic, but a more general solution for grouping any aesthetic for any geom is pending)
+* Internal overhaul to implement layers and split out stats (at least) from the geom context
 
 ## v0.3 
-* Support grouping, legends for line charts
+* Add other non-fillable shapes to shapes palette
+* Add fillable shapes to shapes palette
+* Draw legend on any side of the plot (top/left/bottom/right)
 * Support faceting
 * Support CSS styling
 * Area charts
@@ -28,5 +29,4 @@
 * Implement a method for rendering new points and updating scales only
 
 ## Beyond
-* Support statistical transformations
 * Would an SVG diffing tool help with development?

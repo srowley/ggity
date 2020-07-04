@@ -6,6 +6,11 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Added initial support for grouping, works (with legend) for line charts and the color aesthetic.
+- Added additional legend key glyphs.
+- Added `economics_long` dataset to support testing of line chart grouping.
+- Added initial support for bar charts in stacked or dodged position, fill mapping and stat_count only.
+- Added `Scale.Fill.Viridis` to support bar chart aesthetic.
 - Added `Scale.X.Discrete`, a prerequisite for implementing bar charts.
 - Legends can be toggled on and off with `Plot.guides/2` or by passing `guide: :none`/`guide: :legend`
 to a scale constructor.
@@ -18,6 +23,7 @@ accepted by NimbleStrftime, or a tuple with a pattern and a keyword list of opti
 
 ### Changed
 
+- Added visual tests for `Geom.Bar`
 - Various minor documentation improvements.
 - Eliminated an extra list traversal in `Scale.Color.Viridis`
 - `Geom.Blank` returns an empty list instead of a list with an unnecessary empty string

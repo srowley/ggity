@@ -136,7 +136,7 @@ defmodule GGity.Plot do
 
   The `Plot` struct's `:plot_width` and `:aspect_ratio` values are used to set the height
   and width properties of the SVG. The viewBox property is set by the plot's `:width` and
-  `aspect_ratio` values.
+  `:aspect_ratio` values.
   """
   @spec plot(Plot.t()) :: iolist()
   def plot(%Plot{} = plot) do
@@ -161,8 +161,7 @@ defmodule GGity.Plot do
 
   Accepts a mapping and/or additonal options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
-  to re-specify the `:x` or `:y` mappings, for example, unless the intent is
-  to override them.
+  to re-specify the `:x` or `:y` mappings.
 
   Point geoms support the following aesthetics, which use the noted default scales:
 
@@ -182,6 +181,8 @@ defmodule GGity.Plot do
   tick on each axis (same value applied to both axes) defaults to `10`.
   * `:breaks` - the number of tick intervals on the x- and y axis (same value applied
   to both axes). This may be adjusted by the scale function based on the data. Defaults to `5`.
+  * `:key_glyph` - Type of glyph to use in the legend key. currently only supported for the
+  `:color` aesthetic. Available values are `:point`, `:path` and `:timeseries`; defaults to `:point`.
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
   @spec geom_point(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
@@ -204,19 +205,19 @@ defmodule GGity.Plot do
 
   Accepts a mapping and/or additonal options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
-  to re-specify the `:x` or `:y` mappings, for example, unless the intent is
-  to override them.
+  to re-specify the `:x` or `:y` mappings.
 
-  Line geoms only support mappings for the `:x` and `:y` aesthetics. By default,
+  Line geoms only support mappings for the `:x`, `:y` and `:color` aesthetics. By default,
   the `:x` aesthetic will use continuous number/`Date`/`DateTime` scales based on the
   type of value in first record.
 
   Note that the line geom sorts the data by the values for the variable mapped
   to the `:x` aesthetic using Erlang default term ordering.
 
-  Fixed values for other aesthetics can be specified as options, e.g., `color: "blue"`.
-  This fixed value is assigned to the aesthetic for all observations. Supported
-  aesthetics include:
+  The `:color` aesthetic can be mapped to a variable. Fixed values can be assigned
+  to all other aesthetics as options, e.g., `linetype: :solid`.
+
+  Supported aesthetics include:
 
   * `:alpha`
   * `:color`
@@ -229,10 +230,11 @@ defmodule GGity.Plot do
   tick on each axis (same value applied to both axes) defaults to `10`.
   * `:breaks` - the number of tick intervals on the x- and y axis (same value applied
   to both axes). This may be adjusted by the scale function based on the data. Defaults to `5`.
+  * `:key_glyph` - Type of glyph to use in the legend key. currently only supported for the
+  `:color` aesthetic. Available values are `:point`, `:path` and `:timeseries`; default values are
+  assigned based on the x value scale type.
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
-
-  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_line(plot, mapping \\ [], options \\ [])
 
   def geom_line(%Plot{} = plot, [], []) do
@@ -246,6 +248,29 @@ defmodule GGity.Plot do
   def geom_line(%Plot{} = plot, mapping, options) do
     add_geom(plot, Geom.Line, mapping, options)
   end
+
+  @doc """
+  Adds a bar geom to the plot.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` mapping.
+
+  Currently bar geoms only support `:stat_count`, meaning that the `:y` value is mapped
+  to the number of observations with given `:x` (and `:fill`, if mapped) values,
+  rather than representing the mapping of a variable in the data to the y axis.
+  This means that the only mappings that are needed or used are the `:x` and `:fill`
+  aesthetics. The `:x` variable is treated as discrete.
+
+  Other supported options:
+
+  * `:area_padding` - amount of blank space before the first tick and after the last
+  tick on each axis (same value applied to both axes) defaults to `10`.
+  * `:position` - Available values are `:stack` (one bar per `:x` value) or `:dodge` (one bar
+  per unique `:x`/`:fill` value pair). Defaults to `:stack`.
+  * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
+  """
+  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
 
   @spec geom_bar(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_bar(plot, mapping \\ [], options \\ [])
