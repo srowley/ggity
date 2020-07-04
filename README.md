@@ -61,22 +61,23 @@ The table below illustrates which scales are available for different aesthetics.
 | :-------: | :--------: | :------: | :------: | :-----------: | :----: |
 | x | Yes | Yes | Yes | Yes | No |
 | y | Yes | No | Yes | No | No |
-| alpha | Yes | Yes | Yes | No | No |
-| color | No | Yes | Yes | No | No |
-| shape | No | Yes | Yes | No | Yes |
-| size | Yes | Yes | Yes | No | No |
+| alpha | Yes | Yes | Yes | N/A | No |
+| color | No | Yes | Yes | N/A | No |
+| linetype | N/A | Yes | Yes | N/A | No |
+| shape | N/A | Yes | Yes | N/A | Yes |
+| size | Yes | Yes | Yes | N/A | No |
 
-Line geoms also support setting a custom value for line type.
+Line geoms support mapping discrete variables to color or line type.
 
 ```elixir
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "linetype: :twodash", x: "Weight")
-    |> Plot.geom_line(linetype: :twodash, size: 1)
+    Examples.economics_long()
+    |> Plot.new(%{x: "date", y: "value01"})
+    |> Plot.labs(title: "Mapped to color")
+    |> Plot.geom_line(%{color: "variable"})
     |> Plot.plot()
 ```
 
-![](./examples/geom_line_linetype.svg)
+![](./examples/geom_line.svg)
 
 ## Goals
 I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.

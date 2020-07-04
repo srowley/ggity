@@ -98,7 +98,7 @@ defmodule GGity.Draw do
     ]
   end
 
-  @spec polyline(list({number(), number()}), number(), number(), number(), binary()) :: iolist()
+  @spec polyline(list({number(), number()}), binary(), number(), number(), binary()) :: iolist()
   def polyline(coords, color, size, alpha, linetype) do
     coord_list =
       Stream.map(coords, fn {x, y} -> "#{x},#{y} " end)

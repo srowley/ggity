@@ -5,7 +5,7 @@
 * [COMPLETE] Allow selective inclusion of legends (for some scales and not others)
 * [Partially Complete] Bar charts (supports fill aesthetic and `stat_count`; other aesthetics and `stat_identity` pending)
 * [COMPLETE] Allow text to be used as shape <s>(i.e., geom_text)</s>
-* [Partially Complete] Support grouping, legends for line charts (this works for the color aesthetic, but a more general solution for grouping any aesthetic for any geom is pending)
+* [COMPLETE] Support grouping, legends for line charts 
 * Internal overhaul to implement layers and split out stats (at least) from the geom context
 
 ## v0.3 
@@ -14,9 +14,10 @@
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Support faceting
 * Support CSS styling
-* Area charts
+* Publish to Hex
 
 ## v0.4
+* Area charts
 * Continuous color scale
 * Legends for continuous scales
 * Implement x_lim/y_lim

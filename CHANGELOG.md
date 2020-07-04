@@ -6,7 +6,8 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Added initial support for grouping, works (with legend) for line charts and the color aesthetic.
+- Default grouping for line charts applied to all applicable scales.
+- Added `Scale.Linetype.Discrete` for line charts.
 - Added additional legend key glyphs.
 - Added `economics_long` dataset to support testing of line chart grouping.
 - Added initial support for bar charts in stacked or dodged position, fill mapping and stat_count only.

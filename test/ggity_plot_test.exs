@@ -259,6 +259,33 @@ defmodule GGityPlotTest do
     end
   end
 
+  describe "scale_linetype_discrete/2" do
+    setup %{data: data, mapping: mapping} do
+      mapping = Map.put(mapping, :linetype, :c)
+
+      plot =
+        Plot.new(data, mapping)
+        |> Plot.geom_line()
+
+      %{plot: plot}
+    end
+
+    test "sets the linetype scale on the plot geom", %{plot: plot} do
+      plot = Plot.scale_linetype_discrete(plot)
+      assert %Scale.Linetype.Discrete{} = plot.geom.linetype_scale()
+    end
+
+    test "labels legend breaks using custom function", %{plot: plot} do
+      plot = Plot.scale_linetype_discrete(plot, labels: fn _value -> "foo" end)
+      assert Labels.format(plot.geom.linetype_scale, 1.0) == "foo"
+    end
+
+    test "sets legend labels to blank when labels value is nil", %{plot: plot} do
+      plot = Plot.scale_linetype_discrete(plot, labels: nil)
+      assert Labels.format(plot.geom.linetype_scale, 1.0) == ""
+    end
+  end
+
   describe "scale_shape/2" do
     setup %{data: data, mapping: mapping} do
       mapping = Map.put(mapping, :shape, :c)

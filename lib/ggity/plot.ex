@@ -207,15 +207,11 @@ defmodule GGity.Plot do
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` or `:y` mappings.
 
-  Line geoms only support mappings for the `:x`, `:y` and `:color` aesthetics. By default,
-  the `:x` aesthetic will use continuous number/`Date`/`DateTime` scales based on the
-  type of value in first record.
+  By default, the `:x` aesthetic will use continuous number/`Date`/`DateTime`
+  scales based on the type of value in first record.
 
   Note that the line geom sorts the data by the values for the variable mapped
   to the `:x` aesthetic using Erlang default term ordering.
-
-  The `:color` aesthetic can be mapped to a variable. Fixed values can be assigned
-  to all other aesthetics as options, e.g., `linetype: :solid`.
 
   Supported aesthetics include:
 
@@ -223,6 +219,9 @@ defmodule GGity.Plot do
   * `:color`
   * `:size`
   * `:linetype`
+
+  The `:linetype` and `:color` aesthetics can be mapped to a variable. Only fixed values
+  can be assigned to `:alpha` and `:size`.
 
   Other supported options:
 
@@ -458,6 +457,33 @@ defmodule GGity.Plot do
       |> Scale.Fill.Viridis.new(options)
 
     updated_geom = struct(plot.geom, fill_scale: fill_scale)
+    struct(plot, geom: updated_geom)
+  end
+
+  @doc """
+  Sets type of line for categorical data in line charts.
+
+  This scale uses a palette of six line types (`:solid`, `:dashed`, `:dotted`, `:longdash`,
+  `:dotdash` and `:twodash`) that are mapped to each unique value of the data. The
+  set of unique data values are sorted for the purpose of assigning them to a line type
+  (in the same order as listed above) and ordering the legend.
+
+  If there are more than six unique values in the data, the line types are recycled
+  per the order above.
+
+  This function also takes the following options:
+
+  - `:labels` - specifies how legend item names (levels of the scale) should be
+  formatted. See `GGity.Labels` for valid values for this option.
+  """
+  @spec scale_linetype_discrete(Plot.t(), keyword()) :: Plot.t()
+  def scale_linetype_discrete(%Plot{geom: %Geom.Line{}} = plot, options \\ []) do
+    linetype_scale =
+      plot.data
+      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:linetype]) end)
+      |> Scale.Linetype.Discrete.new(options)
+
+    updated_geom = struct(plot.geom, linetype_scale: linetype_scale)
     struct(plot, geom: updated_geom)
   end
 
@@ -893,7 +919,7 @@ defmodule GGity.Plot do
   defp draw_legend_group(plot) do
     {legend_group, legend_group_height} =
       Enum.reduce(
-        [:alpha_scale, :color_scale, :fill_scale, :shape_scale, :size_scale],
+        [:alpha_scale, :color_scale, :fill_scale, :linetype_scale, :shape_scale, :size_scale],
         {[], 0},
         fn scale, {legends, offset_acc} ->
           {[draw_legend(plot, scale, offset_acc) | legends],

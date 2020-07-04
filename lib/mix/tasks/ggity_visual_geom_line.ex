@@ -20,7 +20,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
           add_linetype_aesthetic(),
           fixed_aesthetics(),
           date_time(),
-          group()
+          group_by_color(),
+          group_by_linetype()
         ],
         "\n"
       )
@@ -56,7 +57,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
   defp add_linetype_aesthetic do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "linetype: :twodash", x: "Weight")
+    |> Plot.labs(title: "Fixed linetype: :twodash", x: "Weight")
     |> Plot.geom_line(linetype: :twodash, size: 1)
     |> Plot.plot()
   end
@@ -65,7 +66,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     Examples.economics()
     |> Plot.new(%{x: "date", y: "unemploy"})
     |> Plot.geom_line(color: "red", size: 1)
-    |> Plot.labs(title: "Fixed, color: \"red\"")
+    |> Plot.labs(title: "Fixed color: \"red\"")
     |> Plot.plot()
   end
 
@@ -99,11 +100,19 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.plot()
   end
 
-  def group do
+  def group_by_color do
     Examples.economics_long()
     |> Plot.new(%{x: "date", y: "value01"})
-    |> Plot.labs(title: "Group by discrete variable")
+    |> Plot.labs(title: "Mapped to color")
     |> Plot.geom_line(%{color: "variable"})
+    |> Plot.plot()
+  end
+
+  def group_by_linetype do
+    Examples.economics_long()
+    |> Plot.new(%{x: "date", y: "value01"})
+    |> Plot.labs(title: "Mapped to linetype, custom glyph")
+    |> Plot.geom_line(%{linetype: "variable"}, key_glyph: :path)
     |> Plot.plot()
   end
 end

@@ -24,11 +24,11 @@ defmodule GGity.Geom.Line do
 
   @spec new(list(record()), mapping(), keyword()) :: Geom.Line.t()
   def new(data, %{x: x_name, y: y_name} = mapping, options \\ []) do
-    [x_values, y_values, _size_values, _alpha_values, color_values] =
+    [x_values, y_values, _size_values, _alpha_values, color_values, linetype_values] =
       data
       |> Enum.map(fn row ->
         {row[x_name], row[y_name], row[mapping[:size]], row[mapping[:alpha]],
-         row[mapping[:color]]}
+         row[mapping[:color]], row[mapping[:linetype]]}
       end)
       |> List.zip()
       |> Enum.map(&Tuple.to_list/1)
@@ -38,28 +38,28 @@ defmodule GGity.Geom.Line do
 
     struct(Geom.Line, Keyword.drop(options, fixed_scale_aesthetics))
     |> struct(%{mapping: mapping})
-    |> assign_x_scale(x_values)
+    |> assign_x_scale(x_values, options)
     |> assign_y_scale(y_values)
     |> assign_alpha_scale(fixed_scales)
     |> assign_color_scale(fixed_scales, color_values)
-    |> assign_linetype_scale(fixed_scales)
+    |> assign_linetype_scale(fixed_scales, linetype_values)
     |> assign_size_scale(fixed_scales)
   end
 
-  defp assign_x_scale(geom_line, values) do
+  defp assign_x_scale(geom_line, values, options) do
     {scale, key_glyph} =
       case hd(values) do
         %Date{} ->
-          {Scale.X.Date.new(values), :timeseries}
+          {Scale.X.Date.new(values), Keyword.get(options, :key_glyph, :timeseries)}
 
         %date_time{} when date_time in [DateTime, NaiveDateTime] ->
-          {Scale.X.DateTime.new(values), :timeseries}
+          {Scale.X.DateTime.new(values), Keyword.get(options, :key_glyph, :timeseries)}
 
         value when is_binary(value) ->
-          {Scale.X.Discrete.new(values), :path}
+          {Scale.X.Discrete.new(values), Keyword.get(options, :key_glyph, :path)}
 
         _value ->
-          {Scale.X.Continuous.new(values), :path}
+          {Scale.X.Continuous.new(values), Keyword.get(options, :key_glyph, :path)}
       end
 
     %{geom_line | x_scale: scale, key_glyph: key_glyph}
@@ -99,14 +99,18 @@ defmodule GGity.Geom.Line do
     %{geom_line | color_scale: scale}
   end
 
-  defp assign_linetype_scale(geom_line, fixed_scales) do
+  defp assign_linetype_scale(geom_line, fixed_scales, values) do
     scale =
-      case Keyword.get(fixed_scales, :linetype) do
-        nil ->
+      cond do
+        hd(values) != nil ->
+          Scale.Linetype.Discrete.new(values)
+
+        Keyword.get(fixed_scales, :linetype) == nil ->
           Scale.Linetype.Manual.new()
 
-        linetype ->
-          Scale.Linetype.Manual.new(linetype)
+        true ->
+          Keyword.get(fixed_scales, :linetype)
+          |> Scale.Linetype.Manual.new()
       end
 
     %{geom_line | linetype_scale: scale}
@@ -136,8 +140,14 @@ defmodule GGity.Geom.Line do
 
   @spec lines(Geom.Line.t(), list(record())) :: iolist()
   def lines(%Geom.Line{} = geom_line, data) do
-    # group the data by color scale level
-    Enum.group_by(data, fn row -> row[geom_line.mapping[:color]] end)
+    Enum.group_by(data, fn row ->
+      {
+        row[geom_line.mapping[:alpha]],
+        row[geom_line.mapping[:color]],
+        row[geom_line.mapping[:linetype]],
+        row[geom_line.mapping[:size]]
+      }
+    end)
     |> Enum.map(fn {_value, group} -> line(geom_line, group) end)
   end
 
@@ -157,11 +167,11 @@ defmodule GGity.Geom.Line do
       end)
       |> Enum.map(fn row -> {row.x + geom_line.area_padding, row.y + geom_line.area_padding} end)
 
-    {color, size, alpha, linetype} = {
+    {alpha, color, linetype, size} = {
+      geom_line.alpha_scale.transform.(hd(data)[geom_line.mapping[:alpha]]),
       geom_line.color_scale.transform.(hd(data)[geom_line.mapping[:color]]),
-      geom_line.size_scale.transform.(nil),
-      geom_line.alpha_scale.transform.(nil),
-      geom_line.linetype_scale.transform.(nil)
+      geom_line.linetype_scale.transform.(hd(data)[geom_line.mapping[:linetype]]),
+      geom_line.size_scale.transform.(hd(data)[geom_line.mapping[:size]])
     }
 
     Draw.polyline(coords, color, size, alpha, linetype)
