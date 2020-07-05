@@ -27,13 +27,10 @@ defmodule GGityGeomLineTest do
       assert geom.linetype_scale.transform.("meat") == "4"
     end
 
-    @tag :skip
-    # TODO: wait to implement with groups
-    # , %{data: data} do
-    test "adds aesthetics mapped to data" do
-      # geom = Geom.Point.new(data, %{x: :wt, y: :mpg, color: :cyl})
-      # assert %Scale.Color.Viridis{} = geom.color_scale
-      # assert geom.color_scale.transform.(6) == "#208F8C"
+    test "adds aesthetics mapped to data", %{data: data} do
+      geom = Geom.Point.new(data, %{x: :wt, y: :mpg, color: :cyl})
+      assert %Scale.Color.Viridis{} = geom.color_scale
+      assert geom.color_scale.transform.(6) == "#208F8C"
     end
   end
 
