@@ -18,7 +18,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
         [
           basic(),
           stack(),
-          dodge()
+          dodge(),
+          geom_col()
         ],
         "\n"
       )
@@ -71,6 +72,21 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
     end)
     |> Plot.new(%{x: "manufacturer"})
     |> Plot.geom_bar(%{fill: "class"}, position: :dodge)
+    |> Plot.plot()
+  end
+
+  defp geom_col do
+    [
+      %{salesperson: "Joe", week: "Week 1", units: 10},
+      %{salesperson: "Jane", week: "Week 1", units: 15},
+      %{salesperson: "Joe", week: "Week 2", units: 4},
+      %{salesperson: "Jane", week: "Week 2", units: 10},
+      %{salesperson: "Joe", week: "Week 3", units: 14},
+      %{salesperson: "Jane", week: "Week 3", units: 9}
+    ]
+    |> Plot.new(%{x: :week, y: :units, fill: :salesperson})
+    |> Plot.geom_col(position: :dodge)
+    |> Plot.scale_fill_viridis(option: :cividis)
     |> Plot.plot()
   end
 end

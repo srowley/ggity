@@ -4,7 +4,7 @@ defmodule GGity.MixProject do
   def project do
     [
       app: :ggity,
-      version: "0.1.0",
+      version: "0.2.0",
       aliases: aliases(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,

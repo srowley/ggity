@@ -74,6 +74,49 @@ defmodule GGityPlotTest do
     end
   end
 
+  describe "geom_bar/3" do
+    setup %{data: data} do
+      mapping = %{x: :a}
+      %{plot: Plot.new(data, mapping)}
+    end
+
+    # TODO This fails when there is only one point
+    test "adds a bar geom with stat count by default", %{plot: plot} do
+      plot = Plot.geom_bar(plot)
+      assert %Geom.Bar{} = plot.geom
+      assert plot.geom.mapping == Map.put(plot.mapping, :y, :count)
+      assert plot.geom.stat == :count
+    end
+
+    test "adds a bar geom with specified mapping", %{plot: plot} do
+      plot = Plot.geom_bar(plot, %{fill: :c})
+      assert %Geom.Bar{} = plot.geom
+      assert plot.geom.mapping == %{x: :a, y: :count, fill: :c}
+    end
+
+    test "adds a point geom with specified stat and dodge options", %{plot: plot} do
+      plot = Plot.geom_bar(plot, %{y: :b, fill: :c}, stat: :identity, position: :dodge)
+      assert %Geom.Bar{} = plot.geom
+      assert plot.geom.mapping == %{x: :a, y: :b, fill: :c}
+      assert plot.geom.stat == :identity
+      assert plot.geom.position == :dodge
+    end
+  end
+
+  describe "geom_col/3" do
+    test "adds a bar geom with y mapping and stat identity", %{data: data, mapping: mapping} do
+      plot =
+        data
+        |> Plot.new(mapping)
+        |> Plot.geom_col(%{fill: :c}, stat: :identity)
+
+      assert %Geom.Bar{} = plot.geom
+      assert plot.geom.mapping == %{x: :a, y: :b, fill: :c}
+      assert plot.geom.stat == :identity
+      assert plot.geom.position == :stack
+    end
+  end
+
   describe "geom_point/2" do
     setup %{data: data, mapping: mapping} do
       %{plot: Plot.new(data, mapping)}

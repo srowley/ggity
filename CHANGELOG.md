@@ -4,8 +4,11 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+## v0.2 - 2020-07-05
 ### Added
 
+- Added bar charts (i.e., `Plot.geom_bar/3` and `Plot.geom_col/3`)
+- Added `Stat` to support count transformation for bar charts
 - Default grouping for line charts applied to all applicable scales.
 - Added `Scale.Linetype.Discrete` for line charts.
 - Added additional legend key glyphs.

@@ -234,6 +234,7 @@ defmodule GGity.Plot do
   assigned based on the x value scale type.
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
+  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_line(plot, mapping \\ [], options \\ [])
 
   def geom_line(%Plot{} = plot, [], []) do
@@ -269,8 +270,6 @@ defmodule GGity.Plot do
   per unique `:x`/`:fill` value pair). Defaults to `:stack`.
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
-  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
-
   @spec geom_bar(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_bar(plot, mapping \\ [], options \\ [])
 
@@ -284,6 +283,30 @@ defmodule GGity.Plot do
 
   def geom_bar(%Plot{} = plot, mapping, options) do
     add_geom(plot, Geom.Bar, mapping, options)
+  end
+
+  @doc """
+  Shorthand for `geom_bar(plot, stat: :identity)`.
+
+  Produces a bar chart similar to `geom_bar/3`, but uses the values of observations
+  mapped to the `:y` aesthetic (instead of observation counts) to calculate the height
+  of the bars. See `geom_bar/3` for supported options.
+  """
+  @spec geom_col(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_col(plot, mapping \\ [], options \\ [])
+
+  def geom_col(%Plot{} = plot, [], []) do
+    geom_bar(plot, stat: :identity)
+  end
+
+  def geom_col(%Plot{} = plot, mapping_or_options, []) when is_list(mapping_or_options) do
+    options = Keyword.put(mapping_or_options, :stat, :identity)
+    geom_bar(plot, options)
+  end
+
+  def geom_col(%Plot{} = plot, mapping, options) do
+    options = Keyword.put(options, :stat, :identity)
+    geom_bar(plot, mapping, options)
   end
 
   defp add_geom(%Plot{} = plot, geom_type) do

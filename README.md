@@ -17,7 +17,6 @@ The mapping is specified with a map containing key-value pairs of variable names
     |> Plot.geom_point()
     |> Plot.plot()
 ```
-
 ![](./examples/geom_point_basic.svg)
 
 Note that the library includes a few of R's canonical datasets, which are used in these examples and available to support development as described further below.
@@ -31,7 +30,6 @@ Mappings can also be specified when a geom is added:
     |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
     |> Plot.plot()
 ```
-
 ![](./examples/geom_point_shape_mapping.svg)
 
 Legends are currently only supported for discrete scales.
@@ -52,7 +50,6 @@ and axis labels support custom formatting.
     |> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
     |> Plot.plot()
 ```
-
 ![](./examples/geom_point_custom.svg)
 
 The table below illustrates which scales are available for different aesthetics.
@@ -76,8 +73,21 @@ Line geoms support mapping discrete variables to color or line type.
     |> Plot.geom_line(%{color: "variable"})
     |> Plot.plot()
 ```
-
 ![](./examples/geom_line.svg)
+
+Bar charts are also supported. By default they display stacked counts of observations (as shown below), but they can also display grouped bars (`position = "dodge"` in ggplot2 parlance) as well as raw y values (`geom_col`).
+
+```elixir
+   Examples.mpg()
+    |> Enum.filter(fn record ->
+      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
+    end)
+    |> Plot.new(%{x: "manufacturer"})
+    |> Plot.geom_bar(%{fill: "class"})
+    |> Plot.scale_fill_viridis(option: :inferno)
+    |> Plot.plot()
+```
+![](./examples/geom_bar.svg)
 
 ## Goals
 I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
@@ -101,7 +111,7 @@ With that said, I would welcome and do my best to respond promptly to PRs for th
 
 ### Roadmap
 
-GGity has a roadmap which is subject to change based on what is interesting to me, how difficult those items turn out to be to implement and issues/ideas/contribution from others. If I get to version 0.2 I will think about publishing to Hex.
+GGity has a roadmap which is subject to change based on what is interesting to me, how difficult those items turn out to be to implement and issues/ideas/contribution from others. If I get to version 0.3 I will think about publishing to Hex.
 
 ### Visual tests
 GGity has decent unit test coverage, but given the domain, a picture is worth a thousand words. Therefore the library includes some mix tasks that generate plots of the included datasets to support development. I have used them on Ubuntu Linux and WSL on Windows.
@@ -151,7 +161,7 @@ The package can be installed from GitHub by adding `ggity` to your list of depen
 ```elixir
 def deps do
   [
-    {:ggity, git: "https://github.com/srowley/ggity.git", tag: "v0.1"}
+    {:ggity, git: "https://github.com/srowley/ggity.git", tag: "v0.2"}
   ]
 end
 ```
