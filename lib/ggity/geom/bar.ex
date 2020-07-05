@@ -12,9 +12,8 @@ defmodule GGity.Geom.Bar do
             aspect_ratio: 1.5,
             key_glyph: :rect,
             stat_count: %{},
-            count_levels: 0,
             bar_padding: 5,
-            bar_width: 5,
+            bar_group_width: nil,
             position: :stack,
             x_scale: nil,
             y_scale: nil,
@@ -28,10 +27,10 @@ defmodule GGity.Geom.Bar do
 
   @spec new(list(record()), mapping(), keyword()) :: Geom.Bar.t()
   def new(data, %{x: x_name} = mapping, options \\ []) do
-    [x_values, fill_values] =
+    [x_values, alpha_values, fill_values] =
       data
       |> Enum.map(fn row ->
-        {row[x_name], row[mapping[:fill]]}
+        {row[x_name], row[mapping[:alpha]], row[mapping[:fill]]}
       end)
       |> List.zip()
       |> Enum.map(&Tuple.to_list/1)
@@ -42,20 +41,24 @@ defmodule GGity.Geom.Bar do
 
     x_levels = Enum.uniq(x_values)
     fill_levels = Enum.uniq(fill_values)
+    alpha_levels = Enum.uniq(alpha_values)
 
     # TODO: feels like you could get the count in the comprehension
     # but my first efforst failed
-    permutations = for x <- x_levels, fill <- fill_levels, do: {x, fill}
+    permutations =
+      for x <- x_levels, fill <- fill_levels, alpha <- alpha_levels, do: {x, fill, alpha}
 
     stat_count =
-      Enum.reduce(permutations, [], fn {x_value, fill_value}, stat ->
+      Enum.reduce(permutations, [], fn {x_value, fill_value, alpha_value}, stat ->
         [
           Map.new([
             {mapping[:x], x_value},
             {mapping[:fill], fill_value},
+            {mapping[:alpha], alpha_value},
             {:count,
              Enum.count(data, fn row ->
-               {row[mapping[:x]], row[mapping[:fill]]} == {x_value, fill_value}
+               {row[mapping[:x]], row[mapping[:fill]], row[mapping[:alpha]]} ==
+                 {x_value, fill_value, alpha_value}
              end)}
           ])
           | stat
@@ -63,51 +66,55 @@ defmodule GGity.Geom.Bar do
       end)
       |> Enum.sort_by(fn row -> row[mapping[:x]] end)
 
-    count_levels = length(permutations)
-
-    bar_width =
-      case geom_bar.position do
-        :stack ->
-          (geom_bar.width - (length(x_levels) - 1) * geom_bar.bar_padding) / length(x_levels)
-
-        :dodge ->
-          (geom_bar.width - (length(x_levels) - 1) * geom_bar.bar_padding) / count_levels
-      end
+    bar_group_width =
+      (geom_bar.width - (length(x_levels) - 1) * geom_bar.bar_padding) / length(x_levels)
 
     geom_bar
     |> struct(%{
       mapping: mapping,
       stat_count: stat_count,
-      count_levels: count_levels,
-      bar_width: bar_width
+      bar_group_width: bar_group_width
     })
     |> assign_x_scale(x_values)
     |> assign_y_scale(stat_count)
     |> assign_fill_scale(fixed_scales, fill_values)
+    |> assign_alpha_scale(fixed_scales, alpha_values)
   end
 
   defp assign_x_scale(%Geom.Bar{} = geom_bar, values) do
     %{geom_bar | x_scale: Scale.X.Discrete.new(values)}
   end
 
-  defp assign_y_scale(%Geom.Bar{} = geom_bar, stat) do
-    case geom_bar.position do
-      :stack ->
-        category_max =
-          stat
-          |> Enum.group_by(fn item -> item[geom_bar.mapping[:x]] end)
-          |> Enum.map(fn {_category, values} -> Enum.map(values, fn value -> value.count end) end)
-          |> Enum.map(fn counts -> Enum.sum(counts) end)
-          |> Enum.max()
+  defp assign_y_scale(%Geom.Bar{position: :stack} = geom_bar, stat) do
+    category_max =
+      stat
+      |> Enum.group_by(fn item -> item[geom_bar.mapping[:x]] end)
+      |> Enum.map(fn {_category, values} -> Enum.map(values, fn value -> value.count end) end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
 
-        %{geom_bar | y_scale: Scale.Y.Continuous.new([0, category_max])}
+    %{geom_bar | y_scale: Scale.Y.Continuous.new([0, category_max])}
+  end
 
-      :dodge ->
-        %{
-          geom_bar
-          | y_scale: Scale.Y.Continuous.new([0 | Enum.map(stat, fn row -> row.count end)])
-        }
-    end
+  defp assign_y_scale(%Geom.Bar{position: :dodge} = geom_bar, stat) do
+    %{geom_bar | y_scale: Scale.Y.Continuous.new([0 | Enum.map(stat, fn row -> row.count end)])}
+  end
+
+  defp assign_alpha_scale(%Geom.Bar{} = geom_bar, fixed_scales, values) do
+    scale =
+      cond do
+        hd(values) != nil ->
+          Scale.Alpha.Discrete.new(values)
+
+        Keyword.get(fixed_scales, :color) == nil ->
+          Scale.Alpha.Manual.new()
+
+        true ->
+          Keyword.get(fixed_scales, :color)
+          |> Scale.Alpha.Manual.new()
+      end
+
+    %{geom_bar | alpha_scale: scale}
   end
 
   defp assign_fill_scale(%Geom.Bar{} = geom_bar, fixed_scales, values) do
@@ -138,70 +145,70 @@ defmodule GGity.Geom.Bar do
 
   @spec bars(Geom.Bar.t()) :: iolist()
   def bars(%Geom.Bar{} = geom_bar) do
-    position_transform =
+    geom_bar.stat_count
+    |> Enum.reject(fn row -> row.count == 0 end)
+    |> Enum.group_by(fn row -> row[geom_bar.mapping[:x]] end)
+    |> Enum.with_index()
+    |> Enum.map(fn {{_x_value, group}, group_index} -> bar_group(geom_bar, group, group_index) end)
+  end
+
+  defp bar_group(geom_bar, group_values, group_index) do
+    count_rows = length(group_values)
+
+    sort_order =
       case geom_bar.position do
-        :stack -> &stack/3
-        :dodge -> &dodge/3
+        :stack -> :desc
+        :dodge -> :asc
+        _unknown_adjustment -> :asc
       end
 
-    geom_bar.stat_count
-    |> Enum.group_by(fn item -> item[geom_bar.mapping[:x]] end)
-    |> Enum.reduce({0, []}, fn {_group, group_values}, {group_rank, group_data} ->
-      {
-        group_rank + 1,
-        position_transform.(geom_bar, group_values, group_rank) ++ group_data
-      }
-    end)
-    |> elem(1)
-    |> Enum.map(fn row ->
-      Draw.rect(
-        x: row[:x],
-        y: (geom_bar.width - row[:y]) / geom_bar.aspect_ratio + geom_bar.area_padding,
-        height: row[:y] / geom_bar.aspect_ratio,
-        width: geom_bar.bar_width,
-        fill: row[:fill]
-      )
-    end)
-  end
-
-  defp stack(geom_bar, group_values, group_rank) do
     group_values
-    |> Enum.sort_by(fn row -> row[geom_bar.mapping[:fill]] end)
-    |> Enum.reduce({0, []}, fn row, {total_height, data} ->
+    |> Enum.sort_by(fn row -> row[geom_bar.mapping[:fill]] end, sort_order)
+    |> Enum.reduce({0, 0, []}, fn row, {total_width, total_height, rects} ->
       {
-        total_height + geom_bar.y_scale.transform.(row.count),
+        total_width + geom_bar.bar_group_width / count_rows,
+        total_height + geom_bar.y_scale.transform.(row.count) / geom_bar.aspect_ratio,
         [
-          [
-            x: geom_bar.area_padding + group_rank * (geom_bar.bar_width + geom_bar.bar_padding),
-            y: total_height + geom_bar.y_scale.transform.(row.count),
-            fill: geom_bar.fill_scale.transform.(row[geom_bar.mapping[:fill]])
-          ]
-          | data
+          Draw.rect(
+            x: position_adjust_x(geom_bar, row, group_index, total_width),
+            y:
+              geom_bar.area_padding + geom_bar.width / geom_bar.aspect_ratio -
+                position_adjust_y(geom_bar, row, total_height),
+            width: position_adjust_bar_width(geom_bar, count_rows),
+            height: geom_bar.y_scale.transform.(row.count) / geom_bar.aspect_ratio,
+            fill: geom_bar.fill_scale.transform.(row[geom_bar.mapping[:fill]]),
+            fill_opacity: geom_bar.alpha_scale.transform.(row[geom_bar.mapping[:alpha]])
+          )
+          | rects
         ]
       }
     end)
-    |> elem(1)
+    |> elem(2)
   end
 
-  defp dodge(geom_bar, group_values, group_rank) do
-    group_values
-    |> Enum.sort_by(fn row -> row[geom_bar.mapping[:fill]] end)
-    |> Enum.reduce({0, []}, fn row, {bar_rank, data} ->
-      {
-        bar_rank + 1,
-        [
-          [
-            x:
-              geom_bar.area_padding + bar_rank * geom_bar.bar_width +
-                group_rank * (length(group_values) * geom_bar.bar_width + geom_bar.bar_padding),
-            y: geom_bar.y_scale.transform.(row.count),
-            fill: geom_bar.fill_scale.transform.(row[geom_bar.mapping[:fill]])
-          ]
-          | data
-        ]
-      }
-    end)
-    |> elem(1)
+  defp position_adjust_x(%Geom.Bar{position: :stack} = geom_bar, _row, group_index, _total_width) do
+    geom_bar.area_padding + group_index * (geom_bar.bar_group_width + geom_bar.bar_padding)
+  end
+
+  defp position_adjust_x(%Geom.Bar{position: :dodge} = geom_bar, _row, group_index, total_width) do
+    geom_bar.area_padding + group_index * (geom_bar.bar_group_width + geom_bar.bar_padding) +
+      total_width
+  end
+
+  defp position_adjust_y(%Geom.Bar{position: :stack} = geom_bar, row, total_height) do
+    total_height + geom_bar.y_scale.transform.(row.count) / geom_bar.aspect_ratio
+  end
+
+  defp position_adjust_y(%Geom.Bar{position: :dodge} = geom_bar, row, _total_height) do
+    geom_bar.y_scale.transform.(row.count) / geom_bar.aspect_ratio
+  end
+
+  defp position_adjust_bar_width(%Geom.Bar{position: :stack} = geom_bar, _count_rows) do
+    geom_bar.bar_group_width
+  end
+
+  defp position_adjust_bar_width(%Geom.Bar{position: :dodge} = geom_bar, count_rows) do
+    geom_bar.bar_group_width / count_rows
   end
 
   defp x_axis(%Geom.Bar{} = geom_bar) do
@@ -223,27 +230,15 @@ defmodule GGity.Geom.Bar do
 
     geom_bar.stat_count
     |> Enum.group_by(fn row -> row[geom_bar.mapping[:x]] end)
-    |> Enum.reduce({0, []}, fn {group, group_values}, {group_rank, group_data} ->
-      group_adjustment =
-        case geom_bar.position do
-          :stack -> 1
-          :dodge -> length(group_values)
-        end
-
-      {
-        group_rank + 1,
-        [
-          [
-            group: group,
-            x_coord:
-              geom_bar.area_padding + geom_bar.bar_width * group_adjustment * 0.5 +
-                group_rank * (geom_bar.bar_width * group_adjustment + geom_bar.bar_padding)
-          ]
-          | group_data
-        ]
-      }
+    |> Enum.with_index()
+    |> Enum.map(fn {{group, _group_data}, group_rank} ->
+      [
+        group: group,
+        x_coord:
+          geom_bar.area_padding + geom_bar.bar_group_width * 0.5 +
+            group_rank * (geom_bar.bar_group_width + geom_bar.bar_padding)
+      ]
     end)
-    |> elem(1)
     |> Enum.map(&x_tick(geom_bar, &1[:group], &1[:x_coord]))
     |> Draw.g(
       transform: "translate(0, #{top_shift})",

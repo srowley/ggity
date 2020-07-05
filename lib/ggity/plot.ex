@@ -919,7 +919,7 @@ defmodule GGity.Plot do
   defp draw_legend_group(plot) do
     {legend_group, legend_group_height} =
       Enum.reduce(
-        [:alpha_scale, :color_scale, :fill_scale, :linetype_scale, :shape_scale, :size_scale],
+        [:color_scale, :fill_scale, :linetype_scale, :shape_scale, :size_scale, :alpha_scale],
         {[], 0},
         fn scale, {legends, offset_acc} ->
           {[draw_legend(plot, scale, offset_acc) | legends],
