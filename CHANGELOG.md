@@ -3,8 +3,13 @@
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
+
+## v0.2.1 - 2020-07-06
 ### Added
 - License information for matplotlib (viridis) and cividis color palettes
+
+### Fixed
+- Continuous scales can handle zero-length domains
 
 ## v0.2 - 2020-07-05
 ### Added

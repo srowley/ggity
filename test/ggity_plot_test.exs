@@ -9,15 +9,14 @@ defmodule GGityPlotTest do
       %{a: 2, b: 4, c: 6, date: ~D[2001-01-03], datetime: ~N[2001-01-03 00:00:00]}
     ]
 
-    # TODO: Use this fixture to test zero-length data range
-    # data = [%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3}]
+    zero_domain_data = [%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3}]
     mapping = %{x: :a, y: :b}
 
     plot =
       Plot.new(data, mapping)
       |> Plot.geom_point()
 
-    %{plot: plot, data: data, mapping: mapping}
+    %{plot: plot, data: data, mapping: mapping, zero_domain_data: zero_domain_data}
   end
 
   describe "new/3" do
@@ -80,7 +79,6 @@ defmodule GGityPlotTest do
       %{plot: Plot.new(data, mapping)}
     end
 
-    # TODO This fails when there is only one point
     test "adds a bar geom with stat count by default", %{plot: plot} do
       plot = Plot.geom_bar(plot)
       assert %Geom.Bar{} = plot.geom
@@ -122,10 +120,20 @@ defmodule GGityPlotTest do
       %{plot: Plot.new(data, mapping)}
     end
 
-    # TODO This fails when x or y points are all the same because x and y range
-    # is 0 and scale functions use logarithms to determine transformation function
     test "adds a point geom with no additional mapping or options", %{plot: plot} do
       plot = Plot.geom_point(plot)
+      assert %Geom.Point{} = plot.geom
+      assert plot.geom.mapping == plot.mapping
+    end
+
+    test "handles data with a zero-length domain", %{
+      mapping: mapping,
+      zero_domain_data: zero_domain_data
+    } do
+      plot =
+        Plot.new(zero_domain_data, mapping)
+        |> Plot.geom_point()
+
       assert %Geom.Point{} = plot.geom
       assert plot.geom.mapping == plot.mapping
     end
@@ -164,10 +172,20 @@ defmodule GGityPlotTest do
       %{plot: Plot.new(data, mapping)}
     end
 
-    # TODO This fails when x or y points are all the same because x and y range
-    # is 0 and scale functions use logarithms to determine transformation function
     test "adds a line geom with no additional mapping or options", %{plot: plot} do
       plot = Plot.geom_line(plot)
+      assert %Geom.Line{} = plot.geom
+      assert plot.geom.mapping == plot.mapping
+    end
+
+    test "handles data with a zero-length domain", %{
+      mapping: mapping,
+      zero_domain_data: zero_domain_data
+    } do
+      plot =
+        Plot.new(zero_domain_data, mapping)
+        |> Plot.geom_line()
+
       assert %Geom.Line{} = plot.geom
       assert plot.geom.mapping == plot.mapping
     end

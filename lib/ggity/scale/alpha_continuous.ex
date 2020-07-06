@@ -17,13 +17,23 @@ defmodule GGity.Scale.Alpha.Continuous do
   end
 
   def new(values, options) do
-    scale = struct(Alpha.Continuous, options)
-    domain = scale.alpha_max - scale.alpha_min
     {value_min, value_max} = Enum.min_max(values)
-    range = value_max - value_min
+    domain = value_max - value_min
+    new(domain, value_min, options)
+  end
+
+  @spec new(number(), number(), keyword()) :: Alpha.Continuous.t()
+  def new(0, _value_min, options) do
+    scale = struct(Alpha.Continuous, options)
+    struct(scale, transform: fn _value -> 1 end)
+  end
+
+  def new(domain, value_min, options) do
+    scale = struct(Alpha.Continuous, options)
+    range = scale.alpha_max - scale.alpha_min
 
     struct(scale,
-      transform: fn value -> scale.alpha_min + (value - value_min) / range * domain end
+      transform: fn value -> scale.alpha_min + (value - value_min) / domain * range end
     )
   end
 end
