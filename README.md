@@ -161,7 +161,7 @@ The package can be installed from GitHub by adding `ggity` to your list of depen
 ```elixir
 def deps do
   [
-    {:ggity, git: "https://github.com/srowley/ggity.git", tag: "v0.2"}
+    {:ggity, git: "https://github.com/srowley/ggity.git", tag: "v0.2.1"}
   ]
 end
 ```
