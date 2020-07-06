@@ -1,3 +1,53 @@
+# ---------License information for the matplotlib (viridis) palettes---------
+# New matplotlib colormaps by Nathaniel J. Smith, Stefan van der Walt,
+# and (in the case of viridis) Eric Firing.
+#
+# The Viridis, Magma, Plasma, and Inferno colormaps are released under the
+# CC0 license / public domain dedication. We would appreciate credit if you
+# use or redistribute these colormaps, but do not impose any legal
+# restrictions.
+#
+# To the extent possible under law, the persons who associated CC0 with
+# mpl-colormaps have waived all copyright and related or neighboring rights
+# to mpl-colormaps.
+#
+# You should have received a copy of the CC0 legalcode along with this
+# work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# --------------------License for cividis color palette --------------------
+# https://github.com/pnnl/cmaputil/blob/master/LICENSE
+# Copyright (c) 2017, Battelle Memorial Institute
+#
+# 1.  Battelle Memorial Institute (hereinafter Battelle) hereby grants
+# permission to any person or entity lawfully obtaining a copy of this software
+# and associated documentation files (hereinafter "the Software") to
+# redistribute and use the Software in source and binary forms, with or without
+# modification. Such person or entity may use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and may permit
+# others to do so, subject to the following conditions:
+#
+# + Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimers.
+#
+# + Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# + Other than as used herein, neither the name Battelle Memorial Institute or
+# Battelle may be used in any form whatsoever without the express written
+# consent of Battelle.
+#
+# 2.  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL BATTELLE OR CONTRIBUTORS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# -----------------------------------------------------------------------------
 defmodule GGity.Scale.Color.Viridis do
   @moduledoc false
 
