@@ -140,7 +140,8 @@ mix ggity.visual.geom.point --wsl
 # The --wsl option works for WSL users by generating a file with
 # point geom examples and opening the file in Firefox in Windows
 # assuming Firefox is installed in the default location.
-# This fails if an instance of Firefox is already open in Windows.
+# If a browser window is already opened, each example will open a new tab;
+# otherwise the behavior is the same as in Linux.
 # The --wsl option doesn't support other browsers on Windows at this time.
 ```
 

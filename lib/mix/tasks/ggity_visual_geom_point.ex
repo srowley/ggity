@@ -44,6 +44,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
 
     File.write!(test_file, "<html>\n#{plots}\n</html>")
     open_html_file(browser, test_file)
+    Process.sleep(1000)
     File.rm(test_file)
   end
 

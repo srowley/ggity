@@ -3,6 +3,10 @@
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
+### Fixed
+- `mix.ggity.visual --wsl` no longer fails if a browser is open. Instead
+it opens tabs and as a bonus stops blocking the terminal process. If no
+window is open it works as before.
 
 ## v0.2.1 - 2020-07-06
 ### Added
