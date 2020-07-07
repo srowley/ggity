@@ -15,22 +15,16 @@ defmodule GGity.Scale.Size.Discrete do
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Size.Discrete.t()
-  def new(values, options \\ [])
+  @spec new(keyword()) :: Size.Discrete.t()
+  def new(options \\ []), do: struct(Size.Discrete, options)
 
-  def new([value], options) do
-    levels = [to_string(value)]
+  @spec train(Size.Discrete.t(), list()) :: Size.Discrete.t()
+  def train(scale, [_value] = levels) do
     transform = fn _value -> @palette_min + @palette_range / 2 end
-    struct(Size.Discrete, [{:levels, levels}, {:transform, transform} | options])
+    struct(scale, levels: levels, transform: transform)
   end
 
-  def new(values, options) do
-    levels =
-      values
-      |> Enum.sort()
-      |> Enum.map(&Kernel.to_string/1)
-      |> Enum.uniq()
-
+  def train(scale, levels) do
     intervals = length(levels) - 1
 
     values_map =
@@ -42,12 +36,8 @@ defmodule GGity.Scale.Size.Discrete do
       end)
       |> Enum.into(%{})
 
-    options = [
-      {:levels, levels},
-      {:transform, fn value -> values_map[to_string(value)] end} | options
-    ]
-
-    struct(Size.Discrete, options)
+    transform = fn value -> values_map[to_string(value)] end
+    struct(scale, levels: levels, transform: transform)
   end
 
   @spec draw_legend(Size.Discrete.t(), binary()) :: iolist()

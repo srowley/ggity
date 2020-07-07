@@ -1348,22 +1348,22 @@ defmodule GGity.Scale.Color.Viridis do
   }
 
   @palette_names %{a: :magma, b: :inferno, c: :plasma, d: :viridis, e: :cividis}
-  @default_palette :viridis
 
   defstruct transform: nil,
             levels: nil,
             labels: :waivers,
-            guide: :legend
+            guide: :legend,
+            option: :viridis
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Color.Viridis.t()
-  def new(values, options \\ []) do
-    levels =
-      Enum.uniq(values)
-      |> Enum.sort()
+  @spec new(keyword()) :: Color.Viridis.t()
+  def new(options \\ []),
+    do: struct(Color.Viridis, [{:transform, fn _value -> "black" end} | options])
 
-    palette = get_palette(options)
+  @spec train(Color.Viridis.t(), list()) :: Color.Viridis.t()
+  def train(scale, levels) do
+    palette = get_palette(scale.option)
     number_of_levels = length(levels)
 
     interval_size =
@@ -1381,8 +1381,7 @@ defmodule GGity.Scale.Color.Viridis do
 
     color_map = Enum.zip(levels, colors) |> Enum.into(%{})
 
-    struct(Color.Viridis, options)
-    |> struct(levels: levels, transform: fn value -> color_map[value] end)
+    struct(scale, levels: levels, transform: fn value -> color_map[to_string(value)] end)
   end
 
   @spec draw_legend(Color.Viridis.t(), binary(), atom()) :: iolist()
@@ -1474,9 +1473,7 @@ defmodule GGity.Scale.Color.Viridis do
     20 + 15 * length(scale.levels)
   end
 
-  defp get_palette(options) do
-    palette_name = Keyword.get(options, :option, @default_palette)
-
+  defp get_palette(palette_name) do
     cond do
       palette_name in Map.values(@palette_names) ->
         @palettes[palette_name]

@@ -11,21 +11,15 @@ defmodule GGity.Scale.X.Discrete do
             levels: nil,
             labels: :waivers,
             tick_values: nil,
-            values: nil,
             inverse: nil,
             transform: nil
 
-  @spec new(list(record()), keyword()) :: X.Discrete.t()
-  # def new(values, options \\ [])
+  @spec new(keyword()) :: X.Discrete.t()
+  def new(options \\ []), do: struct(X.Discrete, options)
 
-  def new(values, options \\ []) do
-    levels =
-      values
-      |> Enum.sort()
-      |> Enum.map(&Kernel.to_string/1)
-      |> Enum.uniq()
-
-    scale = struct(X.Discrete, [{:levels, levels}, {:values, values} | options])
+  @spec train(X.Discrete.t(), list()) :: X.Discrete.t()
+  def train(scale, levels) do
+    scale = struct(scale, levels: levels)
     struct(scale, transformations(scale))
   end
 
@@ -36,7 +30,7 @@ defmodule GGity.Scale.X.Discrete do
       scale.levels
       |> Stream.with_index()
       |> Stream.map(fn {level, index} ->
-        {level, index / (number_of_levels - 1) * scale.width}
+        {level, (2 * index + 1) * (scale.width / (2 * number_of_levels))}
       end)
       |> Enum.into(%{})
 

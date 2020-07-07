@@ -52,7 +52,7 @@ defmodule GGity.Plot do
   """
 
   alias __MODULE__
-  alias GGity.{Draw, Geom, Legend, Scale}
+  alias GGity.{Axis, Draw, Geom, Layer, Legend, Scale, Stat}
 
   @type t() :: %__MODULE__{}
   @type column() :: list()
@@ -61,15 +61,29 @@ defmodule GGity.Plot do
   @type mapping() :: map()
   @type options() :: keyword()
 
+  @continuous_scales [
+    Scale.Alpha.Continuous,
+    Scale.Size.Continuous,
+    Scale.X.Continuous,
+    Scale.X.Date,
+    Scale.X.DateTime,
+    Scale.Y.Continuous
+  ]
+
   defstruct data: [],
             mapping: %{},
             width: 200,
             aspect_ratio: 1.5,
             plot_width: 500,
-            labels: %{},
+            layers: [%Geom.Blank{}],
+            scales: %{},
+            limits: %{},
+            labels: %{x: nil, y: nil},
+            y_label_padding: 20,
+            breaks: 5,
+            area_padding: 10,
             panel_background_color: "#eeeeee",
-            margins: %{left: 30, top: 10, right: 0, bottom: 0},
-            geom: nil
+            margins: %{left: 30, top: 10, right: 0, bottom: 0}
 
   @doc """
   Generates a Plot struct with provided data and aesthetic mappings.
@@ -101,32 +115,52 @@ defmodule GGity.Plot do
   * `:margins` - a map with keys `:left`, `:top`, `:right` and `:bottom`, specifying the
   plot margins. Default is `%{left: 30, top: 10, right: 0, bottom: 0}`.
   """
-  @spec new(list(record()), mapping(), options()) :: Plot.t()
-  def new(data, mapping, options \\ [])
-
-  def new(data, %{x: x_name, y: y_name} = mapping, options) do
-    geom =
-      Keyword.get(options, :geom, Geom.Blank)
-      |> struct()
-      |> Geom.new(data, mapping, options)
-
-    labels = %{title: nil, x: x_name, y: y_name}
-
-    struct(Plot, options)
-    |> struct(%{data: data, mapping: mapping, geom: geom, labels: labels})
+  @spec new(list(record()), mapping()) :: Plot.t()
+  def new([first_row | _rest] = data, %{x: x_name} = mapping) do
+    scales = assign_scales(mapping, first_row)
+    labels = %{title: nil, x: x_name, y: mapping[:y]}
+    struct(Plot, data: data, mapping: mapping, scales: scales, labels: labels)
   end
 
-  def new(data, %{x: x_name} = mapping, options) do
-    geom =
-      Keyword.get(options, :geom, Geom.Blank)
-      |> struct()
-      |> Geom.new(data, mapping, options)
-
-    labels = %{title: nil, x: x_name, y: "count"}
-
-    struct(Plot, options)
-    |> struct(%{data: data, mapping: mapping, geom: geom, labels: labels})
+  defp assign_scales(mapping, record) do
+    mapping
+    |> Map.keys()
+    |> Enum.reduce(%{}, fn aesthetic, scale_map ->
+      Map.put(scale_map, aesthetic, assign_scale(aesthetic, record[mapping[aesthetic]]))
+    end)
   end
+
+  defp assign_scale(:alpha, value) when is_number(value) do
+    Scale.Alpha.Continuous.new()
+  end
+
+  defp assign_scale(:alpha, _value), do: Scale.Alpha.Discrete.new()
+
+  defp assign_scale(:color, _value), do: Scale.Color.Viridis.new()
+
+  defp assign_scale(:fill, _value), do: Scale.Fill.Viridis.new()
+
+  defp assign_scale(:linetype, _value), do: Scale.Linetype.Discrete.new()
+
+  defp assign_scale(:shape, _value), do: Scale.Shape.new()
+
+  defp assign_scale(:size, value) when is_number(value) do
+    Scale.Size.Continuous.new()
+  end
+
+  defp assign_scale(:size, _value), do: Scale.Size.Discrete.new()
+
+  defp assign_scale(:x, %Date{}), do: Scale.X.Date.new()
+
+  defp assign_scale(:x, %DateTime{}), do: Scale.X.DateTime.new()
+
+  defp assign_scale(:x, value) when is_number(value) do
+    Scale.X.Continuous.new()
+  end
+
+  defp assign_scale(:x, _value), do: Scale.X.Discrete.new()
+
+  defp assign_scale(:y, _value), do: Scale.Y.Continuous.new()
 
   @doc """
   Generates an iolist of SVG markup representing a `Plot`.
@@ -140,11 +174,46 @@ defmodule GGity.Plot do
   """
   @spec plot(Plot.t()) :: iolist()
   def plot(%Plot{} = plot) do
+    plot
+    |> map_aesthetics()
+    |> apply_stats()
+    |> train_scales()
+    |> render()
+  end
+
+  defp map_aesthetics(%Plot{} = plot) do
+    layers =
+      Enum.map(plot.layers, fn layer ->
+        struct(layer, mapping: Map.merge(plot.mapping, layer.mapping || %{}))
+      end)
+
+    struct(plot, layers: layers)
+  end
+
+  defp apply_stats(%Plot{} = plot) do
+    layers =
+      Enum.map(plot.layers, fn layer ->
+        {data, mapping} = apply(Stat, layer.stat, [layer.data || plot.data, layer.mapping])
+        struct(layer, data: data, mapping: mapping)
+      end)
+
+    struct(plot, layers: layers)
+  end
+
+  defp train_scales(%Plot{} = plot) do
+    plot
+    |> all_mapped_aesthetics()
+    |> train_scales(plot)
+  end
+
+  defp render(%Plot{} = plot) do
     viewbox_width = plot.width * 7 / 4
 
     [
       draw_background(plot),
-      draw_geom(plot),
+      draw_x_axis(plot),
+      draw_y_axis(plot),
+      draw_layers(plot),
       draw_title(plot),
       draw_legend_group(plot)
     ]
@@ -154,6 +223,188 @@ defmodule GGity.Plot do
       viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}",
       font_family: "Helvetica, Arial, sans-serif"
     )
+  end
+
+  defp all_mapped_aesthetics(%Plot{} = plot) do
+    plot.layers
+    |> Enum.flat_map(fn layer -> Map.keys(layer.mapping) end)
+    |> Enum.uniq()
+  end
+
+  defp train_scales(aesthetics, %Plot{} = plot) do
+    scales =
+      Enum.reduce(aesthetics, %{}, fn aesthetic, scales_map ->
+        Map.put(scales_map, aesthetic, train_scale(aesthetic, plot))
+      end)
+
+    struct(plot, scales: scales)
+  end
+
+  defp train_scale(aesthetic, plot) do
+    sample_layer =
+      plot.layers
+      |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
+      |> hd()
+
+    sample_value = hd(sample_layer.data)[sample_layer.mapping[aesthetic]]
+
+    scale = plot.scales[aesthetic] || assign_scale(aesthetic, sample_value)
+    global_parameters = global_parameters(aesthetic, plot, scale)
+    Scale.train(scale, global_parameters)
+  end
+
+  defp global_parameters(aesthetic, plot, %scale_type{}) when scale_type in @continuous_scales do
+    {fixed_min, fixed_max} = plot.limits[aesthetic] || {nil, nil}
+
+    plot.layers
+    |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
+    |> Enum.map(fn layer -> layer_min_max(aesthetic, layer) end)
+    |> Enum.reduce({fixed_min, fixed_max}, fn {layer_min, layer_max}, {global_min, global_max} ->
+      {min(fixed_min || layer_min, global_min || layer_min),
+       max(fixed_max || layer_max, global_max || layer_max)}
+
+      # {Enum.min([(fixed_min || layer_min), layer_min, global_min]), Enum.max([(fixed_max || layer_max), layer_max, global_max])}
+    end)
+  end
+
+  defp global_parameters(aesthetic, plot, _sample_value) do
+    plot.layers
+    |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
+    |> Enum.reduce(MapSet.new(), fn layer, levels ->
+      MapSet.union(levels, layer_value_set(aesthetic, layer))
+    end)
+    |> Enum.sort()
+  end
+
+  defp layer_min_max(aesthetic, layer) do
+    layer.data
+    |> Enum.map(fn row -> row[layer.mapping[aesthetic]] end)
+    |> min_max()
+  end
+
+  defp layer_value_set(aesthetic, layer) do
+    layer.data
+    |> Enum.map(fn row -> row[layer.mapping[aesthetic]] end)
+    |> Enum.map(&Kernel.to_string/1)
+    |> MapSet.new()
+  end
+
+  defp min_max([]), do: raise(Enum.EmptyError)
+
+  defp min_max([single_value]), do: {single_value, single_value}
+
+  defp min_max([%date_type{} | _rest] = dates) when date_type in [DateTime, NaiveDateTime] do
+    {Enum.min_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end),
+     Enum.max_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end)}
+  end
+
+  defp min_max(list), do: Enum.min_max(list)
+
+  defp draw_background(%Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+
+    Draw.rect(
+      x: "0",
+      y: "0",
+      height: to_string(plot.width / plot.aspect_ratio + plot.area_padding * 2),
+      width: to_string(plot.width + plot.area_padding * 2),
+      fill: plot.panel_background_color
+    )
+    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp title_margin(%Plot{labels: %{title: title}}) when is_binary(title), do: 10
+
+  defp title_margin(%Plot{}), do: 0
+
+  defp draw_x_axis(%Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+
+    Axis.draw_x_axis(plot)
+    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp draw_y_axis(%Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+
+    Axis.draw_y_axis(plot)
+    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp draw_layers(%Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+
+    plot.layers
+    |> Enum.reverse()
+    |> Enum.map(fn layer -> Layer.draw(layer, layer.data, plot) end)
+    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp draw_title(%Plot{labels: %{title: title}}) when not is_binary(title), do: ""
+
+  defp draw_title(%Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+
+    plot.labels.title
+    |> Draw.text(
+      x: "0",
+      y: "-15",
+      dy: "0.71em",
+      dx: "0",
+      font_size: "12"
+    )
+    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp draw_legend_group(plot) do
+    {legend_group, legend_group_height} =
+      Enum.reduce(
+        [:color, :fill, :linetype, :shape, :size, :alpha],
+        {[], 0},
+        fn aesthetic, {legends, offset_acc} ->
+          {[draw_legend(plot, aesthetic, offset_acc) | legends],
+           offset_acc + Legend.legend_height(Map.get(plot.scales, aesthetic))}
+        end
+      )
+
+    left_shift = plot.margins.left + plot.y_label_padding + plot.width + 25
+
+    top_shift =
+      plot.margins.top + title_margin(plot) + plot.width / plot.aspect_ratio / 2 + 10 -
+        legend_group_height / 2 + 10
+
+    Draw.g(legend_group, transform: "translate(#{left_shift}, #{top_shift})")
+  end
+
+  defp draw_legend(%Plot{} = plot, aesthetic, offset) do
+    scale = Map.get(plot.scales, aesthetic)
+    label = plot.labels[aesthetic]
+    key_glyph = key_glyph(plot, aesthetic)
+
+    case Legend.legend_height(scale) do
+      0 ->
+        []
+
+      _positive ->
+        Legend.draw_legend(scale, label, key_glyph)
+        |> Draw.g(transform: "translate(0, #{offset})")
+    end
+  end
+
+  defp key_glyph(plot, aesthetic) do
+    layers =
+      plot.layers
+      |> Enum.filter(fn layer -> aesthetic in Map.keys(layer.mapping || %{}) end)
+
+    case layers do
+      [] -> hd(plot.layers).key_glyph
+      [first | _rest] -> first.key_glyph
+    end
   end
 
   @doc """
@@ -238,15 +489,50 @@ defmodule GGity.Plot do
   def geom_line(plot, mapping \\ [], options \\ [])
 
   def geom_line(%Plot{} = plot, [], []) do
-    add_geom(plot, Geom.Line)
+    add_geom(plot, Geom.Line, key_glyph: line_key_glyph(plot))
   end
 
-  def geom_line(%Plot{} = plot, mapping_or_options, []) do
-    add_geom(plot, Geom.Line, mapping_or_options)
+  def geom_line(%Plot{} = plot, mapping, []) when is_map(mapping) do
+    add_geom(plot, Geom.Line, mapping, key_glyph: line_key_glyph(plot, mapping))
+  end
+
+  def geom_line(%Plot{} = plot, options, []) when is_list(options) do
+    key_glyph = options[:key_glyph] || line_key_glyph(plot, options)
+    add_geom(plot, Geom.Line, [{:key_glyph, key_glyph} | options])
   end
 
   def geom_line(%Plot{} = plot, mapping, options) do
-    add_geom(plot, Geom.Line, mapping, options)
+    key_glyph = options[:key_glyph] || line_key_glyph(plot, mapping, options)
+    add_geom(plot, Geom.Line, mapping, [{:key_glyph, key_glyph} | options])
+  end
+
+  defp line_key_glyph(%Plot{scales: %{x: %Date{}}}), do: :timeseries
+  defp line_key_glyph(%Plot{scales: %{x: %DateTime{}}}), do: :timeseries
+  defp line_key_glyph(_plot), do: :path
+
+  defp line_key_glyph(%Plot{} = plot, mapping) when is_map(mapping) do
+    mapping = Map.merge(plot.mapping, mapping)
+
+    case hd(plot.data)[mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
+  end
+
+  defp line_key_glyph(%Plot{} = plot, options) when is_list(options) do
+    case hd(options[:data] || plot.data)[plot.mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
+  end
+
+  defp line_key_glyph(%Plot{} = plot, mapping, options) do
+    mapping = Map.merge(plot.mapping, mapping)
+
+    case hd(options[:data] || plot.data)[mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
   end
 
   @doc """
@@ -274,15 +560,53 @@ defmodule GGity.Plot do
   def geom_bar(plot, mapping \\ [], options \\ [])
 
   def geom_bar(%Plot{} = plot, [], []) do
-    add_geom(plot, Geom.Bar)
+    updated_plot = add_geom(plot, Geom.Bar)
+    bar_geom = hd(updated_plot.layers)
+
+    scale_adjustment =
+      case bar_geom.position do
+        :stack -> {0, nil}
+        _other_positions -> {0, nil}
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   def geom_bar(%Plot{} = plot, mapping_or_options, []) do
-    add_geom(plot, Geom.Bar, mapping_or_options)
+    updated_plot = add_geom(plot, Geom.Bar, mapping_or_options)
+    bar_geom = hd(updated_plot.layers)
+
+    {data, mapping} = apply(Stat, :count, [updated_plot.data, updated_plot.mapping])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case bar_geom.position do
+        :stack -> {0, fixed_max}
+        _other_positions -> {0, nil}
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   def geom_bar(%Plot{} = plot, mapping, options) do
-    add_geom(plot, Geom.Bar, mapping, options)
+    updated_plot = add_geom(plot, Geom.Bar, mapping, options)
+    bar_geom = hd(updated_plot.layers)
+
+    scale_adjustment =
+      case bar_geom.position do
+        :stack -> {0, nil}
+        _other_positions -> {0, nil}
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   @doc """
@@ -310,43 +634,23 @@ defmodule GGity.Plot do
   end
 
   defp add_geom(%Plot{} = plot, geom_type) do
-    geom =
-      struct(geom_type)
-      |> Geom.new(plot.data, plot.mapping, [])
-      |> struct(labels: plot.labels)
-
-    struct(plot, geom: geom)
+    layer = Layer.new(struct(geom_type), %{}, [])
+    struct(plot, layers: [layer | plot.layers])
   end
 
   defp add_geom(%Plot{} = plot, geom_type, mapping) when is_map(mapping) do
-    mapping = Map.merge(plot.mapping, mapping)
-
-    geom =
-      struct(geom_type)
-      |> Geom.new(plot.data, mapping, [])
-      |> struct(labels: plot.labels)
-
-    struct(plot, geom: geom)
+    layer = Layer.new(struct(geom_type), mapping, [])
+    struct(plot, layers: [layer | plot.layers])
   end
 
   defp add_geom(%Plot{} = plot, geom_type, options) when is_list(options) do
-    geom =
-      struct(geom_type)
-      |> Geom.new(plot.data, plot.mapping, options)
-      |> struct(labels: plot.labels)
-
-    struct(plot, geom: geom)
+    layer = Layer.new(struct(geom_type), %{}, options)
+    struct(plot, layers: [layer | plot.layers])
   end
 
   defp add_geom(%Plot{} = plot, geom_type, mapping, options) do
-    mapping = Map.merge(plot.mapping, mapping)
-
-    geom =
-      struct(geom_type)
-      |> Geom.new(plot.data, mapping, options)
-      |> struct(labels: plot.labels)
-
-    struct(plot, geom: geom)
+    layer = Layer.new(struct(geom_type), mapping, options)
+    struct(plot, layers: [layer | plot.layers])
   end
 
   @doc """
@@ -357,13 +661,7 @@ defmodule GGity.Plot do
   """
   @spec scale_alpha_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_alpha_continuous(%Plot{} = plot, options \\ []) do
-    alpha_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:alpha]) end)
-      |> Scale.Alpha.Continuous.new(options)
-
-    updated_geom = struct(plot.geom, alpha_scale: alpha_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :alpha, Scale.Alpha.Continuous.new(options)))
   end
 
   @doc """
@@ -383,13 +681,7 @@ defmodule GGity.Plot do
   """
   @spec scale_alpha_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_alpha_discrete(%Plot{} = plot, options \\ []) do
-    alpha_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:alpha]) end)
-      |> Scale.Alpha.Discrete.new(options)
-
-    updated_geom = struct(plot.geom, alpha_scale: alpha_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :alpha, Scale.Alpha.Discrete.new(options)))
   end
 
   @doc """
@@ -401,8 +693,7 @@ defmodule GGity.Plot do
   """
   @spec scale_alpha_identity(Plot.t()) :: Plot.t()
   def scale_alpha_identity(%Plot{} = plot) do
-    updated_geom = struct(plot.geom, alpha_scale: Scale.Identity.new(plot, :alpha))
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :alpha, Scale.Identity.new(plot, :alpha)))
   end
 
   @doc """
@@ -429,8 +720,7 @@ defmodule GGity.Plot do
   """
   @spec scale_color_identity(Plot.t()) :: Plot.t()
   def scale_color_identity(%Plot{} = plot) do
-    updated_geom = struct(plot.geom, color_scale: Scale.Identity.new(plot, :color))
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :color, Scale.Identity.new(plot, :color)))
   end
 
   @doc """
@@ -458,13 +748,7 @@ defmodule GGity.Plot do
   """
   @spec scale_color_viridis(Plot.t(), keyword()) :: Plot.t()
   def scale_color_viridis(%Plot{} = plot, options \\ []) do
-    color_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:color]) end)
-      |> Scale.Color.Viridis.new(options)
-
-    updated_geom = struct(plot.geom, color_scale: color_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :color, Scale.Color.Viridis.new(options)))
   end
 
   @doc """
@@ -474,13 +758,7 @@ defmodule GGity.Plot do
   """
   @spec scale_fill_viridis(Plot.t(), keyword()) :: Plot.t()
   def scale_fill_viridis(%Plot{} = plot, options \\ []) do
-    fill_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:fill]) end)
-      |> Scale.Fill.Viridis.new(options)
-
-    updated_geom = struct(plot.geom, fill_scale: fill_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :fill, Scale.Fill.Viridis.new(options)))
   end
 
   @doc """
@@ -500,14 +778,8 @@ defmodule GGity.Plot do
   formatted. See `GGity.Labels` for valid values for this option.
   """
   @spec scale_linetype_discrete(Plot.t(), keyword()) :: Plot.t()
-  def scale_linetype_discrete(%Plot{geom: %Geom.Line{}} = plot, options \\ []) do
-    linetype_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:linetype]) end)
-      |> Scale.Linetype.Discrete.new(options)
-
-    updated_geom = struct(plot.geom, linetype_scale: linetype_scale)
-    struct(plot, geom: updated_geom)
+  def scale_linetype_discrete(%Plot{} = plot, options \\ []) do
+    struct(plot, scales: Map.put(plot.scales, :linetype, Scale.Linetype.Discrete.new(options)))
   end
 
   @doc """
@@ -528,13 +800,7 @@ defmodule GGity.Plot do
   """
   @spec scale_shape(Plot.t(), keyword()) :: Plot.t()
   def scale_shape(%Plot{} = plot, options \\ []) do
-    shape_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:shape]) end)
-      |> Scale.Shape.new(options)
-
-    updated_geom = struct(plot.geom, shape_scale: shape_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :shape, Scale.Shape.new(options)))
   end
 
   @doc """
@@ -565,13 +831,7 @@ defmodule GGity.Plot do
   """
   @spec scale_shape_manual(Plot.t(), keyword()) :: Plot.t()
   def scale_shape_manual(%Plot{} = plot, options \\ []) do
-    shape_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:shape]) end)
-      |> Scale.Shape.Manual.new(options)
-
-    updated_geom = struct(plot.geom, shape_scale: shape_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :shape, Scale.Shape.Manual.new(options)))
   end
 
   @doc """
@@ -585,13 +845,7 @@ defmodule GGity.Plot do
   """
   @spec scale_size_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_size_continuous(%Plot{} = plot, options \\ []) do
-    size_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:size]) end)
-      |> Scale.Size.Continuous.new(options)
-
-    updated_geom = struct(plot.geom, size_scale: size_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :size, Scale.Size.Continuous.new(options)))
   end
 
   @doc """
@@ -614,13 +868,7 @@ defmodule GGity.Plot do
   """
   @spec scale_size_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_size_discrete(%Plot{} = plot, options \\ []) do
-    size_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:size]) end)
-      |> Scale.Size.Discrete.new(options)
-
-    updated_geom = struct(plot.geom, size_scale: size_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :size, Scale.Size.Discrete.new(options)))
   end
 
   @doc """
@@ -635,8 +883,7 @@ defmodule GGity.Plot do
   """
   @spec scale_size_identity(Plot.t()) :: Plot.t()
   def scale_size_identity(%Plot{} = plot) do
-    updated_geom = struct(plot.geom, size_scale: Scale.Identity.new(plot, :size))
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :size, Scale.Identity.new(plot, :size)))
   end
 
   @doc """
@@ -653,13 +900,7 @@ defmodule GGity.Plot do
   """
   @spec scale_x_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_x_continuous(%Plot{} = plot, options \\ []) do
-    x_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:x]) end)
-      |> Scale.X.Continuous.new(options)
-
-    updated_geom = struct(plot.geom, x_scale: x_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :x, Scale.X.Continuous.new(options)))
   end
 
   @doc """
@@ -711,13 +952,7 @@ defmodule GGity.Plot do
   """
   @spec scale_x_date(Plot.t(), keyword()) :: Plot.t()
   def scale_x_date(%Plot{} = plot, options \\ []) do
-    x_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:x]) end)
-      |> Scale.X.Date.new(options)
-
-    updated_geom = struct(plot.geom, x_scale: x_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :x, Scale.X.Date.new(options)))
   end
 
   @doc """
@@ -747,13 +982,7 @@ defmodule GGity.Plot do
   """
   @spec scale_x_datetime(Plot.t(), keyword()) :: Plot.t()
   def scale_x_datetime(%Plot{} = plot, options \\ []) do
-    x_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:x]) end)
-      |> Scale.X.DateTime.new(options)
-
-    updated_geom = struct(plot.geom, x_scale: x_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :x, Scale.X.DateTime.new(options)))
   end
 
   @doc """
@@ -770,13 +999,7 @@ defmodule GGity.Plot do
   """
   @spec scale_x_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_x_discrete(%Plot{} = plot, options \\ []) do
-    x_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:x]) end)
-      |> Scale.X.Discrete.new(options)
-
-    updated_geom = struct(plot.geom, x_scale: x_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :x, Scale.X.Discrete.new(options)))
   end
 
   @doc """
@@ -793,13 +1016,7 @@ defmodule GGity.Plot do
   """
   @spec scale_y_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_y_continuous(%Plot{} = plot, options \\ []) do
-    y_scale =
-      plot.data
-      |> Enum.map(fn row -> Map.get(row, plot.geom.mapping[:y]) end)
-      |> Scale.Y.Continuous.new(options)
-
-    updated_geom = struct(plot.geom, y_scale: y_scale)
-    struct(plot, geom: updated_geom)
+    struct(plot, scales: Map.put(plot.scales, :y, Scale.Y.Continuous.new(options)))
   end
 
   @doc """
@@ -818,16 +1035,12 @@ defmodule GGity.Plot do
   Updates the plot x axis label.
   """
   @spec xlab(Plot.t(), binary()) :: Plot.t()
-  def xlab(plot, label) do
+  def xlab(%Plot{} = plot, label) do
     labels =
-      plot.geom.labels
+      plot.labels
       |> Map.merge(%{x: label})
 
-    geom =
-      plot.geom
-      |> Map.put(:labels, labels)
-
-    struct(plot, labels: Map.merge(plot.labels, labels), geom: geom)
+    struct(plot, labels: labels)
   end
 
   @doc """
@@ -836,14 +1049,10 @@ defmodule GGity.Plot do
   @spec ylab(Plot.t(), binary()) :: Plot.t()
   def ylab(plot, label) do
     labels =
-      plot.geom.labels
+      plot.labels
       |> Map.merge(%{y: label})
 
-    geom =
-      plot.geom
-      |> Map.put(:labels, labels)
-
-    struct(plot, labels: Map.merge(plot.labels, labels), geom: geom)
+    struct(plot, labels: labels)
   end
 
   @doc """
@@ -865,27 +1074,18 @@ defmodule GGity.Plot do
   """
   @spec guides(Plot.t(), keyword()) :: Plot.t()
   def guides(plot, guides) do
-    updated_scales =
-      Keyword.take(guides, [:alpha, :color, :size, :shape])
-      |> Enum.reduce([], fn {aesthetic, value}, scales_list ->
-        new_scale =
-          plot
-          |> scale_for_aesthetic(aesthetic)
-          |> struct(guide: value)
+    scales =
+      guides
+      |> Keyword.take(Map.keys(plot.scales))
+      |> Enum.reduce(%{}, fn {aesthetic, guide_value}, new_scales ->
+        scale =
+          plot.scales[aesthetic]
+          |> Map.put(:guide, guide_value)
 
-        [{scale_key_for_aesthetic(aesthetic), new_scale} | scales_list]
+        Map.put(new_scales, aesthetic, scale)
       end)
 
-    %Plot{plot | geom: struct(plot.geom, updated_scales)}
-  end
-
-  defp scale_for_aesthetic(plot, aesthetic) do
-    Map.get(plot.geom, scale_key_for_aesthetic(aesthetic))
-  end
-
-  defp scale_key_for_aesthetic(aesthetic) do
-    (Atom.to_string(aesthetic) <> "_scale")
-    |> String.to_existing_atom()
+    struct(plot, scales: Map.merge(plot.scales, scales))
   end
 
   @doc """
@@ -894,88 +1094,5 @@ defmodule GGity.Plot do
   @spec to_file(Plot.t(), list(binary)) :: :ok
   def to_file(%Plot{} = plot, path) do
     File.write!(path, plot(plot))
-  end
-
-  defp draw_background(%Plot{margins: margins, geom: geom} = plot) do
-    left_shift = margins.left + geom.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
-    Draw.rect(
-      x: "0",
-      y: "0",
-      height: to_string(plot.width / plot.aspect_ratio + geom.area_padding * 2),
-      width: to_string(plot.width + geom.area_padding * 2),
-      fill: plot.panel_background_color
-    )
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp title_margin(%Plot{labels: %{title: title}}) when is_binary(title), do: 10
-
-  defp title_margin(%Plot{}), do: 0
-
-  defp draw_title(%Plot{labels: %{title: title}}) when not is_binary(title), do: ""
-
-  defp draw_title(%Plot{margins: margins, geom: geom} = plot) do
-    left_shift = margins.left + geom.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
-    plot.labels.title
-    |> Draw.text(
-      x: "0",
-      y: "-15",
-      dy: "0.71em",
-      dx: "0",
-      font_size: "12"
-    )
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp draw_geom(%Plot{margins: margins} = plot) do
-    left_shift = margins.left + plot.geom.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
-    Geom.draw(plot.geom, plot.data)
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp draw_legend_group(plot) do
-    {legend_group, legend_group_height} =
-      Enum.reduce(
-        [:color_scale, :fill_scale, :linetype_scale, :shape_scale, :size_scale, :alpha_scale],
-        {[], 0},
-        fn scale, {legends, offset_acc} ->
-          {[draw_legend(plot, scale, offset_acc) | legends],
-           offset_acc + Legend.legend_height(Map.get(plot.geom, scale))}
-        end
-      )
-
-    left_shift = plot.margins.left + plot.geom.y_label_padding + plot.width + 25
-
-    top_shift =
-      plot.margins.top + title_margin(plot) + plot.width / plot.aspect_ratio / 2 + 10 -
-        legend_group_height / 2 + 10
-
-    Draw.g(legend_group, transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp draw_legend(%Plot{} = plot, scale, offset) do
-    aesthetic =
-      Atom.to_string(scale)
-      |> String.split("_")
-      |> hd()
-      |> String.to_existing_atom()
-
-    label = plot.labels[aesthetic] || plot.geom.mapping[aesthetic]
-    scale = Map.get(plot.geom, scale)
-
-    case Legend.legend_height(scale) do
-      0 ->
-        []
-
-      _positive ->
-        Legend.draw_legend(scale, label, plot.geom.key_glyph)
-        |> Draw.g(transform: "translate(0, #{offset})")
-    end
   end
 end

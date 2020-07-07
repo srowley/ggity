@@ -15,23 +15,16 @@ defmodule GGity.Scale.Alpha.Discrete do
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Alpha.Discrete.t()
-  def new(values, options \\ [])
+  @spec new(keyword()) :: Alpha.Discrete.t()
+  def new(options \\ []), do: struct(Alpha.Discrete, options)
 
-  def new([value], options) do
-    levels = [to_string(value)]
+  @spec train(Alpha.Discrete.t(), list()) :: Alpha.Discrete.t()
+  def train(scale, [_value] = levels) do
     transform = fn _value -> @palette_min + @palette_range / 2 end
-    options = [{:levels, levels}, {:transform, transform} | options]
-    struct(Alpha.Discrete, options)
+    struct(scale, levels: levels, transform: transform)
   end
 
-  def new(values, options) do
-    levels =
-      values
-      |> Stream.map(&Kernel.to_string/1)
-      |> Enum.uniq()
-      |> Enum.sort()
-
+  def train(scale, levels) do
     intervals = length(levels) - 1
 
     values_map =
@@ -43,12 +36,9 @@ defmodule GGity.Scale.Alpha.Discrete do
       end)
       |> Enum.into(%{})
 
-    options = [
-      {:levels, levels},
-      {:transform, fn value -> values_map[to_string(value)] end} | options
-    ]
+    transform = fn value -> values_map[to_string(value)] end
 
-    struct(Alpha.Discrete, options)
+    struct(scale, levels: levels, transform: transform)
   end
 
   @spec draw_legend(Alpha.Discrete.t(), binary()) :: iolist()

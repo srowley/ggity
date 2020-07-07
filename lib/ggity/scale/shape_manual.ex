@@ -4,38 +4,28 @@ defmodule GGity.Scale.Shape.Manual do
   alias GGity.{Draw, Labels}
   alias GGity.Scale.Shape
 
-  @default_shape :circle
-  @valid_shapes [:circle, :square, :diamond, :triangle]
-
   @type t() :: %__MODULE__{}
 
   defstruct levels: nil,
             transform: nil,
             labels: :waivers,
-            guide: :legend
+            guide: :legend,
+            values: []
 
-  @spec new(atom() | binary()) :: Shape.Manual.t()
-  def new(shape \\ @default_shape)
+  @spec new(keyword()) :: Shape.Manual.t()
+  def new(options \\ []), do: struct(Shape.Manual, options)
 
-  def new(shape) when shape in @valid_shapes do
-    struct(Shape.Manual, levels: [], transform: fn _shape -> shape end)
+  # Note - this is not entirely consistent with the protocol but seems to work anyway
+  @spec train(Shape.Manual.t(), binary() | list()) :: Shape.Manual.t()
+  def train(scale, shape) when is_binary(shape) do
+    train(scale, [String.first(shape)])
   end
 
-  def new(shape) when is_binary(shape) do
-    struct(Shape.Manual, transform: fn _shape -> String.first(shape) end)
-  end
-
-  @spec new(list(), keyword()) :: Shape.Manual.t()
-  def new(values, options) when is_list(values) do
-    levels =
-      Enum.map(values, &to_string/1)
-      |> Enum.uniq()
-      |> Enum.sort()
-
+  def train(scale, levels) when is_list(levels) do
     number_of_levels = length(levels)
 
     palette =
-      Keyword.get(options, :values)
+      scale.values
       |> Stream.cycle()
       |> Enum.take(number_of_levels)
       |> List.to_tuple()
@@ -48,12 +38,7 @@ defmodule GGity.Scale.Shape.Manual do
       end)
       |> Enum.into(%{})
 
-    options = [
-      {:levels, levels},
-      {:transform, fn value -> values_map[to_string(value)] end}
-    ]
-
-    struct(Shape.Manual, options)
+    struct(scale, levels: levels, transform: fn value -> values_map[to_string(value)] end)
   end
 
   @spec draw_legend(Shape.Manual.t(), binary()) :: iolist()

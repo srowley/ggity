@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
   @default_browser "firefox"
 
   @doc false
-  @spec run(list(any)) :: any
+  @spec run(list(any)) :: any()
   def run([]), do: run([@default_browser])
 
   def run(argv) do
@@ -110,7 +110,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
     |> Plot.geom_point(%{size: :qsec})
-    |> Plot.labs(title: "Shape")
+    |> Plot.labs(title: "Size Continuous")
     |> Plot.plot()
   end
 

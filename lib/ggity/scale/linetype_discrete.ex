@@ -22,14 +22,11 @@ defmodule GGity.Scale.Linetype.Discrete do
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Linetype.Discrete.t()
-  def new(values, options \\ []) do
-    levels =
-      values
-      |> Enum.sort()
-      |> Enum.map(&Kernel.to_string/1)
-      |> Enum.uniq()
+  @spec new(keyword()) :: Linetype.Discrete.t()
+  def new(options \\ []), do: struct(Linetype.Discrete, options)
 
+  @spec train(Linetype.Discrete.t(), list()) :: Linetype.Discrete.t()
+  def train(scale, levels) do
     number_of_levels = length(levels)
 
     palette =
@@ -46,12 +43,9 @@ defmodule GGity.Scale.Linetype.Discrete do
       end)
       |> Enum.into(%{})
 
-    options = [
-      {:levels, levels},
-      {:transform, fn value -> @linetype_specs[values_map[value]] end} | options
-    ]
+    transform = fn value -> @linetype_specs[values_map[value]] end
 
-    struct(Linetype.Discrete, options)
+    struct(scale, levels: levels, transform: transform)
   end
 
   @spec draw_legend(Linetype.Discrete.t(), binary(), atom()) :: iolist()

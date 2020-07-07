@@ -7,17 +7,22 @@ defmodule GGity.Scale.Fill.Viridis do
   defstruct transform: nil,
             levels: nil,
             labels: :waivers,
-            guide: :legend
+            guide: :legend,
+            option: :viridis
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Fill.Viridis.t()
-  def new(values, options \\ []) do
-    color_scale =
-      Color.Viridis.new(values, options)
-      |> Map.from_struct()
+  @spec new(keyword()) :: Fill.Viridis.t()
+  def new(options \\ []), do: struct(Fill.Viridis, options)
 
-    struct(Fill.Viridis, color_scale)
+  @spec train(Fill.Viridis.t(), list()) :: Fill.Viridis.t()
+  def train(scale, levels) do
+    color_struct =
+      Color.Viridis
+      |> struct(Map.from_struct(scale))
+      |> Color.Viridis.train(levels)
+
+    struct(Fill.Viridis, Map.from_struct(color_struct))
   end
 
   @spec draw_legend(Fill.Viridis.t(), binary(), atom()) :: iolist()

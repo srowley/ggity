@@ -3,6 +3,9 @@
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
+### Changed
+- `Geom.Line.sort_by_x/2` is private
+
 ### Fixed
 - `mix.ggity.visual --wsl` no longer fails if a browser is open. Instead
 it opens tabs and as a bonus stops blocking the terminal process. If no

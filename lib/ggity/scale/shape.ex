@@ -13,14 +13,11 @@ defmodule GGity.Scale.Shape do
 
   @type t() :: %__MODULE__{}
 
-  @spec new(list(any()), keyword()) :: Shape.t()
-  def new(values, options \\ []) do
-    levels =
-      values
-      |> Enum.sort()
-      |> Enum.map(&Kernel.to_string/1)
-      |> Enum.uniq()
+  @spec new(keyword()) :: Shape.t()
+  def new(options \\ []), do: struct(Shape, options)
 
+  @spec train(Shape.t(), list()) :: Shape.t()
+  def train(scale, levels) do
     number_of_levels = length(levels)
 
     palette =
@@ -37,12 +34,8 @@ defmodule GGity.Scale.Shape do
       end)
       |> Enum.into(%{})
 
-    options = [
-      {:levels, levels},
-      {:transform, fn value -> values_map[to_string(value)] end} | options
-    ]
-
-    struct(Shape, options)
+    transform = fn value -> values_map[to_string(value)] end
+    struct(scale, levels: levels, transform: transform)
   end
 
   @spec draw_legend(Shape.t(), binary()) :: iolist()

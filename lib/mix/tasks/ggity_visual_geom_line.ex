@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
       Enum.join(
         [
           basic(),
-          add_linetype_aesthetic(),
+          fixed_line_and_mapped_points(),
           fixed_aesthetics(),
           date_time(),
           group_by_color(),
@@ -55,11 +55,12 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.plot()
   end
 
-  defp add_linetype_aesthetic do
+  defp fixed_line_and_mapped_points do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "Fixed linetype: :twodash", x: "Weight")
+    |> Plot.labs(title: "Line and points layers")
     |> Plot.geom_line(linetype: :twodash, size: 1)
+    |> Plot.geom_point(%{color: :cyl})
     |> Plot.plot()
   end
 

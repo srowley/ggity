@@ -1,7 +1,10 @@
 defmodule GGity.Geom.Blank do
   @moduledoc false
 
-  defstruct area_padding: 20,
+  defstruct data: nil,
+            mapping: nil,
+            position: :identity,
+            stat: :identity,
             labels: %{}
 
   @spec draw() :: iolist()
