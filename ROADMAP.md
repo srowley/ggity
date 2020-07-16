@@ -8,7 +8,7 @@
 * [COMPLETE] Support grouping, legends for line charts 
 
 ## v0.3 
-* Internal overhaul to implement layers and split out stats (at least) from the geom context
+* [COMPLETE] Internal overhaul to implement layers and split out stats (at least) from the geom context
 * Add `geom_text` to support data point labeling
 * Support CSS styling (use themes, but via inline CSS to allow overrides via custom stylesheet)
 * Add other non-fillable shapes to shapes palette
