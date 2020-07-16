@@ -6,7 +6,7 @@ defmodule GGityScaleSizeDiscreteTest do
   alias GGity.Scale.Size
 
   setup do
-    %{scale: Size.Discrete.new(["beef", "chicken", "lamb", "fish"])}
+    %{scale: Size.Discrete.new() |> Size.Discrete.train(["beef", "chicken", "fish", "lamb"])}
   end
 
   describe "new/2" do
@@ -19,13 +19,10 @@ defmodule GGityScaleSizeDiscreteTest do
   end
 
   describe "draw_legend/2" do
-    test "returns an empty list if scale has one or zero levels" do
+    test "returns an empty list if scale has one level" do
       assert [] ==
-               Size.Discrete.new([])
-               |> Size.Discrete.draw_legend("Nothing Here")
-
-      assert [] ==
-               Size.Discrete.new(["fish"])
+               Size.Discrete.new()
+               |> Size.Discrete.train(["fish"])
                |> Size.Discrete.draw_legend("Nothing Here")
     end
 

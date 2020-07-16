@@ -58,9 +58,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
   defp fixed_line_and_mapped_points do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "Line and points layers")
+    |> Plot.labs(title: "Fixed linetype: :twodash", x: "Weight")
     |> Plot.geom_line(linetype: :twodash, size: 1)
-    |> Plot.geom_point(%{color: :cyl})
     |> Plot.plot()
   end
 

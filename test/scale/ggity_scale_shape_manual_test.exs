@@ -3,25 +3,20 @@ defmodule GGityScaleShapeManual do
 
   alias GGity.Scale.Shape
 
-  describe "new/1" do
-    test "set transform function to single value given valid shape name" do
-      assert Shape.Manual.new(:circle).transform.("meat") == :circle
-    end
-
+  describe "train/2" do
     test "set transform function to single value given a binary" do
-      assert Shape.Manual.new("A").transform.("meat") == "A"
+      scale = Shape.Manual.new(values: ["A"])
+      assert Shape.Manual.train(scale, ["meat"]).transform.("meat") == "A"
     end
 
     test "set transform function to a custom list" do
-      assert Shape.Manual.new([1, 2, 3], values: ["a", "b", "c"]).transform.(2) == "b"
+      scale = Shape.Manual.new(values: ["a", "b", "c"])
+      assert Shape.Manual.train(scale, ["1", "2", "3"]).transform.(2) == "b"
     end
 
     test "raises with an invalid value" do
-      assert_raise FunctionClauseError, fn -> Shape.Manual.new(2).transform.("meat") == 2 end
-
-      assert_raise FunctionClauseError, fn ->
-        Shape.Manual.new(:rhombus).transform.("meat") == :rhombus
-      end
+      assert_raise FunctionClauseError, fn -> Shape.Manual.new(values: [2]) end
+      assert_raise FunctionClauseError, fn -> Shape.Manual.new(values: [:rhombus]) end
     end
   end
 end

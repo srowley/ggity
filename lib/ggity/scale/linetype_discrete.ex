@@ -25,8 +25,8 @@ defmodule GGity.Scale.Linetype.Discrete do
   @spec new(keyword()) :: Linetype.Discrete.t()
   def new(options \\ []), do: struct(Linetype.Discrete, options)
 
-  @spec train(Linetype.Discrete.t(), list()) :: Linetype.Discrete.t()
-  def train(scale, levels) do
+  @spec train(Linetype.Discrete.t(), list(binary())) :: Linetype.Discrete.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     number_of_levels = length(levels)
 
     palette =
@@ -50,8 +50,6 @@ defmodule GGity.Scale.Linetype.Discrete do
 
   @spec draw_legend(Linetype.Discrete.t(), binary(), atom()) :: iolist()
   def draw_legend(%Linetype.Discrete{guide: :none}, _label, _key_glyph), do: []
-
-  def draw_legend(%Linetype.Discrete{levels: []}, _label, _key_glyph), do: []
 
   def draw_legend(%Linetype.Discrete{levels: [_]}, _label, _key_glyph), do: []
 

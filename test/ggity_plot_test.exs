@@ -24,7 +24,7 @@ defmodule GGityPlotTest do
       plot = Plot.new(data, mapping)
       assert plot.mapping == mapping
       assert plot.data == data
-      assert %Geom.Blank{} = plot.geom
+      assert %Geom.Blank{} = hd(plot.layers)
     end
 
     test "sets provided options only if valid", %{data: data, mapping: mapping} do
@@ -43,9 +43,6 @@ defmodule GGityPlotTest do
 
       assert plot.labels.title == "Title"
       assert plot.labels.x == "X Axis"
-
-      assert plot.geom.labels.title == "Title"
-      assert plot.geom.labels.x == "X Axis"
     end
   end
 
@@ -57,7 +54,6 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
 
       assert plot.labels.x == "X Axis"
-      assert plot.geom.labels.x == "X Axis"
     end
   end
 
@@ -69,7 +65,6 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
 
       assert plot.labels.y == "Y Axis"
-      assert plot.geom.labels.y == "Y Axis"
     end
   end
 
@@ -79,25 +74,24 @@ defmodule GGityPlotTest do
       %{plot: Plot.new(data, mapping)}
     end
 
-    test "adds a bar geom with stat count by default", %{plot: plot} do
+    test "adds a bar geom with stat count by default, sets plot y limit", %{plot: plot} do
       plot = Plot.geom_bar(plot)
-      assert %Geom.Bar{} = plot.geom
-      assert plot.geom.mapping == Map.put(plot.mapping, :y, :count)
-      assert plot.geom.stat == :count
+      assert %Geom.Bar{stat: :count} = hd(plot.layers)
+      assert plot.limits.y == {0, nil}
     end
 
     test "adds a bar geom with specified mapping", %{plot: plot} do
       plot = Plot.geom_bar(plot, %{fill: :c})
-      assert %Geom.Bar{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :count, fill: :c}
+      assert %Geom.Bar{mapping: %{fill: :c}} = hd(plot.layers)
     end
 
-    test "adds a point geom with specified stat and dodge options", %{plot: plot} do
+    test "adds a bar geom with specified stat and dodge options", %{plot: plot} do
       plot = Plot.geom_bar(plot, %{y: :b, fill: :c}, stat: :identity, position: :dodge)
-      assert %Geom.Bar{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b, fill: :c}
-      assert plot.geom.stat == :identity
-      assert plot.geom.position == :dodge
+      geom = hd(plot.layers)
+      assert %Geom.Bar{} = geom
+      assert geom.mapping == %{y: :b, fill: :c}
+      assert geom.stat == :identity
+      assert geom.position == :dodge
     end
   end
 
@@ -108,10 +102,11 @@ defmodule GGityPlotTest do
         |> Plot.new(mapping)
         |> Plot.geom_col(%{fill: :c}, stat: :identity)
 
-      assert %Geom.Bar{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b, fill: :c}
-      assert plot.geom.stat == :identity
-      assert plot.geom.position == :stack
+      geom = hd(plot.layers)
+      assert %Geom.Bar{} = geom
+      assert geom.mapping == %{fill: :c}
+      assert geom.stat == :identity
+      assert geom.position == :stack
     end
   end
 
@@ -121,34 +116,27 @@ defmodule GGityPlotTest do
     end
 
     test "adds a point geom with no additional mapping or options", %{plot: plot} do
-      plot = Plot.geom_point(plot)
-      assert %Geom.Point{} = plot.geom
-      assert plot.geom.mapping == plot.mapping
-    end
-
-    test "handles data with a zero-length domain", %{
-      mapping: mapping,
-      zero_domain_data: zero_domain_data
-    } do
-      plot =
-        Plot.new(zero_domain_data, mapping)
+      geom =
+        plot
         |> Plot.geom_point()
+        |> Map.get(:layers)
+        |> hd()
 
-      assert %Geom.Point{} = plot.geom
-      assert plot.geom.mapping == plot.mapping
+      assert %Geom.Point{} = geom
     end
 
     test "adds a point geom with specified mapping", %{plot: plot} do
       plot = Plot.geom_point(plot, %{color: :c})
-      assert %Geom.Point{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b, color: :c}
+      geom = hd(plot.layers)
+      assert %Geom.Point{} = geom
+      assert geom.mapping == %{color: :c}
     end
 
     test "adds a point geom with specified options", %{plot: plot} do
       plot = Plot.geom_point(plot, color: "red")
-      assert %Geom.Point{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b}
-      assert plot.geom.color_scale == Scale.Color.Manual.new("red")
+      geom = hd(plot.layers)
+      assert %Geom.Point{} = geom
+      assert geom.color == "red"
     end
   end
 
@@ -161,9 +149,10 @@ defmodule GGityPlotTest do
         Plot.new(data, mapping)
         |> Plot.geom_point(%{y: :c}, color: "red")
 
-      assert %Geom.Point{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :c}
-      assert plot.geom.color_scale == Scale.Color.Manual.new("red")
+      geom = hd(plot.layers)
+      assert %Geom.Point{} = geom
+      assert geom.mapping == %{y: :c}
+      assert geom.color == "red"
     end
   end
 
@@ -174,33 +163,22 @@ defmodule GGityPlotTest do
 
     test "adds a line geom with no additional mapping or options", %{plot: plot} do
       plot = Plot.geom_line(plot)
-      assert %Geom.Line{} = plot.geom
-      assert plot.geom.mapping == plot.mapping
-    end
-
-    test "handles data with a zero-length domain", %{
-      mapping: mapping,
-      zero_domain_data: zero_domain_data
-    } do
-      plot =
-        Plot.new(zero_domain_data, mapping)
-        |> Plot.geom_line()
-
-      assert %Geom.Line{} = plot.geom
-      assert plot.geom.mapping == plot.mapping
+      geom = hd(plot.layers)
+      assert %Geom.Line{} = geom
     end
 
     test "adds a line geom with specified mapping", %{plot: plot} do
       plot = Plot.geom_line(plot, %{color: :c})
-      assert %Geom.Line{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b, color: :c}
+      geom = hd(plot.layers)
+      assert %Geom.Line{} = geom
+      assert geom.mapping == %{color: :c}
     end
 
     test "adds a line geom with specified options", %{plot: plot} do
       plot = Plot.geom_line(plot, color: "red")
-      assert %Geom.Line{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :b}
-      assert plot.geom.color_scale == Scale.Color.Manual.new("red")
+      geom = hd(plot.layers)
+      assert %Geom.Line{} = geom
+      assert geom.color == "red"
     end
   end
 
@@ -213,9 +191,10 @@ defmodule GGityPlotTest do
         Plot.new(data, mapping)
         |> Plot.geom_line(%{y: :c}, color: "red")
 
-      assert %Geom.Line{} = plot.geom
-      assert plot.geom.mapping == %{x: :a, y: :c}
-      assert plot.geom.color_scale == Scale.Color.Manual.new("red")
+      geom = hd(plot.layers)
+      assert %Geom.Line{} = geom
+      assert geom.mapping == %{y: :c}
+      assert geom.color == "red"
     end
   end
 
@@ -231,7 +210,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_alpha_continuous()
 
-      assert %Scale.Alpha.Continuous{} = plot.geom.alpha_scale()
+      assert %Scale.Alpha.Continuous{} = plot.scales.alpha
     end
   end
 
@@ -248,17 +227,17 @@ defmodule GGityPlotTest do
 
     test "sets the alpha scale on the plot geom to an discrete scale", %{plot: plot} do
       plot = Plot.scale_alpha_discrete(plot)
-      assert %Scale.Alpha.Discrete{} = plot.geom.alpha_scale()
+      assert %Scale.Alpha.Discrete{} = plot.scales.alpha
     end
 
     test "labels legend breaks using custom function", %{plot: plot} do
       plot = Plot.scale_alpha_discrete(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.alpha_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.alpha, 1.0) == "foo"
     end
 
     test "sets legend labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_alpha_discrete(plot, labels: nil)
-      assert Labels.format(plot.geom.alpha_scale, 1.0) == ""
+      assert Labels.format(plot.scales.alpha, 1.0) == ""
     end
   end
 
@@ -274,7 +253,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_alpha_identity()
 
-      assert %Scale.Identity{} = plot.geom.alpha_scale()
+      assert %Scale.Identity{} = plot.scales.alpha
     end
   end
 
@@ -290,7 +269,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_color_identity()
 
-      assert %Scale.Identity{} = plot.geom.color_scale()
+      assert %Scale.Identity{} = plot.scales.color
     end
   end
 
@@ -306,17 +285,17 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_color_viridis()
 
-      assert %Scale.Color.Viridis{} = plot.geom.color_scale()
+      assert %Scale.Color.Viridis{} = plot.scales.color
     end
 
     test "labels legend breaks using custom function", %{plot: plot} do
       plot = Plot.scale_color_viridis(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.color_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.color, 1.0) == "foo"
     end
 
     test "sets legend labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_color_viridis(plot, labels: nil)
-      assert Labels.format(plot.geom.color_scale, 1.0) == ""
+      assert Labels.format(plot.scales.color, 1.0) == ""
     end
   end
 
@@ -333,17 +312,17 @@ defmodule GGityPlotTest do
 
     test "sets the linetype scale on the plot geom", %{plot: plot} do
       plot = Plot.scale_linetype_discrete(plot)
-      assert %Scale.Linetype.Discrete{} = plot.geom.linetype_scale()
+      assert %Scale.Linetype.Discrete{} = plot.scales.linetype
     end
 
     test "labels legend breaks using custom function", %{plot: plot} do
       plot = Plot.scale_linetype_discrete(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.linetype_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.linetype, 1.0) == "foo"
     end
 
     test "sets legend labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_linetype_discrete(plot, labels: nil)
-      assert Labels.format(plot.geom.linetype_scale, 1.0) == ""
+      assert Labels.format(plot.scales.linetype, 1.0) == ""
     end
   end
 
@@ -360,17 +339,17 @@ defmodule GGityPlotTest do
 
     test "sets the shape scale on the plot geom", %{plot: plot} do
       plot = Plot.scale_shape(plot)
-      assert %Scale.Shape{} = plot.geom.shape_scale()
+      assert %Scale.Shape{} = plot.scales.shape()
     end
 
     test "labels legend breaks using custom function", %{plot: plot} do
       plot = Plot.scale_shape(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.shape_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.shape, 1.0) == "foo"
     end
 
     test "sets legend labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_shape(plot, labels: nil)
-      assert Labels.format(plot.geom.shape_scale, 1.0) == ""
+      assert Labels.format(plot.scales.shape, 1.0) == ""
     end
   end
 
@@ -386,7 +365,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_size_continuous()
 
-      assert %Scale.Size.Continuous{} = plot.geom.size_scale()
+      assert %Scale.Size.Continuous{} = plot.scales.size()
     end
   end
 
@@ -403,7 +382,7 @@ defmodule GGityPlotTest do
 
     test "sets the size scale on the plot geom to an discrete scale", %{plot: plot} do
       plot = Plot.scale_size_discrete(plot)
-      assert %Scale.Size.Discrete{} = plot.geom.size_scale()
+      assert %Scale.Size.Discrete{} = plot.scales.size()
     end
   end
 
@@ -419,7 +398,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_size_identity()
 
-      assert %Scale.Identity{} = plot.geom.size_scale()
+      assert %Scale.Identity{} = plot.scales.size()
     end
   end
 
@@ -432,22 +411,22 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_x_continuous()
 
-      assert %Scale.X.Continuous{} = plot.geom.x_scale()
+      assert %Scale.X.Continuous{} = plot.scales.x
     end
 
     test "labels x breaks using built-in function", %{plot: plot} do
       plot = Plot.scale_x_continuous(plot, labels: :dollar)
-      assert Labels.format(plot.geom.x_scale, 1.0) == "$1.00"
+      assert Labels.format(plot.scales.x, 1.0) == "$1.00"
     end
 
     test "labels x breaks using custom function", %{plot: plot} do
       plot = Plot.scale_x_continuous(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.x_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.x, 1.0) == "foo"
     end
 
     test "sets labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_x_continuous(plot, labels: nil)
-      assert Labels.format(plot.geom.x_scale, 1.0) == ""
+      assert Labels.format(plot.scales.x, 1.0) == ""
     end
   end
 
@@ -461,13 +440,11 @@ defmodule GGityPlotTest do
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_line()
-        |> Plot.scale_x_date()
+        |> Plot.scale_x_date(date_labels: "%b %d %Y")
 
-      assert %Scale.X.Date{} = plot.geom.x_scale()
-      assert plot.geom.x_scale.tick_values == [~D[2001-01-01], ~D[2001-01-02], ~D[2001-01-03]]
+      assert %Scale.X.Date{} = plot.scales.x
 
       assert plot
-             |> Plot.scale_x_date(date_labels: "%b %d %Y")
              |> Plot.plot()
              |> IO.chardata_to_string()
              |> String.contains?("Jan 01 2001")
@@ -482,28 +459,26 @@ defmodule GGityPlotTest do
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_line()
-        |> Plot.scale_x_date()
+        |> Plot.scale_x_date(
+          date_labels:
+            {"%A",
+             day_of_week_names: fn day_of_week ->
+               {
+                 "Monday",
+                 "Tuesday",
+                 "Hump Day",
+                 "Thursday",
+                 "Friday",
+                 "Saturday",
+                 "Sunday"
+               }
+               |> elem(day_of_week - 1)
+             end}
+        )
 
-      assert %Scale.X.Date{} = plot.geom.x_scale()
-      assert plot.geom.x_scale.tick_values == [~D[2001-01-01], ~D[2001-01-02], ~D[2001-01-03]]
+      assert %Scale.X.Date{} = plot.scales.x
 
       assert plot
-             |> Plot.scale_x_date(
-               date_labels:
-                 {"%A",
-                  day_of_week_names: fn day_of_week ->
-                    {
-                      "Monday",
-                      "Tuesday",
-                      "Hump Day",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday"
-                    }
-                    |> elem(day_of_week - 1)
-                  end}
-             )
              |> Plot.plot()
              |> IO.chardata_to_string()
              |> String.contains?("Hump Day")
@@ -520,21 +495,11 @@ defmodule GGityPlotTest do
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point()
-        |> Plot.scale_x_datetime()
+        |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
 
-      assert %Scale.X.DateTime{} = plot.geom.x_scale()
-
-      assert plot.geom.x_scale.tick_values() ==
-               [
-                 ~N[2001-01-01 00:00:00],
-                 ~N[2001-01-01 12:00:00],
-                 ~N[2001-01-02 00:00:00],
-                 ~N[2001-01-02 12:00:00],
-                 ~N[2001-01-03 00:00:00]
-               ]
+      assert %Scale.X.DateTime{} = plot.scales.x
 
       assert plot
-             |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
              |> Plot.plot()
              |> IO.chardata_to_string()
              |> String.contains?("Jan 01 H1")
@@ -550,22 +515,22 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_x_discrete()
 
-      assert %Scale.X.Discrete{} = plot.geom.x_scale()
+      assert %Scale.X.Discrete{} = plot.scales.x
     end
 
     test "labels x breaks using built-in function", %{plot: plot} do
       plot = Plot.scale_x_discrete(plot, labels: :dollar)
-      assert Labels.format(plot.geom.x_scale, 1.0) == "$1.00"
+      assert Labels.format(plot.scales.x, 1.0) == "$1.00"
     end
 
     test "labels x breaks using custom function", %{plot: plot} do
       plot = Plot.scale_x_discrete(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.x_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.x, 1.0) == "foo"
     end
 
     test "sets labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_x_discrete(plot, labels: nil)
-      assert Labels.format(plot.geom.x_scale, 1.0) == ""
+      assert Labels.format(plot.scales.x, 1.0) == ""
     end
   end
 
@@ -581,22 +546,22 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_y_continuous()
 
-      assert %Scale.Y.Continuous{} = plot.geom.y_scale()
+      assert %Scale.Y.Continuous{} = plot.scales.y
     end
 
     test "labels y breaks using built-in function", %{plot: plot} do
       plot = Plot.scale_y_continuous(plot, labels: :dollar)
-      assert Labels.format(plot.geom.y_scale, 1.0) == "$1.00"
+      assert Labels.format(plot.scales.y, 1.0) == "$1.00"
     end
 
     test "labels y breaks using custom function", %{plot: plot} do
       plot = Plot.scale_y_continuous(plot, labels: fn _value -> "foo" end)
-      assert Labels.format(plot.geom.y_scale, 1.0) == "foo"
+      assert Labels.format(plot.scales.y, 1.0) == "foo"
     end
 
     test "sets labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_y_continuous(plot, labels: nil)
-      assert Labels.format(plot.geom.y_scale, 1.0) == ""
+      assert Labels.format(plot.scales.y, 1.0) == ""
     end
   end
 
@@ -610,16 +575,15 @@ defmodule GGityPlotTest do
         |> Plot.geom_point(%{color: :c, size: :c})
         |> Plot.scale_size_discrete()
 
-      assert plot.geom.color_scale.guide == :legend
-      assert plot.geom.size_scale.guide == :legend
+      assert plot.scales.size.guide == :legend
 
       neither_legend = Plot.guides(plot, color: :none, size: :none)
-      assert neither_legend.geom.color_scale.guide == :none
-      assert neither_legend.geom.size_scale.guide == :none
+      assert neither_legend.scales.color.guide == :none
+      assert neither_legend.scales.size.guide == :none
 
       color_only = Plot.guides(neither_legend, color: :legend)
-      assert color_only.geom.color_scale.guide == :legend
-      assert color_only.geom.size_scale.guide == :none
+      assert color_only.scales.color.guide == :legend
+      assert color_only.scales.size.guide == :none
     end
   end
 end

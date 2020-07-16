@@ -3,8 +3,24 @@
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
+### Added
+- Plots can display multiple layers, with each layer supplying its own data and
+mapping. Each layer is added using the applicable `Plot.geom_*` function.
+The plot expands the extents of ("trains") the scale used for each aesthetic to
+include the combined domain of the data mapped to that aesthetic. Mappings
+and data still default to the plot mapping and data. Updating the mapping for a
+layer is unchanged (the passed map is merged with the plot mapping). A
+layer-specific data set can be provided by passing the `data` option with a
+dataset to `Plot.geom_*`. Run `mix ggity.visual.layers` for examples.
+
 ### Changed
+- No breaking changes to the public API
+- Substantial overhaul of plot, geom and scale internals in order to
+accommodate layers
+- Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is private
+- `Geom.Point.points/2` is private
+- `Geom.Line.lines/2` is private
 
 ### Fixed
 - `mix.ggity.visual --wsl` no longer fails if a browser is open. Instead

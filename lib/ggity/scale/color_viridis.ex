@@ -1361,8 +1361,8 @@ defmodule GGity.Scale.Color.Viridis do
   def new(options \\ []),
     do: struct(Color.Viridis, [{:transform, fn _value -> "black" end} | options])
 
-  @spec train(Color.Viridis.t(), list()) :: Color.Viridis.t()
-  def train(scale, levels) do
+  @spec train(Color.Viridis.t(), list(binary())) :: Color.Viridis.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     palette = get_palette(scale.option)
     number_of_levels = length(levels)
 
@@ -1386,8 +1386,6 @@ defmodule GGity.Scale.Color.Viridis do
 
   @spec draw_legend(Color.Viridis.t(), binary(), atom()) :: iolist()
   def draw_legend(%Color.Viridis{guide: :none}, _label, _key_glyph), do: []
-
-  def draw_legend(%Color.Viridis{levels: []}, _label, _key_glyph), do: []
 
   def draw_legend(%Color.Viridis{levels: [_]}, _label, _key_glyph), do: []
 

@@ -13,6 +13,7 @@ defmodule Mix.Tasks.Ggity.Visual do
       Visual.Geom.Point,
       Visual.Geom.Line,
       Visual.Geom.Bar,
+      Visual.Layers,
       Visual.Scale.Color.Viridis
     ]
     |> Enum.each(fn module -> apply(module, :run, [argv]) end)

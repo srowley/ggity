@@ -7,7 +7,9 @@ defmodule GGityScaleLineTypeDiscreteTest do
 
   setup do
     %{
-      scale: Linetype.Discrete.new(["beef", "chicken", "lamb", "fish", "shrimp", "gator", "deer"])
+      scale:
+        Linetype.Discrete.new()
+        |> Linetype.Discrete.train(["beef", "chicken", "deer", "fish", "gator", "lamb", "shrimp"])
     }
   end
 
@@ -24,13 +26,10 @@ defmodule GGityScaleLineTypeDiscreteTest do
   end
 
   describe "draw_legend/2" do
-    test "returns an empty list if scale has one or zero levels" do
+    test "returns an empty list if scale has one level" do
       assert [] ==
-               Linetype.Discrete.new([])
-               |> Linetype.Discrete.draw_legend("Nothing Here", :path)
-
-      assert [] ==
-               Linetype.Discrete.new(["fish"])
+               Linetype.Discrete.new()
+               |> Linetype.Discrete.train(["fish"])
                |> Linetype.Discrete.draw_legend("Nothing Here", :path)
     end
 

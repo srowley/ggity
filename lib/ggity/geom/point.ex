@@ -26,8 +26,7 @@ defmodule GGity.Geom.Point do
   @spec draw(Geom.Point.t(), list(map()), plot()) :: iolist()
   def draw(%Geom.Point{} = geom_point, data, plot), do: points(geom_point, data, plot)
 
-  @spec points(Geom.Point.t(), list(map()), plot()) :: iolist()
-  def points(%Geom.Point{} = geom_point, data, %Plot{scales: scales} = plot) do
+  defp points(%Geom.Point{} = geom_point, data, %Plot{scales: scales} = plot) do
     scale_transforms =
       geom_point.mapping
       |> Map.keys()

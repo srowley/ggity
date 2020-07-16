@@ -6,7 +6,7 @@ defmodule GGityScaleShapeTest do
   alias GGity.Scale.Shape
 
   setup do
-    %{scale: Shape.new(["beef", "chicken", "lamb", "fish", "shrimp"])}
+    %{scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "shrimp"])}
   end
 
   describe "new/2" do
@@ -20,13 +20,10 @@ defmodule GGityScaleShapeTest do
   end
 
   describe "draw_legend/2" do
-    test "returns an empty list if scale has one or zero levels" do
+    test "returns an empty list if scale has one level" do
       assert [] ==
-               Shape.new([])
-               |> Shape.draw_legend("Nothing Here")
-
-      assert [] ==
-               Shape.new(["fish"])
+               Shape.new()
+               |> Shape.train(["fish"])
                |> Shape.draw_legend("Nothing Here")
     end
 

@@ -6,7 +6,7 @@ defprotocol GGity.Scale do
   @type date_or_time() :: date() | datetime()
   @type continuous_value :: number() | date_or_time()
 
-  @spec train(GGity.Scale.t(), {continuous_value(), continuous_value()} | list()) ::
+  @spec train(GGity.Scale.t(), {continuous_value(), continuous_value()} | list(binary())) ::
           GGity.Scale.t()
   def train(scale, parameters)
 end

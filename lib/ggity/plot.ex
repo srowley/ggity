@@ -115,11 +115,14 @@ defmodule GGity.Plot do
   * `:margins` - a map with keys `:left`, `:top`, `:right` and `:bottom`, specifying the
   plot margins. Default is `%{left: 30, top: 10, right: 0, bottom: 0}`.
   """
-  @spec new(list(record()), mapping()) :: Plot.t()
-  def new([first_row | _rest] = data, %{x: x_name} = mapping) do
+  @spec new(list(record()), mapping(), keyword()) :: Plot.t()
+  def new([first_row | _rest] = data, mapping \\ %{}, options \\ []) do
     scales = assign_scales(mapping, first_row)
-    labels = %{title: nil, x: x_name, y: mapping[:y]}
-    struct(Plot, data: data, mapping: mapping, scales: scales, labels: labels)
+    labels = %{title: nil, x: mapping[:x], y: mapping[:y]}
+
+    Plot
+    |> struct(options)
+    |> struct(data: data, mapping: mapping, scales: scales, labels: labels)
   end
 
   defp assign_scales(mapping, record) do
@@ -206,25 +209,6 @@ defmodule GGity.Plot do
     |> train_scales(plot)
   end
 
-  defp render(%Plot{} = plot) do
-    viewbox_width = plot.width * 7 / 4
-
-    [
-      draw_background(plot),
-      draw_x_axis(plot),
-      draw_y_axis(plot),
-      draw_layers(plot),
-      draw_title(plot),
-      draw_legend_group(plot)
-    ]
-    |> Draw.svg(
-      width: to_string(plot.plot_width),
-      height: to_string(plot.plot_width / plot.aspect_ratio),
-      viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}",
-      font_family: "Helvetica, Arial, sans-serif"
-    )
-  end
-
   defp all_mapped_aesthetics(%Plot{} = plot) do
     plot.layers
     |> Enum.flat_map(fn layer -> Map.keys(layer.mapping) end)
@@ -262,8 +246,6 @@ defmodule GGity.Plot do
     |> Enum.reduce({fixed_min, fixed_max}, fn {layer_min, layer_max}, {global_min, global_max} ->
       {min(fixed_min || layer_min, global_min || layer_min),
        max(fixed_max || layer_max, global_max || layer_max)}
-
-      # {Enum.min([(fixed_min || layer_min), layer_min, global_min]), Enum.max([(fixed_max || layer_max), layer_max, global_max])}
     end)
   end
 
@@ -299,6 +281,25 @@ defmodule GGity.Plot do
   end
 
   defp min_max(list), do: Enum.min_max(list)
+
+  defp render(%Plot{} = plot) do
+    viewbox_width = plot.width * 7 / 4
+
+    [
+      draw_background(plot),
+      draw_x_axis(plot),
+      draw_y_axis(plot),
+      draw_layers(plot),
+      draw_title(plot),
+      draw_legend_group(plot)
+    ]
+    |> Draw.svg(
+      width: to_string(plot.plot_width),
+      height: to_string(plot.plot_width / plot.aspect_ratio),
+      viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}",
+      font_family: "Helvetica, Arial, sans-serif"
+    )
+  end
 
   defp draw_background(%Plot{margins: margins} = plot) do
     left_shift = margins.left + plot.y_label_padding
@@ -1076,13 +1077,10 @@ defmodule GGity.Plot do
   def guides(plot, guides) do
     scales =
       guides
-      |> Keyword.take(Map.keys(plot.scales))
-      |> Enum.reduce(%{}, fn {aesthetic, guide_value}, new_scales ->
-        scale =
-          plot.scales[aesthetic]
-          |> Map.put(:guide, guide_value)
-
-        Map.put(new_scales, aesthetic, scale)
+      |> Keyword.keys()
+      |> Enum.reduce(%{}, fn aesthetic, new_scales ->
+        scale = plot.scales[aesthetic] || assign_scale(aesthetic, "a string")
+        Map.put(new_scales, aesthetic, struct(scale, guide: guides[aesthetic]))
       end)
 
     struct(plot, scales: Map.merge(plot.scales, scales))

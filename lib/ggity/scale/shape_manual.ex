@@ -13,15 +13,25 @@ defmodule GGity.Scale.Shape.Manual do
             values: []
 
   @spec new(keyword()) :: Shape.Manual.t()
-  def new(options \\ []), do: struct(Shape.Manual, options)
+  def new(options) do
+    values =
+      options
+      |> Keyword.get(:values)
+      |> set_values()
 
-  # Note - this is not entirely consistent with the protocol but seems to work anyway
-  @spec train(Shape.Manual.t(), binary() | list()) :: Shape.Manual.t()
-  def train(scale, shape) when is_binary(shape) do
-    train(scale, [String.first(shape)])
+    options = Keyword.put_new(options, :values, values)
+    struct(Shape.Manual, options)
   end
 
-  def train(scale, levels) when is_list(levels) do
+  defp set_values(nil),
+    do: raise(ArgumentError, "Manual scales must be passed a :values option with scale values.")
+
+  defp set_values([value | _other_values] = values) when is_binary(value) do
+    values
+  end
+
+  @spec train(Shape.Manual.t(), list(binary())) :: Shape.Manual.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     number_of_levels = length(levels)
 
     palette =

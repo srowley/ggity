@@ -18,13 +18,13 @@ defmodule GGity.Scale.Size.Discrete do
   @spec new(keyword()) :: Size.Discrete.t()
   def new(options \\ []), do: struct(Size.Discrete, options)
 
-  @spec train(Size.Discrete.t(), list()) :: Size.Discrete.t()
-  def train(scale, [_value] = levels) do
+  @spec train(Size.Discrete.t(), list(binary())) :: Size.Discrete.t()
+  def train(scale, [value] = levels) when is_binary(value) do
     transform = fn _value -> @palette_min + @palette_range / 2 end
     struct(scale, levels: levels, transform: transform)
   end
 
-  def train(scale, levels) do
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     intervals = length(levels) - 1
 
     values_map =
@@ -42,8 +42,6 @@ defmodule GGity.Scale.Size.Discrete do
 
   @spec draw_legend(Size.Discrete.t(), binary()) :: iolist()
   def draw_legend(%Size.Discrete{guide: :none}, _label), do: []
-
-  def draw_legend(%Size.Discrete{levels: []}, _label), do: []
 
   def draw_legend(%Size.Discrete{levels: [_]}, _label), do: []
 

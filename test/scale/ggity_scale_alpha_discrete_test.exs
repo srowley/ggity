@@ -6,10 +6,10 @@ defmodule GGityScaleAlphaDiscreteTest do
   alias GGity.Scale.Alpha
 
   setup do
-    %{scale: Alpha.Discrete.new(["beef", "chicken", "lamb", "fish"])}
+    %{scale: Alpha.Discrete.new() |> Alpha.Discrete.train(["beef", "chicken", "fish", "lamb"])}
   end
 
-  describe "new/2" do
+  describe "new/2, train/2" do
     test "returns a proper scale for discrete values", %{scale: scale} do
       assert_in_delta scale.transform.("beef"), 0.1, 0.000001
       assert_in_delta scale.transform.("chicken"), 0.4, 0.000001
@@ -19,13 +19,10 @@ defmodule GGityScaleAlphaDiscreteTest do
   end
 
   describe "draw_legend/2" do
-    test "returns an empty list if scale has one or zero levels" do
+    test "returns an empty list if scale has one level" do
       assert [] ==
-               Alpha.Discrete.new([])
-               |> Alpha.Discrete.draw_legend("Nothing Here")
-
-      assert [] ==
-               Alpha.Discrete.new(["fish"])
+               Alpha.Discrete.new()
+               |> Alpha.Discrete.train(["fish"])
                |> Alpha.Discrete.draw_legend("Nothing Here")
     end
 

@@ -15,8 +15,8 @@ defmodule GGity.Scale.Fill.Viridis do
   @spec new(keyword()) :: Fill.Viridis.t()
   def new(options \\ []), do: struct(Fill.Viridis, options)
 
-  @spec train(Fill.Viridis.t(), list()) :: Fill.Viridis.t()
-  def train(scale, levels) do
+  @spec train(Fill.Viridis.t(), list(binary())) :: Fill.Viridis.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     color_struct =
       Color.Viridis
       |> struct(Map.from_struct(scale))
@@ -27,8 +27,6 @@ defmodule GGity.Scale.Fill.Viridis do
 
   @spec draw_legend(Fill.Viridis.t(), binary(), atom()) :: iolist()
   def draw_legend(%Fill.Viridis{guide: :none}, _label, _key_glyph), do: []
-
-  def draw_legend(%Fill.Viridis{levels: []}, _label, _key_glyph), do: []
 
   def draw_legend(%Fill.Viridis{levels: [_]}, _label, _key_glyph), do: []
 

@@ -16,8 +16,8 @@ defmodule GGity.Scale.Shape do
   @spec new(keyword()) :: Shape.t()
   def new(options \\ []), do: struct(Shape, options)
 
-  @spec train(Shape.t(), list()) :: Shape.t()
-  def train(scale, levels) do
+  @spec train(Shape.t(), list(binary())) :: Shape.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     number_of_levels = length(levels)
 
     palette =
@@ -40,8 +40,6 @@ defmodule GGity.Scale.Shape do
 
   @spec draw_legend(Shape.t(), binary()) :: iolist()
   def draw_legend(%Shape{guide: :none}, _label), do: []
-
-  def draw_legend(%Shape{levels: []}, _label), do: []
 
   def draw_legend(%Shape{levels: [_]}, _label), do: []
 

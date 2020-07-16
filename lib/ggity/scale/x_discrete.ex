@@ -17,8 +17,8 @@ defmodule GGity.Scale.X.Discrete do
   @spec new(keyword()) :: X.Discrete.t()
   def new(options \\ []), do: struct(X.Discrete, options)
 
-  @spec train(X.Discrete.t(), list()) :: X.Discrete.t()
-  def train(scale, levels) do
+  @spec train(X.Discrete.t(), list(binary())) :: X.Discrete.t()
+  def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
     scale = struct(scale, levels: levels)
     struct(scale, transformations(scale))
   end

@@ -42,8 +42,7 @@ defmodule GGity.Geom.Line do
   @spec draw(Geom.Line.t(), list(map()), plot()) :: iolist()
   def draw(%Geom.Line{} = geom_line, _data, plot), do: lines(geom_line, plot)
 
-  @spec lines(Geom.Line.t(), plot()) :: iolist()
-  def lines(%Geom.Line{} = geom_line, plot) do
+  defp lines(%Geom.Line{} = geom_line, plot) do
     (geom_line.data || plot.data)
     |> Enum.group_by(fn row ->
       {
