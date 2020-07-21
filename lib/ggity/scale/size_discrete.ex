@@ -88,7 +88,7 @@ defmodule GGity.Scale.Size.Discrete do
       "a",
       x: "7.5",
       y: "#{7.5 + 15 * index}",
-      font_size: scale.transform.(level),
+      font_size: "#{scale.transform.(level)}pt",
       fill: "black",
       text_anchor: "left"
     )
