@@ -37,3 +37,11 @@ defimpl GGity.Layer, for: GGity.Geom.Blank do
 
   def draw(_geom, _data, _plot), do: GGity.Geom.Blank.draw()
 end
+
+defimpl GGity.Layer, for: GGity.Geom.Text do
+  def new(_geom, mapping, options) do
+    GGity.Geom.Text.new(mapping, options)
+  end
+
+  def draw(geom, data, plot), do: GGity.Geom.Text.draw(geom, data, plot)
+end

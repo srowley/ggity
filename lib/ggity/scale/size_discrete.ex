@@ -40,12 +40,12 @@ defmodule GGity.Scale.Size.Discrete do
     struct(scale, levels: levels, transform: transform)
   end
 
-  @spec draw_legend(Size.Discrete.t(), binary()) :: iolist()
-  def draw_legend(%Size.Discrete{guide: :none}, _label), do: []
+  @spec draw_legend(Size.Discrete.t(), binary(), atom()) :: iolist()
+  def draw_legend(%Size.Discrete{guide: :none}, _label, _key_glyph), do: []
 
-  def draw_legend(%Size.Discrete{levels: [_]}, _label), do: []
+  def draw_legend(%Size.Discrete{levels: [_]}, _label, _key_glyph), do: []
 
-  def draw_legend(%Size.Discrete{levels: levels} = scale, label) do
+  def draw_legend(%Size.Discrete{levels: levels} = scale, label, key_glyph) do
     [
       Draw.text(
         "#{label}",
@@ -56,11 +56,11 @@ defmodule GGity.Scale.Size.Discrete do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_glyph) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_glyph) do
     [
       Draw.rect(
         x: "0",
@@ -71,13 +71,7 @@ defmodule GGity.Scale.Size.Discrete do
         stroke: "#eeeeee",
         stroke_width: "0.5"
       ),
-      Draw.marker(
-        :circle,
-        {7.5, 7.5 + 15 * index},
-        scale.transform.(level),
-        fill: "black",
-        fill_opacity: "1"
-      ),
+      draw_key_glyph(scale, level, index, key_glyph),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "20",
@@ -87,6 +81,27 @@ defmodule GGity.Scale.Size.Discrete do
         text_anchor: "left"
       )
     ]
+  end
+
+  defp draw_key_glyph(scale, level, index, :a) do
+    Draw.text(
+      "a",
+      x: "7.5",
+      y: "#{7.5 + 15 * index}",
+      font_size: scale.transform.(level),
+      fill: "black",
+      text_anchor: "left"
+    )
+  end
+
+  defp draw_key_glyph(scale, level, index, _key_glyph) do
+    Draw.marker(
+      :circle,
+      {7.5, 7.5 + 15 * index},
+      scale.transform.(level),
+      fill: "black",
+      fill_opacity: "1"
+    )
   end
 
   @spec legend_height(Size.Discrete.t()) :: non_neg_integer()

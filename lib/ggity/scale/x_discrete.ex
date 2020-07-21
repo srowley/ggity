@@ -10,6 +10,7 @@ defmodule GGity.Scale.X.Discrete do
   defstruct width: 200,
             levels: nil,
             labels: :waivers,
+            padding: 5,
             tick_values: nil,
             inverse: nil,
             transform: nil
@@ -30,7 +31,8 @@ defmodule GGity.Scale.X.Discrete do
       scale.levels
       |> Stream.with_index()
       |> Stream.map(fn {level, index} ->
-        {level, (2 * index + 1) * (scale.width / (2 * number_of_levels))}
+        group_width = (scale.width - number_of_levels * (scale.padding - 1)) / number_of_levels
+        {level, group_width * (index + 0.5) + index * scale.padding}
       end)
       |> Enum.into(%{})
 

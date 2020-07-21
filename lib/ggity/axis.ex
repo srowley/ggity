@@ -1,7 +1,7 @@
 defmodule GGity.Axis do
   @moduledoc false
 
-  alias GGity.{Draw, Labels, Plot}
+  alias GGity.{Draw, Labels, Plot, Scale}
 
   @spec draw_x_axis(Plot.t()) :: iolist()
   def draw_x_axis(%Plot{} = plot) do
@@ -11,6 +11,7 @@ defmodule GGity.Axis do
   defp x_ticks(%Plot{scales: scales} = plot) do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding * 2
 
+    # TODO: This fails to match on a discrete x axis with only one level.
     [first, second] =
       Enum.slice(scales.x.tick_values, 0..1)
       |> Enum.map(scales.x.inverse)

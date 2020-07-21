@@ -31,6 +31,11 @@ defimpl GGity.Scale, for: GGity.Scale.Fill.Viridis do
     do: GGity.Scale.Fill.Viridis.train(scale, levels)
 end
 
+defimpl GGity.Scale, for: GGity.Scale.Identity do
+  def train(scale, levels),
+    do: GGity.Scale.Identity.train(scale, levels)
+end
+
 defimpl GGity.Scale, for: GGity.Scale.Linetype.Discrete do
   def train(scale, levels),
     do: GGity.Scale.Linetype.Discrete.train(scale, levels)

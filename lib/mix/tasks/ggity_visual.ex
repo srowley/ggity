@@ -13,6 +13,7 @@ defmodule Mix.Tasks.Ggity.Visual do
       Visual.Geom.Point,
       Visual.Geom.Line,
       Visual.Geom.Bar,
+      Visual.Geom.Text,
       Visual.Layers,
       Visual.Scale.Color.Viridis
     ]

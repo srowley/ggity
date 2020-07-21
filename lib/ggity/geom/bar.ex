@@ -14,7 +14,6 @@ defmodule GGity.Geom.Bar do
             key_glyph: :rect,
             fill: "black",
             alpha: 1,
-            bar_padding: 5,
             bar_group_width: nil
 
   @spec new(mapping(), keyword()) :: Geom.Bar.t()
@@ -24,13 +23,9 @@ defmodule GGity.Geom.Bar do
 
   @spec draw(Geom.Bar.t(), list(map()), Plot.t()) :: iolist()
   def draw(%Geom.Bar{} = geom_bar, data, plot) do
-    geom_bar =
-      struct(geom_bar,
-        bar_group_width:
-          (plot.width - (length(plot.scales.x.levels) - 1) * geom_bar.bar_padding) /
-            length(plot.scales.x.levels)
-      )
-
+    number_of_levels = length(plot.scales.x.levels)
+    group_width = (plot.width - number_of_levels * (plot.scales.x.padding - 1)) / number_of_levels
+    geom_bar = struct(geom_bar, bar_group_width: group_width)
     bars(geom_bar, data, plot)
   end
 
@@ -101,7 +96,7 @@ defmodule GGity.Geom.Bar do
          _total_width,
          plot
        ) do
-    plot.area_padding + group_index * (geom_bar.bar_group_width + geom_bar.bar_padding)
+    plot.area_padding + group_index * (geom_bar.bar_group_width + plot.scales.x.padding)
   end
 
   defp position_adjust_x(
@@ -111,7 +106,7 @@ defmodule GGity.Geom.Bar do
          total_width,
          plot
        ) do
-    plot.area_padding + group_index * (geom_bar.bar_group_width + geom_bar.bar_padding) +
+    plot.area_padding + group_index * (geom_bar.bar_group_width + plot.scales.x.padding) +
       total_width
   end
 

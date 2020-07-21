@@ -51,8 +51,8 @@ defimpl GGity.Legend, for: GGity.Scale.Shape.Manual do
 end
 
 defimpl GGity.Legend, for: GGity.Scale.Size.Discrete do
-  def draw_legend(scale, label, _key_glyph),
-    do: GGity.Scale.Size.Discrete.draw_legend(scale, label)
+  def draw_legend(scale, label, key_glyph),
+    do: GGity.Scale.Size.Discrete.draw_legend(scale, label, key_glyph)
 
   def legend_height(scale), do: GGity.Scale.Size.Discrete.legend_height(scale)
 end

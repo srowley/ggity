@@ -17,10 +17,12 @@ dataset to `Plot.geom_*`. Run `mix ggity.visual.layers` for examples.
 - No breaking changes to the public API
 - Substantial overhaul of plot, geom and scale internals in order to
 accommodate layers
+- Added `Geom.Text`; helpful for labelling bar plots
+- Discrete size scale now draws a legend
 - Moved axis drawing code to separate (private) Axis module
-- `Geom.Line.sort_by_x/2` is private
-- `Geom.Point.points/2` is private
-- `Geom.Line.lines/2` is private
+- `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)
+- `Geom.Point.points/2` is fully private (was never part of the public API)
+- `Geom.Line.lines/2` is fully private (was never part of the public API)
 
 ### Fixed
 - `mix.ggity.visual --wsl` no longer fails if a browser is open. Instead

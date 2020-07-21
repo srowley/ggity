@@ -165,6 +165,8 @@ defmodule GGity.Plot do
 
   defp assign_scale(:y, _value), do: Scale.Y.Continuous.new()
 
+  defp assign_scale(other, _value), do: Scale.Identity.new(other)
+
   @doc """
   Generates an iolist of SVG markup representing a `Plot`.
 
@@ -452,6 +454,21 @@ defmodule GGity.Plot do
     add_geom(plot, Geom.Point, mapping, options)
   end
 
+  @spec geom_text(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_text(plot, mapping \\ [], options \\ [])
+
+  def geom_text(%Plot{} = plot, [], []) do
+    add_geom(plot, Geom.Text)
+  end
+
+  def geom_text(%Plot{} = plot, mapping_or_options, []) do
+    add_geom(plot, Geom.Text, mapping_or_options)
+  end
+
+  def geom_text(%Plot{} = plot, mapping, options) do
+    add_geom(plot, Geom.Text, mapping, options)
+  end
+
   @doc """
   Adds a line geom to the plot.
 
@@ -577,7 +594,7 @@ defmodule GGity.Plot do
     updated_plot = add_geom(plot, Geom.Bar, mapping_or_options)
     bar_geom = hd(updated_plot.layers)
 
-    {data, mapping} = apply(Stat, :count, [updated_plot.data, updated_plot.mapping])
+    {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, updated_plot.mapping])
 
     fixed_max =
       data
@@ -601,9 +618,20 @@ defmodule GGity.Plot do
     updated_plot = add_geom(plot, Geom.Bar, mapping, options)
     bar_geom = hd(updated_plot.layers)
 
+    {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, updated_plot.mapping])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
     scale_adjustment =
       case bar_geom.position do
-        :stack -> {0, nil}
+        :stack -> {0, fixed_max}
         _other_positions -> {0, nil}
       end
 
@@ -625,12 +653,12 @@ defmodule GGity.Plot do
   end
 
   def geom_col(%Plot{} = plot, mapping_or_options, []) when is_list(mapping_or_options) do
-    options = Keyword.put(mapping_or_options, :stat, :identity)
+    options = Keyword.merge(mapping_or_options, stat: :identity, limits: %{y: {0, nil}})
     geom_bar(plot, options)
   end
 
   def geom_col(%Plot{} = plot, mapping, options) do
-    options = Keyword.put(options, :stat, :identity)
+    options = Keyword.merge(options, stat: :identity, limits: %{y: {0, nil}})
     geom_bar(plot, mapping, options)
   end
 
@@ -694,7 +722,7 @@ defmodule GGity.Plot do
   """
   @spec scale_alpha_identity(Plot.t()) :: Plot.t()
   def scale_alpha_identity(%Plot{} = plot) do
-    struct(plot, scales: Map.put(plot.scales, :alpha, Scale.Identity.new(plot, :alpha)))
+    struct(plot, scales: Map.put(plot.scales, :alpha, Scale.Identity.new(:alpha)))
   end
 
   @doc """
@@ -721,7 +749,12 @@ defmodule GGity.Plot do
   """
   @spec scale_color_identity(Plot.t()) :: Plot.t()
   def scale_color_identity(%Plot{} = plot) do
-    struct(plot, scales: Map.put(plot.scales, :color, Scale.Identity.new(plot, :color)))
+    struct(plot, scales: Map.put(plot.scales, :color, Scale.Identity.new(:color)))
+  end
+
+  @spec scale_label_identity(Plot.t()) :: Plot.t()
+  def scale_label_identity(%Plot{} = plot) do
+    struct(plot, scales: Map.put(plot.scales, :color, Scale.Identity.new(:label)))
   end
 
   @doc """
@@ -884,7 +917,7 @@ defmodule GGity.Plot do
   """
   @spec scale_size_identity(Plot.t()) :: Plot.t()
   def scale_size_identity(%Plot{} = plot) do
-    struct(plot, scales: Map.put(plot.scales, :size, Scale.Identity.new(plot, :size)))
+    struct(plot, scales: Map.put(plot.scales, :size, Scale.Identity.new(:size)))
   end
 
   @doc """
