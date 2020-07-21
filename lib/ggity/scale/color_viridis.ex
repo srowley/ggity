@@ -1448,6 +1448,20 @@ defmodule GGity.Scale.Color.Viridis do
     )
   end
 
+  defp draw_key_glyph(scale, level, index, :a) do
+    Draw.text(
+      "a",
+      x: 7.5,
+      y: 7.5 + 15 * index,
+      text_anchor: "middle",
+      dominant_baseline: "middle",
+      font_size: 10,
+      font_weight: "bold",
+      fill: "#{scale.transform.(level)}",
+      fill_opacity: "1"
+    )
+  end
+
   defp draw_key_glyph(scale, level, index, :timeseries) do
     offset = 15 * index
 

@@ -46,7 +46,7 @@ defmodule GGity.Scale.Alpha.Discrete do
 
   def draw_legend(%Alpha.Discrete{levels: [_]}, _label), do: []
 
-  def draw_legend(%Alpha.Discrete{levels: levels} = scale, label) do
+  def draw_legend(%Alpha.Discrete{levels: levels} = scale, label, key_glyph) do
     [
       Draw.text(
         "#{label}",
@@ -57,11 +57,11 @@ defmodule GGity.Scale.Alpha.Discrete do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_glyph) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_glyph) do
     [
       Draw.rect(
         x: "0",
@@ -72,13 +72,7 @@ defmodule GGity.Scale.Alpha.Discrete do
         stroke: "#eeeeee",
         stroke_width: "0.5"
       ),
-      Draw.marker(
-        :circle,
-        {7.5, 7.5 + 15 * index},
-        5,
-        fill: "black",
-        fill_opacity: scale.transform.(level)
-      ),
+      draw_key_glyph(scale, level, index, key_glyph),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "20",
@@ -88,6 +82,30 @@ defmodule GGity.Scale.Alpha.Discrete do
         text_anchor: "left"
       )
     ]
+  end
+
+  defp draw_key_glyph(scale, level, index, :a) do
+    Draw.text(
+      "a",
+      x: 7.5,
+      y: 7.5 + 15 * index,
+      text_anchor: "middle",
+      dominant_baseline: "middle",
+      font_size: 10,
+      font_weight: "bold",
+      fill: "black",
+      fill_opacity: "#{scale.transform.(level)}"
+    )
+  end
+
+  defp draw_key_glyph(scale, level, index, :point) do
+    Draw.marker(
+      :circle,
+      {7.5, 7.5 + 15 * index},
+      5,
+      fill: "#{scale.transform.(level)}",
+      fill_opacity: "1"
+    )
   end
 
   @spec legend_height(Alpha.Discrete.t()) :: non_neg_integer()
