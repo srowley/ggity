@@ -669,7 +669,7 @@ defmodule GGity.Plot do
 
   defp add_geom(%Plot{} = plot, geom_type, mapping) when is_map(mapping) do
     layer = Layer.new(struct(geom_type), mapping, [])
-    struct(plot, layers: [layer | plot.layers])
+    struct(plot, layers: [layer | plot.layers], labels: Map.merge(plot.labels, mapping))
   end
 
   defp add_geom(%Plot{} = plot, geom_type, options) when is_list(options) do
@@ -679,7 +679,7 @@ defmodule GGity.Plot do
 
   defp add_geom(%Plot{} = plot, geom_type, mapping, options) do
     layer = Layer.new(struct(geom_type), mapping, options)
-    struct(plot, layers: [layer | plot.layers])
+    struct(plot, layers: [layer | plot.layers], labels: Map.merge(plot.labels, mapping))
   end
 
   @doc """
