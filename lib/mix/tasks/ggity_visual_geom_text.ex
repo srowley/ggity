@@ -18,8 +18,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
         [
           basic(),
           bar_labels(),
-          geom_col(),
-          stack()
+          stack(),
+          geom_col()
         ],
         "\n"
       )
