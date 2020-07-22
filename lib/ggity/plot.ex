@@ -77,8 +77,8 @@ defmodule GGity.Plot do
             plot_width: 500,
             layers: [%Geom.Blank{}],
             scales: %{},
-            limits: %{},
-            labels: %{x: nil, y: nil},
+            limits: %{x: {nil, nil}, y: {nil, nil}},
+            labels: %{title: nil, x: nil, y: nil},
             y_label_padding: 20,
             breaks: 5,
             area_padding: 10,
@@ -118,11 +118,10 @@ defmodule GGity.Plot do
   @spec new(list(record()), mapping(), keyword()) :: Plot.t()
   def new([first_row | _rest] = data, mapping \\ %{}, options \\ []) do
     scales = assign_scales(mapping, first_row)
-    labels = %{title: nil, x: mapping[:x], y: mapping[:y]}
 
     Plot
     |> struct(options)
-    |> struct(data: data, mapping: mapping, scales: scales, labels: labels)
+    |> struct(data: data, mapping: mapping, scales: scales)
   end
 
   defp assign_scales(mapping, record) do
@@ -182,6 +181,7 @@ defmodule GGity.Plot do
     plot
     |> map_aesthetics()
     |> apply_stats()
+    |> provide_default_axis_labels()
     |> train_scales()
     |> render()
   end
@@ -203,6 +203,18 @@ defmodule GGity.Plot do
       end)
 
     struct(plot, layers: layers)
+  end
+
+  defp provide_default_axis_labels(%Plot{} = plot) do
+    [x_label, y_label] =
+      plot.layers
+      |> hd()
+      |> Map.get(:mapping)
+      |> Map.take([:x, :y])
+      |> Map.values()
+
+    labels = %{title: plot.labels.title, x: plot.labels.x || x_label, y: plot.labels.y || y_label}
+    struct(plot, labels: labels)
   end
 
   defp train_scales(%Plot{} = plot) do
@@ -458,15 +470,73 @@ defmodule GGity.Plot do
   def geom_text(plot, mapping \\ [], options \\ [])
 
   def geom_text(%Plot{} = plot, [], []) do
-    add_geom(plot, Geom.Text)
+    updated_plot = add_geom(plot, Geom.Text)
+    geom = hd(updated_plot.layers)
+
+    scale_adjustment =
+      case geom.position do
+        :stack -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+        _other_positions -> plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   def geom_text(%Plot{} = plot, mapping_or_options, []) do
-    add_geom(plot, Geom.Text, mapping_or_options)
+    updated_plot = add_geom(plot, Geom.Text, mapping_or_options)
+    geom = hd(updated_plot.layers)
+
+    {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   def geom_text(%Plot{} = plot, mapping, options) do
-    add_geom(plot, Geom.Text, mapping, options)
+    updated_plot = add_geom(plot, Geom.Text, mapping, options)
+    geom = hd(updated_plot.layers)
+
+    {data, mapping} =
+      apply(Stat, geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   @doc """
@@ -583,8 +653,8 @@ defmodule GGity.Plot do
 
     scale_adjustment =
       case bar_geom.position do
-        :stack -> {0, nil}
-        _other_positions -> {0, nil}
+        :stack -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+        _other_positions -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
       end
 
     struct(updated_plot, limits: %{y: scale_adjustment})
@@ -607,8 +677,12 @@ defmodule GGity.Plot do
 
     scale_adjustment =
       case bar_geom.position do
-        :stack -> {0, fixed_max}
-        _other_positions -> {0, nil}
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
       end
 
     struct(updated_plot, limits: %{y: scale_adjustment})
@@ -618,7 +692,8 @@ defmodule GGity.Plot do
     updated_plot = add_geom(plot, Geom.Bar, mapping, options)
     bar_geom = hd(updated_plot.layers)
 
-    {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, updated_plot.mapping])
+    {data, mapping} =
+      apply(Stat, bar_geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
 
     fixed_max =
       data
@@ -631,8 +706,12 @@ defmodule GGity.Plot do
 
     scale_adjustment =
       case bar_geom.position do
-        :stack -> {0, fixed_max}
-        _other_positions -> {0, nil}
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
       end
 
     struct(updated_plot, limits: %{y: scale_adjustment})

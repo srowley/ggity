@@ -18,8 +18,10 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
         [
           basic(),
           bar_labels(),
-          stack(),
-          geom_col()
+          bar_stack(),
+          col_stack(),
+          bar_dodge(),
+          col_dodge()
         ],
         "\n"
       )
@@ -78,7 +80,26 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
     |> Plot.plot()
   end
 
-  defp stack do
+  defp bar_stack do
+    Examples.mpg()
+    |> Enum.filter(fn record ->
+      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
+    end)
+    |> Plot.new(%{x: "manufacturer", label: :count, group: "class"})
+    |> Plot.geom_bar(%{fill: "class"}, position: :stack)
+    |> Plot.geom_text(
+      color: "grey",
+      stat: :count,
+      position: :stack,
+      position_vjust: 0.5,
+      fontface: "bold",
+      size: 6
+    )
+    |> Plot.scale_fill_viridis(option: :inferno)
+    |> Plot.plot()
+  end
+
+  defp col_stack do
     [
       %{salesperson: "Joe", week: "Week 1", units: 10},
       %{salesperson: "Jane", week: "Week 1", units: 15},
@@ -105,7 +126,26 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
     |> Plot.plot()
   end
 
-  defp geom_col do
+  defp bar_dodge do
+    Examples.mpg()
+    |> Enum.filter(fn record ->
+      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
+    end)
+    |> Plot.new(%{x: "manufacturer", label: :count, group: "class"})
+    |> Plot.geom_bar(%{fill: "class"}, position: :dodge)
+    |> Plot.geom_text(%{y: :count},
+      color: "grey",
+      stat: :count,
+      position: :dodge,
+      position_vjust: 0.5,
+      fontface: "bold",
+      size: 6
+    )
+    |> Plot.scale_fill_viridis(option: :inferno)
+    |> Plot.plot()
+  end
+
+  defp col_dodge do
     [
       %{salesperson: "Joe", week: "Week 1", units: 10},
       %{salesperson: "Jane", week: "Week 1", units: 15},
@@ -119,13 +159,13 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
       %{salesperson: "Joe", week: "Week 4", units: 14},
       %{salesperson: "Jane", week: "Week 4", units: 9}
     ]
-    |> Enum.map(fn row -> Map.put(row, :label_y_pos, row.units / 2) end)
     |> Plot.new(%{x: :week, y: :units, label: :units, group: :salesperson})
     |> Plot.geom_col(%{fill: :salesperson}, position: :dodge)
-    |> Plot.geom_text(%{y: :label_y_pos},
+    |> Plot.geom_text(
       color: "#BAAC6F",
       position: :dodge,
       fontface: "bold",
+      position_vjust: 0.5,
       size: 6
     )
     |> Plot.scale_fill_viridis(option: :cividis)

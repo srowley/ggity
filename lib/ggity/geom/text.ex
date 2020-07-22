@@ -207,6 +207,7 @@ defmodule GGity.Geom.Text do
   end
 
   defp position_adjust_y(%Geom.Text{position: :dodge} = geom_text, row, _total_height, plot) do
-    plot.scales.y.transform.(row[geom_text.mapping[:y]]) / plot.aspect_ratio
+    plot.scales.y.transform.(row[geom_text.mapping[:y]]) / plot.aspect_ratio *
+      geom_text.position_vjust
   end
 end

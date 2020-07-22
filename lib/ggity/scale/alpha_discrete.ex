@@ -41,10 +41,10 @@ defmodule GGity.Scale.Alpha.Discrete do
     struct(scale, levels: levels, transform: transform)
   end
 
-  @spec draw_legend(Alpha.Discrete.t(), binary()) :: iolist()
-  def draw_legend(%Alpha.Discrete{guide: :none}, _label), do: []
+  @spec draw_legend(Alpha.Discrete.t(), binary(), atom()) :: iolist()
+  def draw_legend(%Alpha.Discrete{guide: :none}, _label, _key_glyph), do: []
 
-  def draw_legend(%Alpha.Discrete{levels: [_]}, _label), do: []
+  def draw_legend(%Alpha.Discrete{levels: [_]}, _label, _key_glyph), do: []
 
   def draw_legend(%Alpha.Discrete{levels: levels} = scale, label, key_glyph) do
     [
@@ -103,8 +103,8 @@ defmodule GGity.Scale.Alpha.Discrete do
       :circle,
       {7.5, 7.5 + 15 * index},
       5,
-      fill: "#{scale.transform.(level)}",
-      fill_opacity: "1"
+      fill: "black",
+      fill_opacity: "#{scale.transform.(level)}"
     )
   end
 
