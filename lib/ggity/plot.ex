@@ -79,6 +79,7 @@ defmodule GGity.Plot do
             width: 200,
             aspect_ratio: 1.5,
             plot_width: 500,
+            title_margin: 15,
             layers: [%Geom.Blank{}],
             scales: %{},
             limits: %{x: {nil, nil}, y: {nil, nil}},
@@ -87,7 +88,7 @@ defmodule GGity.Plot do
             breaks: 5,
             area_padding: 10,
             panel_background_color: "#eeeeee",
-            margins: %{left: 30, top: 10, right: 0, bottom: 0}
+            margins: %{left: 30, top: 5, right: 0, bottom: 0}
 
   @doc """
   Generates a Plot struct with provided data and aesthetic mappings.
@@ -315,10 +316,13 @@ defmodule GGity.Plot do
     [
       # This is how you set the plot background
       # ["<rect width=100% height=100% fill=\"cornflowerblue\"/>"],
-      draw_background(plot),
-      draw_x_axis(plot),
-      draw_y_axis(plot),
-      draw_layers(plot),
+      [
+        draw_background(plot),
+        Axis.draw_x_axis(plot),
+        Axis.draw_y_axis(plot),
+        draw_layers(plot)
+      ]
+      |> translate_for_title_and_y_axis(plot),
       draw_title(plot),
       draw_legend_group(plot)
     ]
@@ -330,10 +334,7 @@ defmodule GGity.Plot do
     )
   end
 
-  defp draw_background(%Plot{margins: margins} = plot) do
-    left_shift = margins.left + plot.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
+  defp draw_background(%Plot{} = plot) do
     Draw.rect(
       x: "0",
       y: "0",
@@ -341,54 +342,33 @@ defmodule GGity.Plot do
       width: to_string(plot.width + plot.area_padding * 2),
       fill: plot.panel_background_color
     )
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
   end
 
-  defp title_margin(%Plot{labels: %{title: title}}) when is_binary(title), do: 10
+  defp title_margin(%Plot{labels: %{title: title}} = plot) when is_binary(title),
+    do: plot.title_margin
 
   defp title_margin(%Plot{}), do: 0
 
-  defp draw_x_axis(%Plot{margins: margins} = plot) do
-    left_shift = margins.left + plot.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
-    Axis.draw_x_axis(plot)
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp draw_y_axis(%Plot{margins: margins} = plot) do
-    left_shift = margins.left + plot.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
-    Axis.draw_y_axis(plot)
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
-  end
-
-  defp draw_layers(%Plot{margins: margins} = plot) do
-    left_shift = margins.left + plot.y_label_padding
-    top_shift = margins.top + title_margin(plot)
-
+  defp draw_layers(%Plot{} = plot) do
     plot.layers
     |> Enum.reverse()
     |> Enum.map(fn layer -> Layer.draw(layer, layer.data, plot) end)
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
   end
 
   defp draw_title(%Plot{labels: %{title: title}}) when not is_binary(title), do: ""
 
   defp draw_title(%Plot{margins: margins} = plot) do
     left_shift = margins.left + plot.y_label_padding
-    top_shift = margins.top + title_margin(plot)
 
     plot.labels.title
     |> Draw.text(
       x: "0",
-      y: "-15",
+      y: "#{margins.top}",
       dy: "0.71em",
       dx: "0",
       font_size: "12"
     )
-    |> Draw.g(transform: "translate(#{left_shift}, #{top_shift})")
+    |> Draw.g(transform: "translate(#{left_shift}, 0)")
   end
 
   defp draw_legend_group(plot) do
@@ -424,6 +404,12 @@ defmodule GGity.Plot do
         Legend.draw_legend(scale, label, key_glyph)
         |> Draw.g(transform: "translate(0, #{offset})")
     end
+  end
+
+  defp translate_for_title_and_y_axis(element, %Plot{margins: margins} = plot) do
+    left_shift = margins.left + plot.y_label_padding
+    top_shift = margins.top + title_margin(plot)
+    Draw.g(element, transform: "translate(#{left_shift}, #{top_shift})")
   end
 
   defp key_glyph(plot, aesthetic) do
