@@ -313,6 +313,8 @@ defmodule GGity.Plot do
     viewbox_width = plot.width * 7 / 4
 
     [
+      # This is how you set the plot background
+      # ["<rect width=100% height=100% fill=\"cornflowerblue\"/>"],
       draw_background(plot),
       draw_x_axis(plot),
       draw_y_axis(plot),
