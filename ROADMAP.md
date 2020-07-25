@@ -9,7 +9,7 @@
 
 ## v0.3 
 * [COMPLETE] Internal overhaul to implement layers and split out stats (at least) from the geom context
-* Add `geom_text` to support data point labeling
+* [COMPLETE] Add `geom_text` to support data point labeling
 * Implement x_lim/y_lim
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Support CSS styling (use themes, but via inline CSS to allow overrides via custom stylesheet)
