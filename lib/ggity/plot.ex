@@ -8,7 +8,7 @@ defmodule GGity.Plot do
 
   Data must be provided as a list of maps, where each map in the list
   represents an observation, and the map's keys represent variable names.
-  GGity does not perform any validation of the data; data is assumed to be
+  **GGity does not perform any validation of the data**; data is assumed to be
   clean and not to have missing values.
 
   ```
@@ -18,8 +18,7 @@ defmodule GGity.Plot do
 
   Mappings are specified using maps, where the map's keys are the names
   of supported aesthetics, and the values are the names of variables in
-  the data. The mapping must include assignments for the `:x` and `:y`
-  aesthetics.
+  the data.
 
   ```
     Examples.mtcars()
@@ -27,17 +26,22 @@ defmodule GGity.Plot do
     |> Plot.geom_point()
   ```
 
-  A geom struct (GGity supports points and lines in this version) is added
-  to the plot using using `geom_point/3` or `geom_line/3`. The
-  geom struct contains the scales for each variable assigned to an aesthetic.
-  Scales generate functions that transform data into an aesthetic value (e.g,
-  an x coordinate or a color) and functions that transform an aesthetic value
-  back into an observation (for the purpose of drawing axes or legends).integer()
+  A plot layer (represented as a struct that implements the `GGity.Geom` protocol)
+  is added to the plot using functions such as `geom_point/3` or `geom_line/3`.
 
-  Each geom uses default scales, but these can be overridden by passing the Plot
-  struct to `scale[scale_type]/2`. With respect to x values, GGity will
-  try to guess if the data is numeric or date/datetime-typed and assign a
-  scale accordingly.
+  As layers are assembled into a plot, the scales for each aesthetic are calculated
+  using the data assigned to each aesthetic in each layer. Scales generate functions
+  that transform data into an aesthetic value (e.g, an x coordinate or a color) and
+  functions that transform an aesthetic value back into an observation (for the
+  purpose of drawing axes or legends).
+
+  The plot will assign default scales based on the type of data assigned to each
+  aesthetic in each layer (by examining the value in the first row of the data),
+  typically mapping numerical data to a continuous scale (if available) and binary
+  data to a discrete scale. These assignments can be overridden by passing the Plot
+  struct to a scale-setting function, e.g. `scale_[scale_type]/2`. For `x` values
+  only, GGity will assign at date/datetime scale if the data mapped to the `:x`
+  aesthetic is a `Date`, `DateTime` or `NaiveDateTime` struct.
 
   ```
     Examples.mtcars()
@@ -100,20 +104,29 @@ defmodule GGity.Plot do
   `new/3` also supports several options that shortcut plot creation or alter the
   appearance of the plot. All graphical size units are in pixels.
 
-  * `:width` - the width of the plot area. Defaults to `200`.
-
-  * `:plot_width` - the width of the SVG inclusive of axes and legends. Defaults to `500.`
+  * `:area_padding` - amount of blank space before the first tick and after the last
+  tick on each axis (same value applied to both axes) defaults to `10`.
 
   * `:aspect_ratio` - the ratio of the plot area height to `:width`. Defaults to `1.5.`
 
+  * `:breaks` - the number of tick intervals on the x- and y axis (same value applied
+  to both axes). This may be adjusted by the scale function based on the data. Defaults to `5`.
+
   * `:labels` - a map specifying the titles of the plot (`:title`), x and y-axes
-  (`:x` and `:y`) or legend title for another aesthetic (e.g. `:color`).
+  (`:x` and `:y`) or legend title for another aesthetic (e.g. `:color`). A `nil` value indicates
+  no label. Defaults to `%{title: :nil, x: nil, y: nil}`.
+
+  * `:margins` - a map with keys `:left`, `:top`, `:right` and `:bottom`, specifying the
+  plot margins. Default is `%{left: 30, top: 10, right: 0, bottom: 0}`.
 
   * `:panel_background_color` - a string value (hex or CSS color name) for the panel background.
   Defaults to grey (`#eeeeee`)
 
-  * `:margins` - a map with keys `:left`, `:top`, `:right` and `:bottom`, specifying the
-  plot margins. Default is `%{left: 30, top: 10, right: 0, bottom: 0}`.
+  * `:plot_width` - the width of the SVG inclusive of axes and legends. Defaults to `500.`
+
+  * `:width` - the width of the plot area. Defaults to `200`.
+
+  * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
   @spec new(list(record()), mapping(), keyword()) :: Plot.t()
   def new([first_row | _rest] = data, mapping \\ %{}, options \\ []) do
@@ -423,226 +436,48 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Adds a point geom to the plot.
-
-  Accepts a mapping and/or additonal options to be used. The provided mapping
-  is merged with the plot mapping for purposes of the geom - there is no need
-  to re-specify the `:x` or `:y` mappings.
-
-  Point geoms support the following aesthetics, which use the noted default scales:
-
-  * `:x` (required - continuous number/`Date`/`DateTime` scale based on type of value in first record)
-  * `:y` (required) - continuous (must be a number)
-  * `:alpha` - continuous
-  * `:color` - discrete (viridis palette)
-  * `:shape` - discrete
-  * `:size` - continuous
-
-  Fixed values for aesthetics can also be specified as options, e.g., `color: "blue"`.
-  This fixed value is assigned to the aesthetic for all observations.
-
-  Other supported options:
-
-  * `:area_padding` - amount of blank space before the first tick and after the last
-  tick on each axis (same value applied to both axes) defaults to `10`.
-  * `:breaks` - the number of tick intervals on the x- and y axis (same value applied
-  to both axes). This may be adjusted by the scale function based on the data. Defaults to `5`.
-  * `:key_glyph` - Type of glyph to use in the legend key. currently only supported for the
-  `:color` aesthetic. Available values are `:point`, `:path` and `:timeseries`; defaults to `:point`.
-  * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
-  """
-  @spec geom_point(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
-  def geom_point(plot, mapping \\ [], options \\ [])
-
-  def geom_point(%Plot{} = plot, [], []) do
-    add_geom(plot, Geom.Point)
-  end
-
-  def geom_point(%Plot{} = plot, mapping_or_options, []) do
-    add_geom(plot, Geom.Point, mapping_or_options)
-  end
-
-  def geom_point(%Plot{} = plot, mapping, options) do
-    add_geom(plot, Geom.Point, mapping, options)
-  end
-
-  @spec geom_text(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
-  def geom_text(plot, mapping \\ [], options \\ [])
-
-  def geom_text(%Plot{} = plot, [], []) do
-    updated_plot = add_geom(plot, Geom.Text)
-    geom = hd(updated_plot.layers)
-
-    scale_adjustment =
-      case geom.position do
-        :stack -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
-        _other_positions -> plot.limits.y
-      end
-
-    struct(updated_plot, limits: %{y: scale_adjustment})
-  end
-
-  def geom_text(%Plot{} = plot, mapping_or_options, []) do
-    updated_plot = add_geom(plot, Geom.Text, mapping_or_options)
-    geom = hd(updated_plot.layers)
-
-    {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
-
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
-
-    scale_adjustment =
-      case geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          plot.limits.y
-      end
-
-    struct(updated_plot, limits: %{y: scale_adjustment})
-  end
-
-  def geom_text(%Plot{} = plot, mapping, options) do
-    updated_plot = add_geom(plot, Geom.Text, mapping, options)
-    geom = hd(updated_plot.layers)
-
-    {data, mapping} =
-      apply(Stat, geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
-
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
-
-    scale_adjustment =
-      case geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          plot.limits.y
-      end
-
-    struct(updated_plot, limits: %{y: scale_adjustment})
-  end
-
-  @doc """
-  Adds a line geom to the plot.
-
-  Accepts a mapping and/or additonal options to be used. The provided mapping
-  is merged with the plot mapping for purposes of the geom - there is no need
-  to re-specify the `:x` or `:y` mappings.
-
-  By default, the `:x` aesthetic will use continuous number/`Date`/`DateTime`
-  scales based on the type of value in first record.
-
-  Note that the line geom sorts the data by the values for the variable mapped
-  to the `:x` aesthetic using Erlang default term ordering.
-
-  Supported aesthetics include:
-
-  * `:alpha`
-  * `:color`
-  * `:size`
-  * `:linetype`
-
-  The `:linetype` and `:color` aesthetics can be mapped to a variable. Only fixed values
-  can be assigned to `:alpha` and `:size`.
-
-  Other supported options:
-
-  * `:area_padding` - amount of blank space before the first tick and after the last
-  tick on each axis (same value applied to both axes) defaults to `10`.
-  * `:breaks` - the number of tick intervals on the x- and y axis (same value applied
-  to both axes). This may be adjusted by the scale function based on the data. Defaults to `5`.
-  * `:key_glyph` - Type of glyph to use in the legend key. currently only supported for the
-  `:color` aesthetic. Available values are `:point`, `:path` and `:timeseries`; default values are
-  assigned based on the x value scale type.
-  * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
-  """
-  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
-  def geom_line(plot, mapping \\ [], options \\ [])
-
-  def geom_line(%Plot{} = plot, [], []) do
-    add_geom(plot, Geom.Line, key_glyph: line_key_glyph(plot))
-  end
-
-  def geom_line(%Plot{} = plot, mapping, []) when is_map(mapping) do
-    add_geom(plot, Geom.Line, mapping, key_glyph: line_key_glyph(plot, mapping))
-  end
-
-  def geom_line(%Plot{} = plot, options, []) when is_list(options) do
-    key_glyph = options[:key_glyph] || line_key_glyph(plot, options)
-    add_geom(plot, Geom.Line, [{:key_glyph, key_glyph} | options])
-  end
-
-  def geom_line(%Plot{} = plot, mapping, options) do
-    key_glyph = options[:key_glyph] || line_key_glyph(plot, mapping, options)
-    add_geom(plot, Geom.Line, mapping, [{:key_glyph, key_glyph} | options])
-  end
-
-  defp line_key_glyph(%Plot{scales: %{x: %Date{}}}), do: :timeseries
-  defp line_key_glyph(%Plot{scales: %{x: %DateTime{}}}), do: :timeseries
-  defp line_key_glyph(_plot), do: :path
-
-  defp line_key_glyph(%Plot{} = plot, mapping) when is_map(mapping) do
-    mapping = Map.merge(plot.mapping, mapping)
-
-    case hd(plot.data)[mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
-    end
-  end
-
-  defp line_key_glyph(%Plot{} = plot, options) when is_list(options) do
-    case hd(options[:data] || plot.data)[plot.mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
-    end
-  end
-
-  defp line_key_glyph(%Plot{} = plot, mapping, options) do
-    mapping = Map.merge(plot.mapping, mapping)
-
-    case hd(options[:data] || plot.data)[mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
-    end
-  end
-
-  @doc """
   Adds a bar geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
 
   Accepts a mapping and/or additonal options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` mapping.
 
-  Currently bar geoms only support `:stat_count`, meaning that the `:y` value is mapped
-  to the number of observations with given `:x` (and `:fill`, if mapped) values,
-  rather than representing the mapping of a variable in the data to the y axis.
-  This means that the only mappings that are needed or used are the `:x` and `:fill`
-  aesthetics. The `:x` variable is treated as discrete.
+  Bar geoms support mapping data to the following aesthetics, which use the
+  noted default scales:
+
+  * `:x` (required)
+  * `:y` (required to draw the geom, but not typically specified for bar geoms - see below)
+  * `:alpha`
+  * `:fill`
+
+  Bar geoms also support providing fixed values (specified as options, e.g. `color: "blue"`)
+  for the optional aesthetics above. A fixed value is assigned to the aesthetic
+  for all observations.
+
+  `geom_bar/3` uses the `:count` stat, which counts the number of
+  observations in the data for each combination of mapped aesthetics and assigns
+  that value to the `:y` aesthetic. To create a bar chart with bars tied values of
+  a specific variable use specify `stat: :identity` or use `geom_col/3`,
+  which is identical to calling `geom_bar/3` with the `stat: :identity`
+  option. In either case, if `stat: :identity` is called, a variable in the data
+  must be mapped to the `:y` aesthetic.
 
   Other supported options:
 
-  * `:area_padding` - amount of blank space before the first tick and after the last
-  tick on each axis (same value applied to both axes) defaults to `10`.
-  * `:position` - Available values are `:stack` (one bar per `:x` value) or `:dodge` (one bar
-  per unique `:x`/`:fill` value pair). Defaults to `:stack`.
-  * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
+  * `:key_glyph` - Type of glyph to use in the legend key. Available values are
+  `:a`, `:point`, `:path`, `:rect` and `:timeseries`. Defaults to `:rect`.
+
+  * `:position` - Available values are:
+      * `:identity` (bars sit on top of each other; not recommended),
+      * `:stack` (one bar per `:x` value)
+      * `:dodge` (one bar per unique `:x`/`:fill` value pair).
+      Defaults to `:stack`.
+
+  * `:stat` - an atom referring to a statistical transformation function in the
+  `GGity.Stat` module that is to be applied to the data. Defaults to `:count` (see above).
   """
   @spec geom_bar(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_bar(plot, mapping \\ [], options \\ [])
@@ -720,9 +555,9 @@ defmodule GGity.Plot do
   @doc """
   Shorthand for `geom_bar(plot, stat: :identity)`.
 
-  Produces a bar chart similar to `geom_bar/3`, but uses the values of observations
-  mapped to the `:y` aesthetic (instead of observation counts) to calculate the height
-  of the bars. See `geom_bar/3` for supported options.
+  Produces a bar chart similar to `geom_bar/3`, but uses the values of
+  observations mapped to the `:y` aesthetic (instead of observation counts) to
+  calculate the height of the bars. See `geom_bar/3` for supported options.
   """
   @spec geom_col(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_col(plot, mapping \\ [], options \\ [])
@@ -739,6 +574,277 @@ defmodule GGity.Plot do
   def geom_col(%Plot{} = plot, mapping, options) do
     options = Keyword.merge(options, stat: :identity, limits: %{y: {0, nil}})
     geom_bar(plot, mapping, options)
+  end
+
+  @doc """
+  Adds a line geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` or `:y` mappings.
+
+  Note that the line geom sorts the data by the values for the variable mapped
+  to the `:x` aesthetic using Erlang default term ordering.
+
+  Line geoms support mapping data to the following aesthetics, which use the
+  noted default scales:
+
+  * `:x` (required)
+  * `:y` (required)
+  * `:alpha`
+  * `:color`
+  * `:linetype`
+  * `:size`
+
+  Line geoms also support providing fixed values (specified as options, e.g. `color: "blue"`)
+  for the optional aesthetics above. A fixed value is assigned to the aesthetic
+  for all observations.
+
+  Other supported options:
+
+  * `:key_glyph` - Type of glyph to use in the legend key. Available values are
+  `:path` and `:timeseries`. By default this value is assigned based on the type
+  of the value in the first row of the data for the variable mapped to the `:x`
+  aesthetic.
+  """
+  @spec geom_line(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_line(plot, mapping \\ [], options \\ [])
+
+  def geom_line(%Plot{} = plot, [], []) do
+    add_geom(plot, Geom.Line, key_glyph: line_key_glyph(plot))
+  end
+
+  def geom_line(%Plot{} = plot, mapping, []) when is_map(mapping) do
+    add_geom(plot, Geom.Line, mapping, key_glyph: line_key_glyph(plot, mapping))
+  end
+
+  def geom_line(%Plot{} = plot, options, []) when is_list(options) do
+    key_glyph = options[:key_glyph] || line_key_glyph(plot, options)
+    add_geom(plot, Geom.Line, [{:key_glyph, key_glyph} | options])
+  end
+
+  def geom_line(%Plot{} = plot, mapping, options) do
+    key_glyph = options[:key_glyph] || line_key_glyph(plot, mapping, options)
+    add_geom(plot, Geom.Line, mapping, [{:key_glyph, key_glyph} | options])
+  end
+
+  defp line_key_glyph(%Plot{scales: %{x: %Date{}}}), do: :timeseries
+  defp line_key_glyph(%Plot{scales: %{x: %DateTime{}}}), do: :timeseries
+  defp line_key_glyph(_plot), do: :path
+
+  defp line_key_glyph(%Plot{} = plot, mapping) when is_map(mapping) do
+    mapping = Map.merge(plot.mapping, mapping)
+
+    case hd(plot.data)[mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
+  end
+
+  defp line_key_glyph(%Plot{} = plot, options) when is_list(options) do
+    case hd(options[:data] || plot.data)[plot.mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
+  end
+
+  defp line_key_glyph(%Plot{} = plot, mapping, options) do
+    mapping = Map.merge(plot.mapping, mapping)
+
+    case hd(options[:data] || plot.data)[mapping[:x]] do
+      %type{} when type in [Date, DateTime] -> :timeseries
+      _type -> :path
+    end
+  end
+
+  @doc """
+  Adds a layer with a point geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` or `:y` mappings.
+
+  Point geoms support mapping data to the following aesthetics, which use the noted
+  default scales:
+
+  * `:x` (required)
+  * `:y` (required)
+  * `:alpha`
+  * `:color`
+  * `:shape`
+  * `:size`
+
+  Point geoms also support providing fixed values (specified as options, e.g. `color: "blue"`)
+  for the optional aesthetics above. A fixed value is assigned to the aesthetic for
+  all observations.
+
+  Other supported options:
+  * `:key_glyph` - Type of glyph to use in the legend key. Available values are
+  `:point`, `:path` and `:timeseries`; defaults to `:point`.
+
+  * `:stat` - an atom referring to a statistical transformation function in the
+  `GGity.Stat` module that is to be applied to the data. Defaults to `:identity`
+  (i.e., no transformation).
+  """
+  @spec geom_point(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_point(plot, mapping \\ [], options \\ [])
+
+  def geom_point(%Plot{} = plot, [], []) do
+    add_geom(plot, Geom.Point)
+  end
+
+  def geom_point(%Plot{} = plot, mapping_or_options, []) do
+    add_geom(plot, Geom.Point, mapping_or_options)
+  end
+
+  def geom_point(%Plot{} = plot, mapping, options) do
+    add_geom(plot, Geom.Point, mapping, options)
+  end
+
+  @doc """
+  Adds a layer with a text geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
+
+  A common use for text geoms is labelling of bar or point geoms. For bar chart
+  labels in particular, it is important to specify the same stat and postion
+  adjustment for the text geom as that specified for the bar chart.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` or `:y` mappings.
+
+  Text geoms support mapping data to the following aesthetics, which use the
+  noted default scales:
+
+  * `:x` (required)
+  * `:y` (required)
+  * `:label` (required - the text to be displayed)
+  * `:group`
+  * `:alpha`
+  * `:color`
+  * `:size`
+
+  The `:group` aesthetic is generally needed for bar chart labelling, where the
+  `:fill` or `:alpha` aesthetic is mapped to a value in the data, in those scenarios,
+  the text geom position adjustment must match the bar, and the `:group` aesthetic for
+  the text geom should be mapped to the variable mapped to `:fill` or `:alpha` on the
+  bar chart layer. See the visual examples code for examples.
+
+  Text geoms also support providing fixed values (specified as options, e.g. `color: "blue"`)
+  for the optional aesthetics above. A fixed value is assigned to the aesthetic for
+  all observations.
+
+  Other supported options:
+
+  * `:family` - The font family used to display the text; equivalent to the
+  SVG `font-family` attribute. Defaults to `"Helvetica, Arial, sans-serif"`.
+
+  * `:fontface` - Equivalent to SVG `font-weight` attribute. Defaults to `:normal`.
+
+  * `:hjust` - Horizontal alignment of the text relevant to element's `:x` value.
+  Valid values are `:left`, `:center` and `:right`. Defaults to `:center`.
+
+  * `:key_glyph` - Type of glyph to use in the legend key. Available values are
+  `:a`, `:point`, `:path` and `:timeseries`. Defaults to `:a`.
+
+  * `nudge_x`, `:nudge_y` - Adjust the x- or y-position value by the specified number
+  of pixels. Both default to `0`.
+
+  * `:position` - Available values are `:identity` (no adjustment), `:stack` (`:y` value
+  represents cumulative value for a given `:x` value) or `:dodge` (one text element per
+  unique pair of `:x` and other non-`:y` mapped aesthetics). Defaults to `:identity`.
+
+  * `position_vjust` - Adjust `:y` position vertically; expressed as a percentage of
+  the calculated `:y` value after taking into account the specified position adjustment.
+  Defaults to `1`.
+
+  * `:stat` - an atom referring to a statistical transformation function in the `GGity.Stat`
+  module that is to be applied to the data. Defaults to `:identity` (i.e., no transformation).
+  Supported values are `:count` and `:identity`. Where text geom is intended to serve as a
+  label for another layer with the `:count` stat, the state for the text layer should
+
+  * `:vjust` - Baseline of the text relevant to element's `:y` value. Valid values are
+  `:top`, `:middle` and `:bottom`. Defaults to `:center`.
+  """
+  @spec geom_text(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_text(plot, mapping \\ [], options \\ [])
+
+  def geom_text(%Plot{} = plot, [], []) do
+    updated_plot = add_geom(plot, Geom.Text)
+    geom = hd(updated_plot.layers)
+
+    scale_adjustment =
+      case geom.position do
+        :stack -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+        _other_positions -> plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
+  end
+
+  def geom_text(%Plot{} = plot, mapping_or_options, []) do
+    updated_plot = add_geom(plot, Geom.Text, mapping_or_options)
+    geom = hd(updated_plot.layers)
+
+    {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
+  end
+
+  def geom_text(%Plot{} = plot, mapping, options) do
+    updated_plot = add_geom(plot, Geom.Text, mapping, options)
+    geom = hd(updated_plot.layers)
+
+    {data, mapping} =
+      apply(Stat, geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
+
+    fixed_max =
+      data
+      |> Enum.group_by(fn item -> item[mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[mapping[:y]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          plot.limits.y
+      end
+
+    struct(updated_plot, limits: %{y: scale_adjustment})
   end
 
   defp add_geom(%Plot{} = plot, geom_type) do
@@ -853,6 +959,7 @@ defmodule GGity.Plot do
 
   - `:labels` - specifies how legend item names (levels of the data mapped to the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
+
   - `:option` - specifies which palette to use. Available palettes are  `:magma`, `:inferno`,
   `:plasma`, `:viridis` (the default) and `:cividis`. These palettes can also be specified via their
   letter codes - `:a`, `:b`, `:c`, `:d` and `:e`, respectively.
