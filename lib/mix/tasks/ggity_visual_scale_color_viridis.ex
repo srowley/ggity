@@ -4,6 +4,7 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
 
   use Mix.Task
 
+  import GGity.Element.{Line, Rect}
   alias GGity.{Examples, Labels, Plot}
 
   @default_browser "firefox"
@@ -104,6 +105,14 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
     |> Plot.labs(title: "Cividis, size: 2")
     |> Plot.geom_point(%{color: "city"}, size: 2)
     |> Plot.scale_color_viridis(option: :cividis)
+    |> Plot.theme(
+      axis_ticks: nil,
+      legend_key: element_rect(fill: "white", size: 1),
+      panel_background: element_rect(fill: "white"),
+      panel_border: element_line(color: "lightgray", size: 0.5),
+      panel_grid: element_line(color: "lightgray"),
+      panel_grid_major: element_line(size: 0.5)
+    )
     |> Plot.plot()
   end
 end
