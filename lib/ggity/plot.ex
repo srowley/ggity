@@ -227,7 +227,7 @@ defmodule GGity.Plot do
       |> Map.take([:x, :y])
       |> Map.values()
 
-    labels = %{title: plot.labels.title, x: plot.labels.x || x_label, y: plot.labels.y || y_label}
+    labels = Map.merge(plot.labels, %{x: x_label, y: y_label})
     struct(plot, labels: labels)
   end
 
