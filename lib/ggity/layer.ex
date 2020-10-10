@@ -8,40 +8,18 @@ defprotocol GGity.Layer do
   def draw(geom, data, plot)
 end
 
-defimpl GGity.Layer, for: GGity.Geom.Point do
-  def new(_geom, mapping, options) do
-    GGity.Geom.Point.new(mapping, options)
+defimpl GGity.Layer, for: [GGity.Geom.Bar, GGity.Geom.Line, GGity.Geom.Point, GGity.Geom.Text] do
+  def new(%geom_type{} = _geom, mapping, options) do
+    apply(geom_type, :new, [mapping, options])
   end
 
-  def draw(geom, data, plot), do: GGity.Geom.Point.draw(geom, data, plot)
-end
-
-defimpl GGity.Layer, for: GGity.Geom.Bar do
-  def new(_geom, mapping, options) do
-    GGity.Geom.Bar.new(mapping, options)
+  def draw(%geom_type{} = geom, data, plot) do
+    apply(geom_type, :draw, [geom, data, plot])
   end
-
-  def draw(geom, data, plot), do: GGity.Geom.Bar.draw(geom, data, plot)
-end
-
-defimpl GGity.Layer, for: GGity.Geom.Line do
-  def new(_geom, mapping, options) do
-    GGity.Geom.Line.new(mapping, options)
-  end
-
-  def draw(geom, data, plot), do: GGity.Geom.Line.draw(geom, data, plot)
 end
 
 defimpl GGity.Layer, for: GGity.Geom.Blank do
   def new(_geom, _mapping, _options), do: struct(GGity.Geom.Blank)
 
   def draw(_geom, _data, _plot), do: GGity.Geom.Blank.draw()
-end
-
-defimpl GGity.Layer, for: GGity.Geom.Text do
-  def new(_geom, mapping, options) do
-    GGity.Geom.Text.new(mapping, options)
-  end
-
-  def draw(geom, data, plot), do: GGity.Geom.Text.draw(geom, data, plot)
 end
