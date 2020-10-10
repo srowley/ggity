@@ -4,7 +4,7 @@ GGity is a charting library intended to bring the familiar interface of R's ggpl
 
 ## Examples
 
-A GGity plot is constructed from data, a geom (such as points or lines, to which GGity is limited at this time) and a mapping of aesthetics (x, y, color, size, etc.) to variables in the data.
+A GGity plot is constructed from data, a geom (such as points, bars or lines) and a mapping of aesthetics (x, y, color, size, etc.) to variables in the data.
 
 Data must be provided as a list of maps, where each map is an observation, and the map's keys are the names of the variables observed.
 
