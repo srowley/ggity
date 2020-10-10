@@ -1,6 +1,14 @@
 defmodule GGity.Element.Rect do
   @moduledoc """
   Defines the data and functions used to style non-geom rect elements.
+
+  CSS presentation attributes:
+  *  `:fill` sets value of CSS `fill`
+  *  `:color` sets value of CSS `stroke`
+  *  `:size` sets value of CSS `stroke-width`
+
+  Other attributes:
+  *  `:height` sets value of SVG `height` (height of they key glyph box)
   """
 
   alias GGity.Element
@@ -19,7 +27,10 @@ defmodule GGity.Element.Rect do
   @doc """
   Constructor for a Rect element.
 
-  Calling `element_rect(attributes) is equivalent to `struct(GGity.Element.Line, attributes)`.
+  Setting the value of an attributed to `nil` will remove that property
+  from the generated stylesheet altogether.
+
+  Calling `element_rect(attributes)` is equivalent to `struct(GGity.Element.Line, attributes)`.
   """
   @spec element_rect(keyword()) :: Element.Line.t()
   def element_rect(attributes) do

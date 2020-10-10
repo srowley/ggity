@@ -1242,6 +1242,18 @@ defmodule GGity.Plot do
     struct(plot, scales: Map.put(plot.scales, :y, Scale.Y.Continuous.new(options)))
   end
 
+  @doc """
+  Updates the plot theme.
+
+  GGity uses themes to style non-data plot elements. The default theme is similar
+  to ggplot2's signature gray background/white gridline theme.
+
+  `theme/2` is used to update on or more elements of the plot theme by passing
+  a keyword list of new elements and values, which are merged with those of the
+  current theme.
+
+  For supported elements and values, see `GGity.Theme`.
+  """
   @spec theme(Plot.t(), keyword()) :: Plot.t()
   def theme(%Plot{} = plot, elements) do
     elements = Enum.into(elements, %{})

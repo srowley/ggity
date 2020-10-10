@@ -1,6 +1,10 @@
 defmodule GGity.Element.Line do
   @moduledoc """
   Defines the data and functions used to style non-geom line elements.
+
+  CSS presentation attributes:
+  *  `:color` sets value of CSS `stroke`
+  *  `:size` sets value of CSS `stroke-width`
   """
 
   alias GGity.Element
@@ -19,7 +23,10 @@ defmodule GGity.Element.Line do
   @doc """
   Constructor for a Line element.
 
-  Calling `element_line(attributes) is equivalent to `struct(GGity.Element.Line, attributes)`.
+  Setting the value of an attributed to `nil` will remove that property
+  from the generated stylesheet altogether.
+
+  Calling `element_line(attributes)` is equivalent to `struct(GGity.Element.Line, attributes)`.
   """
   @spec element_line(keyword()) :: Element.Line.t()
   def element_line(attributes) do

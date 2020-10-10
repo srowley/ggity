@@ -1,6 +1,12 @@
 defmodule GGity.Element.Text do
   @moduledoc """
   Defines the data and functions used to style non-geom text elements.
+
+  CSS presentation attributes:
+  *  `:family` sets value of CSS `font-family`
+  *  `:face` sets value of CSS `font-face`
+  *  `:color` sets value of CSS `fill`
+  *  `:size` sets value of CSS `font-size`
   """
 
   alias GGity.Element
@@ -23,7 +29,10 @@ defmodule GGity.Element.Text do
   @doc """
   Constructor for a Text element.
 
-  Calling `element_text(attributes) is equivalent to `struct(GGity.Element.Line, attributes)`.
+  Setting the value of an attributed to `nil` will remove that property
+  from the generated stylesheet altogether.
+
+  Calling `element_text(attributes)` is equivalent to `struct(GGity.Element.Line, attributes)`.
   """
   @spec element_text(keyword()) :: Element.Text.t()
   def element_text(attributes) do
