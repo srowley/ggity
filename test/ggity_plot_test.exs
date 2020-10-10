@@ -1,7 +1,7 @@
 defmodule GGityPlotTest do
   use ExUnit.Case
 
-  alias GGity.{Geom, Labels, Plot, Scale}
+  alias GGity.{Element, Geom, Labels, Plot, Scale}
 
   setup do
     data = [
@@ -562,6 +562,34 @@ defmodule GGityPlotTest do
     test "sets labels to blank when labels value is nil", %{plot: plot} do
       plot = Plot.scale_y_continuous(plot, labels: nil)
       assert Labels.format(plot.scales.y, 1.0) == ""
+    end
+  end
+
+  describe "theme/2" do
+    test "replaces theme elements that are nil with values", %{plot: plot} do
+      plot = Plot.theme(plot, axis_line: Element.Line.element_line(color: "black", size: 1))
+      assert plot.theme.axis_line == %Element.Line{color: "black", size: 1}
+    end
+
+    test "replaces theme elements that have values with values", %{plot: plot} do
+      plot = Plot.theme(plot, panel_background: Element.Rect.element_rect(fill: "white"))
+      assert plot.theme.panel_background == %Element.Rect{fill: "white"}
+    end
+
+    test "replaces theme elements that have values with nil", %{plot: plot} do
+      plot = Plot.theme(plot, axis_ticks: nil)
+      assert plot.theme.axis_ticks == nil
+    end
+
+    test "merges theme elements that are structs with existing struct", %{plot: plot} do
+      plot = Plot.theme(plot, legend_key: Element.Rect.element_rect(fill: "white", size: 1))
+
+      assert plot.theme.legend_key == %Element.Rect{
+               fill: "white",
+               size: 1,
+               color: "#EEEEEE",
+               height: 15
+             }
     end
   end
 
