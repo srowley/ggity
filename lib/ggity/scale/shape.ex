@@ -49,8 +49,7 @@ defmodule GGity.Scale.Shape do
         "#{label}",
         x: "0",
         y: "-5",
-        font_size: "9",
-        fill: "black",
+        class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
       Stream.with_index(levels)
@@ -63,11 +62,9 @@ defmodule GGity.Scale.Shape do
       Draw.rect(
         x: "0",
         y: "#{15 * index}",
-        height: "15",
-        width: "15",
-        fill: "#eeeeee",
-        stroke: "#eeeeee",
-        stroke_width: "0.5"
+        height: 15,
+        width: 15,
+        class: "gg-legend-key"
       ),
       Draw.marker(
         scale.transform.(level),
@@ -80,21 +77,9 @@ defmodule GGity.Scale.Shape do
         "#{Labels.format(scale, level)}",
         x: "20",
         y: "#{10 + 15 * index}",
-        font_size: "8",
-        fill: "black",
+        class: "gg-text gg-legend-text",
         text_anchor: "left"
       )
     ]
-  end
-
-  @spec legend_height(Shape.t()) :: non_neg_integer()
-  def legend_height(%Shape{guide: :none}), do: 0
-
-  def legend_height(%Shape{levels: []}), do: 0
-
-  def legend_height(%Shape{levels: [_]}), do: 0
-
-  def legend_height(%Shape{} = scale) do
-    20 + 15 * length(scale.levels)
   end
 end

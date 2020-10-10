@@ -1395,8 +1395,7 @@ defmodule GGity.Scale.Color.Viridis do
         "#{label}",
         x: "0",
         y: "-5",
-        font_size: "9",
-        fill: "black",
+        class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
       Stream.with_index(levels)
@@ -1409,19 +1408,16 @@ defmodule GGity.Scale.Color.Viridis do
       Draw.rect(
         x: "0",
         y: "#{15 * index}",
-        height: "15",
-        width: "15",
-        fill: "#eeeeee",
-        stroke: "#eeeeee",
-        stroke_width: "0.5"
+        height: 15,
+        width: 15,
+        class: "gg-legend-key"
       ),
       draw_key_glyph(scale, level, index, key_glyph),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "20",
         y: "#{10 + 15 * index}",
-        font_size: "8",
-        fill: "black",
+        class: "gg-text gg-legend-text",
         text_anchor: "left"
       )
     ]
@@ -1472,17 +1468,6 @@ defmodule GGity.Scale.Color.Viridis do
       1,
       ""
     )
-  end
-
-  @spec legend_height(Color.Viridis.t()) :: non_neg_integer()
-  def legend_height(%Color.Viridis{guide: :none}), do: 0
-
-  def legend_height(%Color.Viridis{levels: []}), do: 0
-
-  def legend_height(%Color.Viridis{levels: [_]}), do: 0
-
-  def legend_height(%Color.Viridis{} = scale) do
-    20 + 15 * length(scale.levels)
   end
 
   defp get_palette(palette_name) do

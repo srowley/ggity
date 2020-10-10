@@ -12,6 +12,11 @@ and data still default to the plot mapping and data. Updating the mapping for a
 layer is unchanged (the passed map is merged with the plot mapping). A
 layer-specific data set can be provided by passing the `data` option with a
 dataset to `Plot.geom_*`. Run `mix ggity.visual.layers` for examples.
+- Added theme support. Each plot has a Theme struct that stores the attributes
+of non-data elements of the plot (titles, borders, backgrouns and more). A
+plot's theme can be updated using `Plot.theme/2`. Attributes that are also 
+CSS presentation attributes are implemented via custom classes that can also be
+styled with an external stylesheet.
 
 ### Changed
 - No breaking changes to the public API

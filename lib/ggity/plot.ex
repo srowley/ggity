@@ -56,7 +56,7 @@ defmodule GGity.Plot do
   """
 
   alias __MODULE__
-  alias GGity.{Axis, Draw, Geom, Layer, Legend, Scale, Stat}
+  alias GGity.{Axis, Draw, Geom, Layer, Legend, Scale, Stat, Theme}
 
   @type t() :: %__MODULE__{}
   @type column() :: list()
@@ -87,7 +87,7 @@ defmodule GGity.Plot do
             y_label_padding: 20,
             breaks: 5,
             area_padding: 10,
-            panel_background_color: "#eeeeee",
+            theme: %Theme{},
             margins: %{left: 30, top: 5, right: 0, bottom: 0}
 
   @doc """
@@ -312,10 +312,11 @@ defmodule GGity.Plot do
 
   defp render(%Plot{} = plot) do
     viewbox_width = plot.width * 7 / 4
+    id = "gg-#{System.unique_integer([:positive])}"
 
     [
-      # This is how you set the plot background
-      # ["<rect width=100% height=100% fill=\"cornflowerblue\"/>"],
+      Theme.to_stylesheet(plot.theme, id),
+      ["<rect class=\"gg-plot-background\" width=100% height=100%></rect>"],
       [
         draw_background(plot),
         Axis.draw_x_axis(plot),
@@ -327,10 +328,10 @@ defmodule GGity.Plot do
       draw_legend_group(plot)
     ]
     |> Draw.svg(
+      id: id,
       width: to_string(plot.plot_width),
       height: to_string(plot.plot_width / plot.aspect_ratio),
-      viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}",
-      font_family: "Helvetica, Arial, sans-serif"
+      viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}"
     )
   end
 
@@ -340,7 +341,7 @@ defmodule GGity.Plot do
       y: "0",
       height: to_string(plot.width / plot.aspect_ratio + plot.area_padding * 2),
       width: to_string(plot.width + plot.area_padding * 2),
-      fill: plot.panel_background_color
+      class: "gg-panel-background gg-panel-border"
     )
   end
 
@@ -366,7 +367,7 @@ defmodule GGity.Plot do
       y: "#{margins.top}",
       dy: "0.71em",
       dx: "0",
-      font_size: "12"
+      class: "gg-text gg-plot-title"
     )
     |> Draw.g(transform: "translate(#{left_shift}, 0)")
   end
@@ -378,7 +379,7 @@ defmodule GGity.Plot do
         {[], 0},
         fn aesthetic, {legends, offset_acc} ->
           {[draw_legend(plot, aesthetic, offset_acc) | legends],
-           offset_acc + Legend.legend_height(Map.get(plot.scales, aesthetic))}
+           offset_acc + legend_height(plot, Map.get(plot.scales, aesthetic))}
         end
       )
 
@@ -396,7 +397,7 @@ defmodule GGity.Plot do
     label = plot.labels[aesthetic]
     key_glyph = key_glyph(plot, aesthetic)
 
-    case Legend.legend_height(scale) do
+    case legend_height(plot, scale) do
       0 ->
         []
 
@@ -405,6 +406,20 @@ defmodule GGity.Plot do
         |> Draw.g(transform: "translate(0, #{offset})")
     end
   end
+
+  defp legend_height(_plot, %scale_type{}) when scale_type in @continuous_scales do
+    0
+  end
+
+  defp legend_height(_plot, %{guide: :none}), do: 0
+  defp legend_height(_plot, %{levels: []}), do: 0
+  defp legend_height(_plot, %{levels: [_]}), do: 0
+
+  defp legend_height(plot, %{} = scale) do
+    20 + plot.theme.legend_key.height * length(scale.levels)
+  end
+
+  defp legend_height(_plot, _nil_or_other), do: 0
 
   defp translate_for_title_and_y_axis(element, %Plot{margins: margins} = plot) do
     left_shift = margins.left + plot.y_label_padding
@@ -1225,6 +1240,40 @@ defmodule GGity.Plot do
   @spec scale_y_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_y_continuous(%Plot{} = plot, options \\ []) do
     struct(plot, scales: Map.put(plot.scales, :y, Scale.Y.Continuous.new(options)))
+  end
+
+  @doc """
+  Updates the plot theme.
+
+  GGity uses themes to style non-data plot elements. The default theme is similar
+  to ggplot2's signature gray background/white gridline theme.
+
+  `theme/2` is used to update on or more elements of the plot theme by passing
+  a keyword list of new elements and values, which are merged with those of the
+  current theme.
+
+  For supported elements and values, see `GGity.Theme`.
+  """
+  @spec theme(Plot.t(), keyword()) :: Plot.t()
+  def theme(%Plot{} = plot, elements) do
+    elements = Enum.into(elements, %{})
+
+    theme =
+      Map.merge(plot.theme, elements, fn
+        _key, _original_value, nil ->
+          nil
+
+        _key, nil, new_value ->
+          new_value
+
+        _key, original_value, new_value ->
+          Map.merge(original_value, new_value, fn
+            _key, original, nil -> original
+            _key, _original, new -> new
+          end)
+      end)
+
+    struct(plot, theme: theme)
   end
 
   @doc """
