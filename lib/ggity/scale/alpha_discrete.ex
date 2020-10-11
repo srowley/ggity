@@ -80,6 +80,16 @@ defmodule GGity.Scale.Alpha.Discrete do
     ]
   end
 
+  defp draw_key_glyph(scale, level, index, :rect) do
+    Draw.rect(
+      x: "0",
+      y: "#{15 * index}",
+      height: 15,
+      width: 15,
+      fill_opacity: "#{scale.transform.(level)}"
+    )
+  end
+
   defp draw_key_glyph(scale, level, index, :a) do
     Draw.text(
       "a",

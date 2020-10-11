@@ -78,7 +78,10 @@ defmodule GGity.Axis do
     tick_length = plot.theme.axis_ticks_length_x || plot.theme.axis_ticks_length
     coord = plot.scales.x.inverse.(value)
 
-    Draw.text(Labels.format(plot.scales.x, value),
+    plot.scales.x
+    |> Labels.format(value)
+    |> to_string()
+    |> Draw.text(
       y: "#{9 + tick_length}",
       # dy: "0.71em",
       # dx: "0",
@@ -181,7 +184,10 @@ defmodule GGity.Axis do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding
     coord = plot.scales.y.inverse.(value) / plot.aspect_ratio
 
-    Draw.text(Labels.format(plot.scales.y, value),
+    plot.scales.y
+    |> Labels.format(value)
+    |> to_string()
+    |> Draw.text(
       x: "-#{9 + tick_length}",
       dy: "0.32em",
       class: "gg-text gg-axis-text gg-axis-text-y"

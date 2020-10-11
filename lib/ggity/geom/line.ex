@@ -58,6 +58,7 @@ defmodule GGity.Geom.Line do
   defp line(%Geom.Line{} = geom_line, data, %Plot{scales: scales} = plot) do
     scale_transforms =
       geom_line.mapping
+      |> Map.take([:x, :y, :color, :linetype, :size])
       |> Map.keys()
       |> Enum.reduce(%{}, fn aesthetic, mapped ->
         Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))

@@ -98,6 +98,17 @@ defmodule GGity.Draw do
     ]
   end
 
+  @spec polygon(binary(), keyword()) :: iolist()
+  def polygon(points, options) do
+    [
+      "<polygon ",
+      ~s|points="#{points}" |,
+      options_to_attributes(options),
+      "/>",
+      "\n"
+    ]
+  end
+
   @spec polyline(list({number(), number()}), binary(), number(), number(), binary()) :: iolist()
   def polyline(coords, color, size, alpha, linetype) do
     coord_list =
@@ -164,15 +175,5 @@ defmodule GGity.Draw do
       height: to_string(size),
       width: to_string(size)
     )
-  end
-
-  defp polygon(points, options) do
-    [
-      "<polygon ",
-      ~s|points="#{points}" |,
-      options_to_attributes(options),
-      "/>",
-      "\n"
-    ]
   end
 end

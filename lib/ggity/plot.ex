@@ -88,7 +88,8 @@ defmodule GGity.Plot do
             breaks: 5,
             area_padding: 10,
             theme: %Theme{},
-            margins: %{left: 30, top: 5, right: 0, bottom: 0}
+            margins: %{left: 30, top: 5, right: 0, bottom: 0},
+            combined_layers: []
 
   @doc """
   Generates a Plot struct with provided data and aesthetic mappings.
@@ -178,6 +179,8 @@ defmodule GGity.Plot do
 
   defp assign_scale(:y, _value), do: Scale.Y.Continuous.new()
 
+  defp assign_scale(:y_max, _value), do: Scale.Y.Continuous.new()
+
   defp assign_scale(other, _value), do: Scale.Identity.new(other)
 
   @doc """
@@ -206,28 +209,30 @@ defmodule GGity.Plot do
         struct(layer, mapping: Map.merge(plot.mapping, layer.mapping || %{}))
       end)
 
-    struct(plot, layers: layers)
+    struct(plot, combined_layers: layers)
   end
 
   defp apply_stats(%Plot{} = plot) do
     layers =
-      Enum.map(plot.layers, fn layer ->
+      Enum.map(plot.combined_layers, fn layer ->
         {data, mapping} = apply(Stat, layer.stat, [layer.data || plot.data, layer.mapping])
         struct(layer, data: data, mapping: mapping)
       end)
 
-    struct(plot, layers: layers)
+    struct(plot, combined_layers: layers)
   end
 
   defp provide_default_axis_labels(%Plot{} = plot) do
-    [x_label, y_label] =
-      plot.layers
+    [x_label | y_labels] =
+      plot.combined_layers
       |> hd()
       |> Map.get(:mapping)
-      |> Map.take([:x, :y])
+      |> Map.take([:x, :y, :y_max])
       |> Map.values()
 
-    labels = Map.merge(plot.labels, %{x: x_label, y: y_label})
+    labels =
+      Map.merge(plot.labels, %{x: plot.labels.x || x_label, y: plot.labels.y || hd(y_labels)})
+
     struct(plot, labels: labels)
   end
 
@@ -238,37 +243,70 @@ defmodule GGity.Plot do
   end
 
   defp all_mapped_aesthetics(%Plot{} = plot) do
-    plot.layers
+    plot.combined_layers
     |> Enum.flat_map(fn layer -> Map.keys(layer.mapping) end)
     |> Enum.uniq()
   end
 
   defp train_scales(aesthetics, %Plot{} = plot) do
-    scales =
+    trained_scales =
       Enum.reduce(aesthetics, %{}, fn aesthetic, scales_map ->
         Map.put(scales_map, aesthetic, train_scale(aesthetic, plot))
       end)
 
+    # TODO
+    # This seems like it could be done better/will have unintended consequences
+    scales =
+      if :y_max in aesthetics do
+        trained_scales
+        |> Map.put(:y, trained_scales.y_max)
+        |> Map.delete(:y_max)
+      else
+        trained_scales
+      end
+
     struct(plot, scales: scales)
+  end
+
+  defp train_scale(:y_max, plot) do
+    sample_layer =
+      plot.combined_layers
+      |> Enum.filter(fn layer -> layer.mapping[:y_max] end)
+      |> hd()
+
+    sample_value = hd(sample_layer.data)[sample_layer.mapping[:y_max]]
+
+    scale = plot.scales[:y_max] || assign_scale(:y_max, sample_value)
+    y_max_global_min_max = global_min_max(:y_max, plot, scale)
+
+    global_min_max =
+      if :y_min in all_mapped_aesthetics(plot) do
+        y_min_global_min_max = global_min_max(:y_min, plot, scale)
+        {elem(y_min_global_min_max, 0), elem(y_max_global_min_max, 1)}
+      else
+        y_max_global_min_max
+      end
+
+    Scale.train(scale, global_min_max)
   end
 
   defp train_scale(aesthetic, plot) do
     sample_layer =
-      plot.layers
+      plot.combined_layers
       |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
       |> hd()
 
     sample_value = hd(sample_layer.data)[sample_layer.mapping[aesthetic]]
 
     scale = plot.scales[aesthetic] || assign_scale(aesthetic, sample_value)
-    global_parameters = global_parameters(aesthetic, plot, scale)
-    Scale.train(scale, global_parameters)
+    global_min_max = global_min_max(aesthetic, plot, scale)
+    Scale.train(scale, global_min_max)
   end
 
-  defp global_parameters(aesthetic, plot, %scale_type{}) when scale_type in @continuous_scales do
+  defp global_min_max(aesthetic, plot, %scale_type{}) when scale_type in @continuous_scales do
     {fixed_min, fixed_max} = plot.limits[aesthetic] || {nil, nil}
 
-    plot.layers
+    plot.combined_layers
     |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
     |> Enum.map(fn layer -> layer_min_max(aesthetic, layer) end)
     |> Enum.reduce({fixed_min, fixed_max}, fn {layer_min, layer_max}, {global_min, global_max} ->
@@ -277,8 +315,8 @@ defmodule GGity.Plot do
     end)
   end
 
-  defp global_parameters(aesthetic, plot, _sample_value) do
-    plot.layers
+  defp global_min_max(aesthetic, plot, _sample_value) do
+    plot.combined_layers
     |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
     |> Enum.reduce(MapSet.new(), fn layer, levels ->
       MapSet.union(levels, layer_value_set(aesthetic, layer))
@@ -351,7 +389,7 @@ defmodule GGity.Plot do
   defp title_margin(%Plot{}), do: 0
 
   defp draw_layers(%Plot{} = plot) do
-    plot.layers
+    plot.combined_layers
     |> Enum.reverse()
     |> Enum.map(fn layer -> Layer.draw(layer, layer.data, plot) end)
   end
@@ -394,18 +432,20 @@ defmodule GGity.Plot do
 
   defp draw_legend(%Plot{} = plot, aesthetic, offset) do
     scale = Map.get(plot.scales, aesthetic)
-    label = plot.labels[aesthetic]
-    key_glyph = key_glyph(plot, aesthetic)
 
-    case legend_height(plot, scale) do
-      0 ->
-        []
+    if display_legend?(plot, scale) do
+      label = plot.labels[aesthetic]
+      key_glyph = key_glyph(plot, aesthetic)
 
-      _positive ->
-        Legend.draw_legend(scale, label, key_glyph)
-        |> Draw.g(transform: "translate(0, #{offset})")
+      scale
+      |> Legend.draw_legend(label, key_glyph)
+      |> Draw.g(transform: "translate(0, #{offset})")
+    else
+      []
     end
   end
+
+  defp display_legend?(plot, scale), do: legend_height(plot, scale) > 0
 
   defp legend_height(_plot, %scale_type{}) when scale_type in @continuous_scales do
     0
@@ -428,14 +468,62 @@ defmodule GGity.Plot do
   end
 
   defp key_glyph(plot, aesthetic) do
-    layers =
-      plot.layers
-      |> Enum.filter(fn layer -> aesthetic in Map.keys(layer.mapping || %{}) end)
+    cond do
+      mapped_to_layer?(plot, aesthetic) ->
+        plot.layers
+        |> Enum.filter(fn layer -> aesthetic in Map.keys(layer.mapping || %{}) end)
+        |> hd()
+        |> Map.get(:key_glyph)
 
-    case layers do
-      [] -> hd(plot.layers).key_glyph
-      [first | _rest] -> first.key_glyph
+      part_of_layer_geom?(plot, aesthetic) ->
+        plot.layers
+        |> Enum.filter(fn layer -> aesthetic in Map.keys(layer) end)
+        |> hd()
+        |> Map.get(:key_glyph)
+
+      true ->
+        hd(plot.layers).key_glyph
     end
+  end
+
+  defp mapped_to_layer?(plot, aesthetic) do
+    not (plot.layers
+         |> Enum.filter(fn layer -> aesthetic in Map.keys(layer.mapping || %{}) end)
+         |> Enum.empty?())
+  end
+
+  defp part_of_layer_geom?(plot, aesthetic) do
+    not (plot.layers
+         |> Enum.filter(fn layer -> aesthetic in Map.keys(layer) end)
+         |> Enum.empty?())
+  end
+
+  @doc """
+  Adds a ribbon geom to the plot with the `position: :stack` option set.
+
+  `geom_area/3` is a convenience alias for `geom_ribbon/3` that sets the
+  `:position` option to `:stack` in order to create stacked area chart.
+
+  See `geom_ribbon/3` for available aesthetics and options.
+
+  Note that stacked ribbon charts are not yet supported - mappings to the
+  `:y_min` aesthetic will be ignored.
+  """
+  @spec geom_area(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_area(plot, mapping \\ [], options \\ [])
+
+  def geom_area(%Plot{} = plot, [], []) do
+    geom_ribbon(plot, position: :stack)
+  end
+
+  def geom_area(%Plot{} = plot, mapping_or_options, []) when is_list(mapping_or_options) do
+    options = Keyword.merge(mapping_or_options, position: :stack)
+    geom_ribbon(plot, options)
+  end
+
+  def geom_area(%Plot{} = plot, mapping, options) do
+    options = Keyword.merge(options, position: :stack)
+    geom_ribbon(plot, mapping, options)
   end
 
   @doc """
@@ -708,6 +796,117 @@ defmodule GGity.Plot do
 
   def geom_point(%Plot{} = plot, mapping, options) do
     add_geom(plot, Geom.Point, mapping, options)
+  end
+
+  @doc """
+  Adds a ribbon geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` mapping.
+
+  Ribbon geoms support mapping data to the following aesthetics, which use the
+  noted default scales:
+
+  * `:x` (required)
+  * `:y_max` (required) - defines the top boundary of the ribbon
+  * `:y_min` - defines the bottom boundary of the ribbon; defaults to zero
+  * `:alpha`
+  * `:fill`
+
+  A ribbon geom with no `:y_min` specified is essentially an area chart. To draw
+  a stacked area chart, set the `:position` option to `:stack`, or use the `geom_area/3`
+  convenience function.
+
+  Ribbon geoms also support providing fixed values (specified as options, e.g. `fill: "blue"`)
+  for the `:alpha` and `:fill` aesthetics above. A fixed value is assigned to the aesthetic
+  for all observations. Fixed values can also be specified for:
+
+  * `:color` - ribbon border color
+  * `:size` - ribbon border color width
+
+  Other supported options:
+
+  * `:key_glyph` - Type of glyph to use in the legend key. Available values are
+  `:a`, `:point`, `:path`, `:rect` and `:timeseries`. Defaults to `:rect`.
+
+  * `:position` - Available values are:
+      * `:identity` (ribbons overlay one another),
+      * `:stack` (ribbons stacked on the y-axis; note )
+      Defaults to `:identity`.
+
+  Note that stacked ribbon charts are not yet supported - mappings to the
+  `:y_min` aesthetic will be ignored is `:positon` is set to `:stack`.
+  """
+  @spec geom_ribbon(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_ribbon(plot, mapping \\ [], options \\ [])
+
+  def geom_ribbon(%Plot{} = plot, [], []) do
+    plot = add_geom(plot, Geom.Ribbon)
+    ribbon_geom = hd(plot.layers)
+
+    scale_adjustment =
+      case ribbon_geom.position do
+        :stack -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+        _other_positions -> {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+      end
+
+    struct(plot, limits: %{y_max: scale_adjustment})
+  end
+
+  def geom_ribbon(%Plot{} = plot, mapping_or_options, []) do
+    plot = add_geom(plot, Geom.Ribbon, mapping_or_options)
+    ribbon_geom = hd(plot.layers)
+
+    fixed_max =
+      plot.data
+      |> Enum.group_by(fn item -> item[plot.mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[plot.mapping[:y_max]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case ribbon_geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+      end
+
+    struct(plot, limits: %{y_max: scale_adjustment})
+  end
+
+  def geom_ribbon(%Plot{} = plot, mapping, options) do
+    plot = add_geom(plot, Geom.Ribbon, mapping, options)
+    ribbon_geom = hd(plot.layers)
+
+    fixed_max =
+      plot.data
+      |> Enum.group_by(fn item -> item[plot.mapping[:x]] end)
+      |> Enum.map(fn {_category, values} ->
+        Enum.map(values, fn value -> value[plot.mapping[:y_max]] end)
+      end)
+      |> Enum.map(fn counts -> Enum.sum(counts) end)
+      |> Enum.max()
+
+    scale_adjustment =
+      case ribbon_geom.position do
+        :stack ->
+          {min(0, elem(plot.limits.y, 0) || 0),
+           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+        _other_positions ->
+          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+      end
+
+    struct(plot, limits: %{y_max: scale_adjustment})
   end
 
   @doc """
@@ -1239,7 +1438,13 @@ defmodule GGity.Plot do
   """
   @spec scale_y_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_y_continuous(%Plot{} = plot, options \\ []) do
-    struct(plot, scales: Map.put(plot.scales, :y, Scale.Y.Continuous.new(options)))
+    Enum.reduce([:y, :y_max], plot, fn aesthetic, plot ->
+      if plot.scales[aesthetic] do
+        struct(plot, scales: Map.put(plot.scales, aesthetic, Scale.Y.Continuous.new(options)))
+      else
+        plot
+      end
+    end)
   end
 
   @doc """

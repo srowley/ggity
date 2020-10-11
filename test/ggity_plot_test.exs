@@ -68,6 +68,23 @@ defmodule GGityPlotTest do
     end
   end
 
+  describe "geom_area/3" do
+    setup %{data: data} do
+      mapping = %{x: :date, y_max: :a, fill: :b}
+      %{plot: Plot.new(data, mapping)}
+    end
+
+    test "adds a ribbon geom with position :stack", %{plot: plot} do
+      mapping = %{alpha: :c}
+      plot = Plot.geom_area(plot, mapping)
+      geom = hd(plot.layers)
+      assert geom.mapping == %{alpha: :c}
+      assert geom.stat == :identity
+      assert geom.position == :stack
+      assert %Geom.Ribbon{} = hd(plot.layers)
+    end
+  end
+
   describe "geom_bar/3" do
     setup %{data: data} do
       mapping = %{x: :a}
@@ -195,6 +212,32 @@ defmodule GGityPlotTest do
       assert %Geom.Line{} = geom
       assert geom.mapping == %{y: :c}
       assert geom.color == "red"
+    end
+  end
+
+  describe "geom_ribbon/3" do
+    setup %{data: data} do
+      mapping = %{x: :date, y_max: :a}
+      %{plot: Plot.new(data, mapping)}
+    end
+
+    test "adds a ribbon geom", %{plot: plot} do
+      plot = Plot.geom_ribbon(plot)
+      assert %Geom.Ribbon{} = hd(plot.layers)
+    end
+
+    test "adds a ribbon geom with specified mapping", %{plot: plot} do
+      plot = Plot.geom_ribbon(plot, %{fill: :c})
+      assert %Geom.Ribbon{mapping: %{fill: :c}} = hd(plot.layers)
+    end
+
+    test "adds a ribbon geom with position adjustment", %{plot: plot} do
+      plot = Plot.geom_ribbon(plot, %{y: :b, fill: :c}, position: :stack)
+      geom = hd(plot.layers)
+      assert %Geom.Ribbon{} = geom
+      assert geom.mapping == %{y: :b, fill: :c}
+      assert geom.stat == :identity
+      assert geom.position == :stack
     end
   end
 
