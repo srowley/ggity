@@ -8,7 +8,7 @@ defmodule GGity.Element.Rect do
   *  `:size` sets value of CSS `stroke-width`
 
   Other attributes:
-  *  `:height` sets value of SVG `height` (height of they key glyph box)
+  *  `:height` sets value of SVG `height` (height of the key glyph box)
   """
 
   alias GGity.Element
