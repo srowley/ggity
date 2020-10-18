@@ -19,7 +19,6 @@ defmodule GGityScaleAlphaContinuousTest do
       assert_in_delta scale.transform.(3), 1, 0.0000001
     end
 
-    # TODO - should be set via Plot.lims and stored in Plot.limits
     test "returns a correct scale given custom min and max", %{min_max: min_max} do
       scale =
         Alpha.Continuous.new(alpha_min: 0.2, alpha_max: 0.8)

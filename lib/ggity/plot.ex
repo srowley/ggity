@@ -254,8 +254,6 @@ defmodule GGity.Plot do
         Map.put(scales_map, aesthetic, train_scale(aesthetic, plot))
       end)
 
-    # TODO
-    # This seems like it could be done better/will have unintended consequences
     scales =
       if :y_max in aesthetics do
         trained_scales
