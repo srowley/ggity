@@ -44,7 +44,6 @@ defmodule GGity.Geom.Text do
 
   def draw(%Geom.Text{} = geom_text, data, plot), do: words(geom_text, data, plot)
 
-  # TODO: De-duplicate this
   defp words(%Geom.Text{} = geom_text, data, %Plot{scales: %{x: %Scale.X.Discrete{}}} = plot) do
     data
     |> Enum.reject(fn row -> row[geom_text.mapping[:y]] == 0 end)
@@ -56,20 +55,7 @@ defmodule GGity.Geom.Text do
   end
 
   defp words(%Geom.Text{} = geom_text, data, %Plot{scales: scales} = plot) do
-    scale_transforms =
-      geom_text.mapping
-      |> Map.keys()
-      |> Enum.reduce(%{}, fn aesthetic, mapped ->
-        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
-      end)
-
-    transforms =
-      geom_text
-      |> Map.take([:alpha, :color, :shape, :size])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
-      end)
-      |> Map.merge(scale_transforms)
+    transforms = transforms(geom_text, scales)
 
     data
     |> Stream.map(fn row ->
@@ -102,21 +88,7 @@ defmodule GGity.Geom.Text do
   end
 
   defp group(geom_text, group_values, group_index, %Plot{scales: scales} = plot) do
-    scale_transforms =
-      geom_text.mapping
-      |> Map.keys()
-      |> Enum.reduce(%{}, fn aesthetic, mapped ->
-        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
-      end)
-
-    transforms =
-      geom_text
-      |> Map.take([:alpha, :color, :size, :family, :fontface, :nudge_x, :nudge_y])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
-      end)
-      |> Map.merge(scale_transforms)
-
+    transforms = transforms(geom_text, scales)
     count_rows = length(group_values)
 
     sort_order =
@@ -158,6 +130,22 @@ defmodule GGity.Geom.Text do
       }
     end)
     |> elem(3)
+  end
+
+  defp transforms(geom, scales) do
+    scale_transforms =
+      geom.mapping
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn aesthetic, mapped ->
+        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
+      end)
+
+    geom
+    |> Map.take([:alpha, :color, :shape, :size])
+    |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
+      Map.put(fixed, aesthetic, fn _value -> fixed_value end)
+    end)
+    |> Map.merge(scale_transforms)
   end
 
   defp position_adjust_x(
