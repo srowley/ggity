@@ -11,23 +11,25 @@
 * [COMPLETE] Internal overhaul to implement layers and split out stats (at least) from the geom context
 * [COMPLETE] Add `geom_text` to support data point labeling
 * [COMPLETE] Support CSS styling (use themes, but via inline CSS to allow overrides via custom stylesheet)
-* Ribbon/area geoms 
-* Add other non-fillable shapes to shapes palette
-* Add fillable shapes to shapes palette
+* [COMPLETE] Ribbon/area geoms 
+* Fix remaining TODOs
+* Sample app
 * Publish to Hex
 
 ## v0.4
-* Support a LiveView sample app
-* Implement a method for rendering new points and updating scales only
+* Support attaching custom attributes to plot elements
+* Add other non-fillable shapes to shapes palette
+* Add fillable shapes to shapes palette
+* Boxplots
+* General annotation drawing
 
 ## v0.5
 * Faceting
-* General annotation drawing
 * Histograms
-* Boxplots
 * Continuous color scale (including legends)
 
 ## Later 
+* Implement a method for rendering new points and updating scales only (LiveView optimization)
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Implement x_lim/y_lim
 * ggplot2-ify gridlines approach (breaks, minor breaks)

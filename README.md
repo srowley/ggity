@@ -52,18 +52,6 @@ and axis labels support custom formatting.
 ```
 ![](./examples/geom_point_custom.svg)
 
-The table below illustrates which scales are available for different aesthetics.
-
-| Aesthetic | Continuous | Discrete | Identity | Date/DateTime | Manual |
-| :-------: | :--------: | :------: | :------: | :-----------: | :----: |
-| x | Yes | Yes | Yes | Yes | No |
-| y | Yes | No | Yes | No | No |
-| alpha | Yes | Yes | Yes | N/A | No |
-| color | No | Yes | Yes | N/A | No |
-| linetype | N/A | Yes | Yes | N/A | No |
-| shape | N/A | Yes | Yes | N/A | Yes |
-| size | Yes | Yes | Yes | N/A | No |
-
 Line geoms support mapping discrete variables to color or line type.
 
 ```elixir
@@ -93,17 +81,13 @@ Bar charts are also supported. By default they display stacked counts of observa
 I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
 
 ## Non-Goals
-* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed  and validations that should be happening but are not. I'm open to addressing these things; they just might not pop up unless someone else finds a problem.
+* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed  and validations that should be happening, but for now they are harder to find because I am not using this in the wild. 
 
-* Optimize for LiveView - there is no reason this library could not be used with LiveView, especially with small datasets, but adding features or optimizations specifically for that purpose are not at the top of my own priority list (I do have some ideas).
-
-* Optimize for performance generally - I am not trying to make it slow! At the same time I am not using this in the real world, so performance is not as important or apparent to me. I am more interested in adding features than squeezing out performance gains.
-
-With that said, I would welcome and do my best to respond promptly to PRs for the items above; just noting here that I will not be starting to work on them myself soon.
+* Optimize for performance generally - I am not trying to make it slow! At the same time I am not using this in the real world, so performance is not as important or apparent to me. I am more interested in adding features than pre-emptively squeezing out performance gains.
 
 ## Alternatives
 
-[ContEx](https://github.com/mindok/contex) - built with LiveView in mind, actually being used, supports bar charts, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
+[ContEx](https://github.com/mindok/contex) - has some special LiveView features, actually being used by the author, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
 
 [Plotex](https://github.com/elcritch/plotex) - focused on time series. Dates/times are hard, and while I have not looked at it in detail I bet Plotex does them better than GGity.
 

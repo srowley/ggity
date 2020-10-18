@@ -12,17 +12,19 @@ and data still default to the plot mapping and data. Updating the mapping for a
 layer is unchanged (the passed map is merged with the plot mapping). A
 layer-specific data set can be provided by passing the `data` option with a
 dataset to `Plot.geom_*`. Run `mix ggity.visual.layers` for examples.
+- Added `Geom.Text`; helpful for labelling bar plots
 - Added theme support. Each plot has a Theme struct that stores the attributes
 of non-data elements of the plot (titles, borders, backgrouns and more). A
 plot's theme can be updated using `Plot.theme/2`. Attributes that are also 
 CSS presentation attributes are implemented via custom classes that can also be
 styled with an external stylesheet.
+- Added ribbon geoms. These are primarily useful for drawing area/stacked area
+charts, but are also good for drawing a confidence interval around a line.
 
 ### Changed
 - No breaking changes to the public API
 - Substantial overhaul of plot, geom and scale internals in order to
 accommodate layers
-- Added `Geom.Text`; helpful for labelling bar plots
 - Discrete size scale now draws a legend
 - Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)
