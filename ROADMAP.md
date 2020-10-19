@@ -12,7 +12,7 @@
 * [COMPLETE] Add `geom_text` to support data point labeling
 * [COMPLETE] Support CSS styling (use themes, but via inline CSS to allow overrides via custom stylesheet)
 * [COMPLETE] Ribbon/area geoms 
-* Fix remaining TODOs
+* [COMPLETE] Fix remaining TODOs
 * Sample app
 * Publish to Hex
 
