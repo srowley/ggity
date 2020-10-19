@@ -1257,11 +1257,9 @@ defmodule GGity.Plot do
   @doc """
   Sets geom point size for continuous data.
 
-  This scale defines a mapping function that assigns an opacity value between
-  `4` and `14` to a given value of the mapped variable.
-
-  Note that "size" is the marker diameter, not marker area (which is generally
-  preferable but not yet implemented).
+  This scale defines a mapping function that assigns a shape area between
+  the values of the `:size_min` (default: `9`) and `:size_max` (default: `1001) to
+  a given value of the mapped variable.
   """
   @spec scale_size_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_size_continuous(%Plot{} = plot, options \\ []) do

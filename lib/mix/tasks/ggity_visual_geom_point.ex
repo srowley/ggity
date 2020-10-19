@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
   defp add_shape_fixed do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{shape: :cyl}, size: 8)
+    |> Plot.geom_point(%{shape: :cyl}, size: 5)
     |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
     |> Plot.plot()
   end
@@ -109,8 +109,9 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
   defp add_size_aesthetic do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{size: :qsec})
+    |> Plot.geom_point(%{size: :qsec}, alpha: 0.3, color: "green")
     |> Plot.labs(title: "Size Continuous")
+    |> Plot.scale_size_continuous(size_min: 100, size_max: 1000)
     |> Plot.plot()
   end
 
