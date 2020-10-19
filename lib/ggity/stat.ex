@@ -7,30 +7,33 @@ defmodule GGity.Stat do
   @spec identity(dataset(), map()) :: {dataset(), map()}
   def identity(data, mapping), do: {data, mapping}
 
-  # TODO: generalize this function so that it know which aesthetics to interact
-  # based on the provided mapping and whether or not the associated scale is discrete
-  @doc false
   @spec count(dataset(), map()) :: {dataset(), map()}
   def count(data, mapping) do
+    discrete_aesthetics = discrete_aesthetics(data, mapping)
+
     permutations =
       for row <- data,
           uniq: true,
-          do: {row[mapping[:x]], row[mapping[:fill]], row[mapping[:alpha]], row[mapping[:group]]}
+          do:
+            discrete_aesthetics
+            |> Enum.map(fn aesthetic -> {aesthetic, row[mapping[aesthetic]]} end)
+            |> Map.new()
 
     stat =
-      Enum.reduce(permutations, [], fn {x_value, fill_value, alpha_value, group_value}, stat ->
+      Enum.reduce(permutations, [], fn permutation, stat ->
         [
-          Map.new([
-            {mapping[:x], x_value},
-            {mapping[:fill], fill_value},
-            {mapping[:alpha], alpha_value},
-            {mapping[:group], group_value},
-            {:count,
-             Enum.count(data, fn row ->
-               {row[mapping[:x]], row[mapping[:fill]], row[mapping[:alpha]], row[mapping[:group]]} ==
-                 {x_value, fill_value, alpha_value, group_value}
-             end)}
-          ])
+          Map.new(
+            Enum.map(discrete_aesthetics, fn aesthetic ->
+              {mapping[aesthetic], permutation[aesthetic]}
+            end)
+          )
+          |> Map.put(
+            :count,
+            Enum.count(data, fn row ->
+              Enum.map(permutation, fn {k, _v} -> row[mapping[k]] end) ==
+                Enum.map(permutation, fn {_k, v} -> v end)
+            end)
+          )
           | stat
         ]
       end)
@@ -38,5 +41,17 @@ defmodule GGity.Stat do
 
     mapping = Map.put(mapping, :y, :count)
     {stat, mapping}
+  end
+
+  defp discrete_aesthetics(data, mapping) do
+    discrete_variables =
+      data
+      |> hd()
+      |> Enum.filter(fn {_k, v} -> is_binary(v) end)
+      |> Enum.map(fn {k, _v} -> k end)
+
+    mapping
+    |> Enum.filter(fn {_k, v} -> v in discrete_variables end)
+    |> Keyword.keys()
   end
 end
