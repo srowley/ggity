@@ -78,7 +78,7 @@ defmodule GGity.Theme do
             axis_line: nil,
             axis_line_x: nil,
             axis_line_y: nil,
-            axis_text: element_text(color: "#808080", size: 8),
+            axis_text: element_text(color: "#808080", size: "8px"),
             axis_text_x: nil,
             axis_text_y: nil,
             axis_ticks: element_line(color: "#000000"),
@@ -87,7 +87,7 @@ defmodule GGity.Theme do
             axis_ticks_length: 2,
             axis_ticks_length_x: nil,
             axis_ticks_length_y: nil,
-            axis_title: element_text(color: "#000000", size: 10),
+            axis_title: element_text(color: "#000000", size: "10px"),
             axis_title_x: nil,
             axis_title_y: nil,
             legend_key:
@@ -97,15 +97,15 @@ defmodule GGity.Theme do
                 size: 0.5,
                 height: 15
               ),
-            legend_text: element_text(fill: "#000000", size: 8),
-            legend_title: element_text(fill: "#000000", size: 9),
+            legend_text: element_text(fill: "#000000", size: "8px"),
+            legend_title: element_text(fill: "#000000", size: "9px"),
             panel_background: element_rect(fill: "#EEEEEE"),
             panel_border: element_line(color: "none"),
             panel_grid: element_line(color: "#FFFFFF"),
             panel_grid_major: element_line(size: 1),
             panel_grid_minor: element_line(size: 0.5),
             plot_background: element_rect(fill: "#FFFFFF"),
-            plot_title: element_text(size: 12)
+            plot_title: element_text(size: "12px")
 
   @doc false
   @spec to_stylesheet(Theme.t() | nil, String.t()) :: iolist()

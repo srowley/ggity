@@ -54,7 +54,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
     end)
     |> Plot.new(%{x: :wt, y: :mpg, label: :model})
     |> Plot.geom_point()
-    |> Plot.geom_text(%{alpha: :gear}, nudge_x: 5, hjust: :left, size: 6)
+    |> Plot.geom_text(%{alpha: :gear}, nudge_x: 5, hjust: :left, size: 8)
     |> Plot.scale_alpha_discrete(guide: :legend)
     |> Plot.xlab("Weight (tons)")
     |> Plot.ylab("Miles Per Gallon")

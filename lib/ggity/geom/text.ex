@@ -76,7 +76,7 @@ defmodule GGity.Geom.Text do
         y: (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding,
         fill: row[:fill],
         fill_opacity: row[:fill_opacity],
-        font_size: "#{row[:size]}pt",
+        font_size: "#{row[:size]}px",
         text_anchor: @hjust_anchor_map[geom_text.hjust],
         dominant_baseline: @vjust_anchor_map[geom_text.vjust],
         dx: geom_text.nudge_x,
