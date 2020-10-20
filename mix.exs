@@ -30,7 +30,7 @@ defmodule GGity.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:sweet_xml, "~> 0.6.6", only: :test},
-      {:nimble_csv, "~> 0.7", only: [:dev, :test]},
+      {:nimble_csv, "~> 0.7"},
       {:nimble_strftime, "~> 0.1"}
     ]
   end
