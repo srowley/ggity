@@ -1485,10 +1485,11 @@ defmodule GGity.Scale.Color.Viridis do
 
   defp to_hex(rgb) do
     rgb
-    |> Stream.map(fn element -> floor(element * 255) end)
-    |> Stream.map(fn element -> Integer.to_string(element, 16) end)
-    |> Stream.map(fn element -> String.pad_leading(element, 2, "0") end)
-    |> Enum.join("")
+    |> Enum.map_join("", fn element ->
+      floor(element * 255)
+      |> Integer.to_string(16)
+      |> String.pad_leading(2, "0")
+    end)
     |> String.pad_leading(7, "#")
   end
 end

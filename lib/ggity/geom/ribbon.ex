@@ -81,8 +81,10 @@ defmodule GGity.Geom.Ribbon do
 
     Enum.map(ribbons, fn ribbon ->
       ribbon.coords
-      |> Enum.map(fn row -> "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}" end)
-      |> Enum.join(" ")
+      |> Enum.map_join(" ", fn row ->
+        "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}"
+      end)
+      # |> Enum.join(" ")
       |> Draw.polygon(
         stroke: ribbon.color,
         stroke_width: ribbon.size,
