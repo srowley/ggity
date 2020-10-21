@@ -23,12 +23,12 @@ defmodule GGityScaleAlphaDiscreteTest do
       assert [] ==
                Alpha.Discrete.new()
                |> Alpha.Discrete.train(["fish"])
-               |> Alpha.Discrete.draw_legend("Nothing Here", :point)
+               |> Alpha.Discrete.draw_legend("Nothing Here", :point, 15)
     end
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Alpha.Discrete.draw_legend(scale, "Fine Meats", :point)
+        Alpha.Discrete.draw_legend(scale, "Fine Meats", :point, 15)
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

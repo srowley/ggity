@@ -436,7 +436,7 @@ defmodule GGity.Plot do
       key_glyph = key_glyph(plot, aesthetic)
 
       scale
-      |> Legend.draw_legend(label, key_glyph)
+      |> Legend.draw_legend(label, key_glyph, plot.theme.legend_key.height)
       |> Draw.g(transform: "translate(0, #{offset})")
     else
       []

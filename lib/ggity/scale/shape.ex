@@ -38,12 +38,12 @@ defmodule GGity.Scale.Shape do
     struct(scale, levels: levels, transform: transform)
   end
 
-  @spec draw_legend(Shape.t(), binary()) :: iolist()
-  def draw_legend(%Shape{guide: :none}, _label), do: []
+  @spec draw_legend(Shape.t(), binary(), number()) :: iolist()
+  def draw_legend(%Shape{guide: :none}, _label, _key_height), do: []
 
-  def draw_legend(%Shape{levels: [_]}, _label), do: []
+  def draw_legend(%Shape{levels: [_]}, _label, _key_height), do: []
 
-  def draw_legend(%Shape{levels: levels} = scale, label) do
+  def draw_legend(%Shape{levels: levels} = scale, label, key_height) do
     [
       Draw.text(
         "#{label}",
@@ -53,30 +53,30 @@ defmodule GGity.Scale.Shape do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_height) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_height) do
     [
       Draw.rect(
         x: "0",
-        y: "#{15 * index}",
-        height: 15,
-        width: 15,
+        y: "#{key_height * index}",
+        height: key_height,
+        width: key_height,
         class: "gg-legend-key"
       ),
       Draw.marker(
         scale.transform.(level),
-        {7.5, 7.5 + 15 * index},
-        5,
+        {key_height / 2, key_height / 2 + key_height * index},
+        key_height / 3,
         fill: "black",
         fill_opacity: "1"
       ),
       Draw.text(
         "#{Labels.format(scale, level)}",
-        x: "20",
-        y: "#{10 + 15 * index}",
+        x: "#{5 + key_height}",
+        y: "#{10 + key_height * index}",
         class: "gg-text gg-legend-text",
         text_anchor: "left"
       )

@@ -1384,12 +1384,12 @@ defmodule GGity.Scale.Color.Viridis do
     struct(scale, levels: levels, transform: fn value -> color_map[to_string(value)] end)
   end
 
-  @spec draw_legend(Color.Viridis.t(), binary(), atom()) :: iolist()
-  def draw_legend(%Color.Viridis{guide: :none}, _label, _key_glyph), do: []
+  @spec draw_legend(Color.Viridis.t(), binary(), atom(), number()) :: iolist()
+  def draw_legend(%Color.Viridis{guide: :none}, _label, _key_glyph, _key_height), do: []
 
-  def draw_legend(%Color.Viridis{levels: [_]}, _label, _key_glyph), do: []
+  def draw_legend(%Color.Viridis{levels: [_]}, _label, _key_glyph, _key_height), do: []
 
-  def draw_legend(%Color.Viridis{levels: levels} = scale, label, key_glyph) do
+  def draw_legend(%Color.Viridis{levels: levels} = scale, label, key_glyph, key_height) do
     [
       Draw.text(
         "#{label}",
@@ -1399,56 +1399,58 @@ defmodule GGity.Scale.Color.Viridis do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_glyph) end)
+      |> Enum.map(fn {level, index} ->
+        draw_legend_item(scale, {level, index}, key_glyph, key_height)
+      end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_glyph) do
+  defp draw_legend_item(scale, {level, index}, key_glyph, key_height) do
     [
       Draw.rect(
         x: "0",
-        y: "#{15 * index}",
-        height: 15,
-        width: 15,
+        y: "#{key_height * index}",
+        height: key_height,
+        width: key_height,
         class: "gg-legend-key"
       ),
-      draw_key_glyph(scale, level, index, key_glyph),
+      draw_key_glyph(scale, level, index, key_glyph, key_height),
       Draw.text(
         "#{Labels.format(scale, level)}",
-        x: "20",
-        y: "#{10 + 15 * index}",
+        x: "#{key_height + 5}",
+        y: "#{10 + key_height * index}",
         class: "gg-text gg-legend-text",
         text_anchor: "left"
       )
     ]
   end
 
-  defp draw_key_glyph(scale, level, index, :path) do
+  defp draw_key_glyph(scale, level, index, :path, key_height) do
     Draw.line(
       x1: 1,
-      y1: 7.5 + 15 * index,
-      x2: 14,
-      y2: 7.5 + 15 * index,
+      y1: key_height / 2 + key_height * index,
+      x2: key_height - 1,
+      y2: key_height / 2 + key_height * index,
       stroke: "#{scale.transform.(level)}",
       stroke_opacity: "1"
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :point) do
+  defp draw_key_glyph(scale, level, index, :point, key_height) do
     Draw.marker(
       :circle,
-      {7.5, 7.5 + 15 * index},
-      5,
+      {key_height / 2, key_height / 2 + key_height * index},
+      key_height / 3,
       fill: "#{scale.transform.(level)}",
       fill_opacity: "1"
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :a) do
+  defp draw_key_glyph(scale, level, index, :a, key_height) do
     Draw.text(
       "a",
-      x: 7.5,
-      y: 7.5 + 15 * index,
+      x: key_height / 2,
+      y: key_height / 2 + key_height * index,
       text_anchor: "middle",
       dominant_baseline: "middle",
       font_size: 10,
@@ -1458,11 +1460,16 @@ defmodule GGity.Scale.Color.Viridis do
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :timeseries) do
-    offset = 15 * index
+  defp draw_key_glyph(scale, level, index, :timeseries, key_height) do
+    offset = key_height * index
 
     Draw.polyline(
-      [{1, 14 + offset}, {6, 6 + offset}, {9, 9 + offset}, {14, 1 + offset}],
+      [
+        {1, key_height - 1 + offset},
+        {key_height / 5 * 2, key_height / 5 * 2 + offset},
+        {key_height / 5 * 3, key_height / 5 * 3 + offset},
+        {key_height - 1, 1 + offset}
+      ],
       scale.transform.(level),
       1,
       1,

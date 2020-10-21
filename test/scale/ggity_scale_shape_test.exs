@@ -24,12 +24,12 @@ defmodule GGityScaleShapeTest do
       assert [] ==
                Shape.new()
                |> Shape.train(["fish"])
-               |> Shape.draw_legend("Nothing Here")
+               |> Shape.draw_legend("Nothing Here", 15)
     end
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Shape.draw_legend(scale, "Fine Meats")
+        Shape.draw_legend(scale, "Fine Meats", 15)
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

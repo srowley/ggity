@@ -51,14 +51,14 @@ defmodule GGity.Scale.Shape.Manual do
     struct(scale, levels: levels, transform: fn value -> values_map[to_string(value)] end)
   end
 
-  @spec draw_legend(Shape.Manual.t(), binary()) :: iolist()
-  def draw_legend(%Shape.Manual{guide: :none}, _label), do: []
+  @spec draw_legend(Shape.Manual.t(), binary(), number()) :: iolist()
+  def draw_legend(%Shape.Manual{guide: :none}, _label, _key_height), do: []
 
-  def draw_legend(%Shape.Manual{levels: []}, _label), do: []
+  def draw_legend(%Shape.Manual{levels: []}, _labe, _key_heightl), do: []
 
-  def draw_legend(%Shape.Manual{levels: [_]}, _label), do: []
+  def draw_legend(%Shape.Manual{levels: [_]}, _label, _key_height), do: []
 
-  def draw_legend(%Shape.Manual{levels: levels} = scale, label) do
+  def draw_legend(%Shape.Manual{levels: levels} = scale, label, key_height) do
     [
       Draw.text(
         "#{label}",
@@ -68,38 +68,38 @@ defmodule GGity.Scale.Shape.Manual do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}) end)
+      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_height) end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}) do
+  defp draw_legend_item(scale, {level, index}, key_height) do
     marker = scale.transform.(level)
 
     size =
       case marker do
-        character when is_binary(character) -> 7
-        _otherwise -> 5
+        character when is_binary(character) -> 7 / 15 * key_height
+        _otherwise -> key_height / 3
       end
 
     [
       Draw.rect(
         x: "0",
-        y: "#{15 * index}",
-        height: 15,
-        width: 15,
+        y: "#{key_height * index}",
+        height: key_height,
+        width: key_height,
         class: "gg-legend-key"
       ),
       Draw.marker(
         marker,
-        {7.5, 7.5 + 15 * index},
+        {key_height / 2, key_height / 2 + key_height * index},
         size,
         fill: "black",
         fill_opacity: "1"
       ),
       Draw.text(
         "#{Labels.format(scale, level)}",
-        x: "20",
-        y: "#{10 + 15 * index}",
+        x: "#{5 + key_height}",
+        y: "#{10 + key_height * index}",
         class: "gg-text gg-legend-text",
         text_anchor: "left"
       )
