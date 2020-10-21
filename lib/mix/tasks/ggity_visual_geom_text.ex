@@ -100,19 +100,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
   end
 
   defp col_stack do
-    [
-      %{salesperson: "Joe", week: "Week 1", units: 10},
-      %{salesperson: "Jane", week: "Week 1", units: 15},
-      %{salesperson: "Paul", week: "Week 1", units: 5},
-      %{salesperson: "Joe", week: "Week 2", units: 4},
-      %{salesperson: "Jane", week: "Week 2", units: 10},
-      %{salesperson: "Paul", week: "Week 2", units: 8},
-      %{salesperson: "Joe", week: "Week 3", units: 14},
-      %{salesperson: "Paul", week: "Week 3", units: 8},
-      %{salesperson: "Jane", week: "Week 3", units: 9},
-      %{salesperson: "Joe", week: "Week 4", units: 14},
-      %{salesperson: "Jane", week: "Week 4", units: 9}
-    ]
+    simple_bar_data()
     |> Plot.new(%{x: :week, y: :units, label: :units, group: :salesperson})
     |> Plot.geom_col(%{fill: :salesperson}, position: :stack)
     |> Plot.geom_text(
@@ -146,6 +134,21 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
   end
 
   defp col_dodge do
+    simple_bar_data()
+    |> Plot.new(%{x: :week, y: :units, label: :units, group: :salesperson})
+    |> Plot.geom_col(%{fill: :salesperson}, position: :dodge)
+    |> Plot.geom_text(
+      color: "#BAAC6F",
+      position: :dodge,
+      fontface: "bold",
+      position_vjust: 0.5,
+      size: 6
+    )
+    |> Plot.scale_fill_viridis(option: :cividis)
+    |> Plot.plot()
+  end
+
+  defp simple_bar_data do
     [
       %{salesperson: "Joe", week: "Week 1", units: 10},
       %{salesperson: "Jane", week: "Week 1", units: 15},
@@ -159,16 +162,5 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
       %{salesperson: "Joe", week: "Week 4", units: 14},
       %{salesperson: "Jane", week: "Week 4", units: 9}
     ]
-    |> Plot.new(%{x: :week, y: :units, label: :units, group: :salesperson})
-    |> Plot.geom_col(%{fill: :salesperson}, position: :dodge)
-    |> Plot.geom_text(
-      color: "#BAAC6F",
-      position: :dodge,
-      fontface: "bold",
-      position_vjust: 0.5,
-      size: 6
-    )
-    |> Plot.scale_fill_viridis(option: :cividis)
-    |> Plot.plot()
   end
 end
