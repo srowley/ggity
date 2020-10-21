@@ -348,6 +348,7 @@ defmodule GGity.Plot do
 
   defp render(%Plot{} = plot) do
     viewbox_width = plot.width * 7 / 4
+
     id = "gg-#{System.unique_integer([:positive])}"
 
     [
@@ -590,24 +591,9 @@ defmodule GGity.Plot do
 
     {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, updated_plot.mapping])
 
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(data, mapping, :y)
 
-    scale_adjustment =
-      case bar_geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
-      end
+    scale_adjustment = position_adjusted_scale_min_max(bar_geom, plot, fixed_max)
 
     struct(updated_plot, limits: %{y: scale_adjustment})
   end
@@ -619,24 +605,9 @@ defmodule GGity.Plot do
     {data, mapping} =
       apply(Stat, bar_geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
 
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(data, mapping, :y)
 
-    scale_adjustment =
-      case bar_geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
-      end
+    scale_adjustment = position_adjusted_scale_min_max(bar_geom, plot, fixed_max)
 
     struct(updated_plot, limits: %{y: scale_adjustment})
   end
@@ -859,24 +830,9 @@ defmodule GGity.Plot do
     plot = add_geom(plot, Geom.Ribbon, mapping_or_options)
     ribbon_geom = hd(plot.layers)
 
-    fixed_max =
-      plot.data
-      |> Enum.group_by(fn item -> item[plot.mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[plot.mapping[:y_max]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(plot.data, plot.mapping, :y_max)
 
-    scale_adjustment =
-      case ribbon_geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
-      end
+    scale_adjustment = position_adjusted_scale_min_max(ribbon_geom, plot, fixed_max)
 
     struct(plot, limits: %{y_max: scale_adjustment})
   end
@@ -885,24 +841,9 @@ defmodule GGity.Plot do
     plot = add_geom(plot, Geom.Ribbon, mapping, options)
     ribbon_geom = hd(plot.layers)
 
-    fixed_max =
-      plot.data
-      |> Enum.group_by(fn item -> item[plot.mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[plot.mapping[:y_max]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(plot.data, plot.mapping, :y_max)
 
-    scale_adjustment =
-      case ribbon_geom.position do
-        :stack ->
-          {min(0, elem(plot.limits.y, 0) || 0),
-           max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
-
-        _other_positions ->
-          {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
-      end
+    scale_adjustment = position_adjusted_scale_min_max(ribbon_geom, plot, fixed_max)
 
     struct(plot, limits: %{y_max: scale_adjustment})
   end
@@ -996,14 +937,7 @@ defmodule GGity.Plot do
 
     {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
 
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(data, mapping, :y)
 
     scale_adjustment =
       case geom.position do
@@ -1025,14 +959,7 @@ defmodule GGity.Plot do
     {data, mapping} =
       apply(Stat, geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
 
-    fixed_max =
-      data
-      |> Enum.group_by(fn item -> item[mapping[:x]] end)
-      |> Enum.map(fn {_category, values} ->
-        Enum.map(values, fn value -> value[mapping[:y]] end)
-      end)
-      |> Enum.map(fn counts -> Enum.sum(counts) end)
-      |> Enum.max()
+    fixed_max = stacked_y_axis_max(data, mapping, :y)
 
     scale_adjustment =
       case geom.position do
@@ -1065,6 +992,26 @@ defmodule GGity.Plot do
   defp add_geom(%Plot{} = plot, geom_type, mapping, options) do
     layer = Layer.new(struct(geom_type), mapping, options)
     struct(plot, layers: [layer | plot.layers], labels: Map.merge(plot.labels, mapping))
+  end
+
+  defp stacked_y_axis_max(data, mapping, y_aesthetic) do
+    data
+    |> Enum.group_by(fn item -> item[mapping[:x]] end)
+    |> Enum.map(fn {_category, values} ->
+      Enum.map(values, fn value -> value[mapping[y_aesthetic]] end)
+    end)
+    |> Enum.map(fn counts -> Enum.sum(counts) end)
+    |> Enum.max()
+  end
+
+  defp position_adjusted_scale_min_max(geom, plot, fixed_max) do
+    case geom.position do
+      :stack ->
+        {min(0, elem(plot.limits.y, 0) || 0), max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
+
+      _other_positions ->
+        {min(0, elem(plot.limits.y, 0) || 0), elem(plot.limits.y, 1)}
+    end
   end
 
   @doc """
