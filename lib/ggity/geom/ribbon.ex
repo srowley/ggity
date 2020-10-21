@@ -28,17 +28,11 @@ defmodule GGity.Geom.Ribbon do
   end
 
   defp ribbons(%Geom.Ribbon{position: :stack} = geom_ribbon, plot) do
-    mapping = geom_ribbon.mapping
     plot_height = plot.width / plot.aspect_ratio
 
     ribbons =
-      (geom_ribbon.data || plot.data)
-      |> Enum.group_by(fn row ->
-        {
-          row[mapping[:alpha]],
-          row[mapping[:fill]]
-        }
-      end)
+      geom_ribbon
+      |> group_by_aesthetics(plot)
       |> Enum.sort_by(fn {value, _group} -> value end, :desc)
       |> Enum.map(fn {_value, group} -> ribbon(geom_ribbon, group, plot) end)
 
@@ -53,44 +47,17 @@ defmodule GGity.Geom.Ribbon do
       ribbons,
       stacked_coords
     )
-    |> Enum.map(fn ribbon ->
-      ribbon.coords
-      |> Enum.map_join(" ", fn row ->
-        "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}"
-      end)
-      |> Draw.polygon(
-        stroke: ribbon.color,
-        stroke_width: ribbon.size,
-        fill: ribbon.fill,
-        fill_opacity: ribbon.alpha
-      )
-    end)
+    |> Enum.map(fn ribbon -> draw_ribbon(ribbon, plot) end)
     |> Enum.reverse()
   end
 
   defp ribbons(%Geom.Ribbon{} = geom_ribbon, plot) do
-    ribbons =
-      (geom_ribbon.data || plot.data)
-      |> Enum.group_by(fn row ->
-        {
-          row[geom_ribbon.mapping[:alpha]],
-          row[geom_ribbon.mapping[:fill]]
-        }
-      end)
-      |> Enum.map(fn {_value, group} -> ribbon(geom_ribbon, group, plot) end)
-
-    Enum.map(ribbons, fn ribbon ->
-      ribbon.coords
-      |> Enum.map_join(" ", fn row ->
-        "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}"
-      end)
-      # |> Enum.join(" ")
-      |> Draw.polygon(
-        stroke: ribbon.color,
-        stroke_width: ribbon.size,
-        fill: ribbon.fill,
-        fill_opacity: ribbon.alpha
-      )
+    geom_ribbon
+    |> group_by_aesthetics(plot)
+    |> Enum.map(fn {_value, group} ->
+      geom_ribbon
+      |> ribbon(group, plot)
+      |> draw_ribbon(plot)
     end)
   end
 
@@ -140,6 +107,29 @@ defmodule GGity.Geom.Ribbon do
       end
 
     %{fill: fill, alpha: alpha, color: color, size: size, coords: List.flatten(all_coords)}
+  end
+
+  defp group_by_aesthetics(geom, plot) do
+    (geom.data || plot.data)
+    |> Enum.group_by(fn row ->
+      {
+        row[geom.mapping[:alpha]],
+        row[geom.mapping[:fill]]
+      }
+    end)
+  end
+
+  defp draw_ribbon(ribbon, plot) do
+    ribbon.coords
+    |> Enum.map_join(" ", fn row ->
+      "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}"
+    end)
+    |> Draw.polygon(
+      stroke: ribbon.color,
+      stroke_width: ribbon.size,
+      fill: ribbon.fill,
+      fill_opacity: ribbon.alpha
+    )
   end
 
   defp format_coordinates(y_aesthetic, geom, data, plot) do
