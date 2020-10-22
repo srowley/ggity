@@ -76,7 +76,6 @@ defmodule GGity.Plot do
 
   defstruct data: [],
             mapping: %{},
-            width: 200,
             aspect_ratio: 1.5,
             title_margin: 15,
             layers: [%Geom.Blank{}],
@@ -88,6 +87,7 @@ defmodule GGity.Plot do
             area_padding: 10,
             theme: %Theme{},
             margins: %{left: 30, top: 5, right: 0, bottom: 0},
+            width: 200,
             combined_layers: []
 
   @doc """
@@ -122,8 +122,6 @@ defmodule GGity.Plot do
 
   * `:panel_background_color` - a string value (hex or CSS color name) for the panel background.
   Defaults to grey (`#eeeeee`)
-
-  * `:width` - the width of the plot area. Defaults to `200`.
 
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
