@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
           browser
       end
 
-    File.write!(test_file, "<html>\n#{plots}\n</html>")
+    File.write!(test_file, "<html><body #{grid_style()}>\n#{plots}\n</body></html>")
     open_html_file(browser, test_file)
     Process.sleep(1000)
     File.rm(test_file)
@@ -45,6 +45,10 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
 
   defp open_html_file(browser, file) do
     System.cmd(browser, [file])
+  end
+
+  defp grid_style do
+    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
   end
 
   defp basic do
