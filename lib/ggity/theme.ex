@@ -79,7 +79,7 @@ defmodule GGity.Theme do
             axis_line_x: nil,
             axis_line_y: nil,
             axis_text: element_text(color: "#808080", size: "8px"),
-            axis_text_x: nil,
+            axis_text_x: element_text(color: "#808080", size: "8px", angle: 0),
             axis_text_y: nil,
             axis_ticks: element_line(color: "#000000"),
             axis_ticks_x: nil,

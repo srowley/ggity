@@ -7,6 +7,9 @@ defmodule GGity.Element.Text do
   *  `:face` sets value of CSS `font-face`
   *  `:color` sets value of CSS `fill`
   *  `:size` sets value of CSS `font-size`
+
+  Other attributes:
+  *  `:angle` argument passed to `transform: rotate()`
   """
 
   alias GGity.Element
@@ -16,10 +19,10 @@ defmodule GGity.Element.Text do
     :family,
     :face,
     :color,
-    :size
+    :size,
+    :angle
     # :hjust,
     # :vjust,
-    # :angle,
     # :lineheight,
     # :margin
   ]

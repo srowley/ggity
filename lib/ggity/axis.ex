@@ -82,13 +82,26 @@ defmodule GGity.Axis do
     |> Labels.format(value)
     |> to_string()
     |> Draw.text(
-      y: "#{9 + tick_length}",
-      # dy: "0.71em",
-      # dx: "0",
-      class: "gg-text gg-axis-text gg-axis-text-x"
-      # text_anchor: "middle"
+      [
+        y: "#{9 + tick_length}",
+        class: "gg-text gg-axis-text gg-axis-text-x"
+      ] ++ attributes_for_angle(plot.theme.axis_text_x.angle, tick_length)
     )
     |> Draw.g(opacity: "1", transform: "translate(#{coord},0)")
+  end
+
+  defp attributes_for_angle(0, _tick_length) do
+    [text_anchor: "middle"]
+  end
+
+  defp attributes_for_angle(angle, tick_length) do
+    x_adjust = angle / 10 * -1
+    y_adjust = (angle - 45) / 15
+
+    [
+      text_anchor: "end",
+      transform: "translate(#{x_adjust}, #{y_adjust + tick_length}),rotate(-#{angle})"
+    ]
   end
 
   defp draw_x_tick(%Plot{} = plot, value) do
@@ -129,8 +142,10 @@ defmodule GGity.Axis do
   defp draw_x_axis_label(%Plot{labels: %{x: nil}}), do: ""
 
   defp draw_x_axis_label(%Plot{labels: labels} = plot) do
+    # MAGIC NUMBERS
+    top_padding = 35 + plot.theme.axis_text_x.angle / 90 * 20
     x_position = (plot.width + plot.area_padding * 2) / 2
-    y_position = plot.width / plot.aspect_ratio + plot.area_padding * 2 + 35
+    y_position = plot.width / plot.aspect_ratio + plot.area_padding * 2 + top_padding
 
     ~s|<text x="#{x_position}" y="#{y_position}" class="gg-text gg-axis-title" text-anchor="middle">#{
       labels.x
