@@ -20,11 +20,15 @@ CSS presentation attributes are implemented via custom classes that can also be
 styled with an external stylesheet.
 - Added ribbon geoms. These are primarily useful for drawing area/stacked area
 charts, but are also good for drawing a confidence interval around a line.
+- Added support for rotating x-axis tick labels.
 
 ### Changed
-- No breaking changes to the public API
 - Substantial overhaul of plot, geom and scale internals in order to
 accommodate layers
+- No longer set an SVG width/height (remove Plot `:plot_width` attribute). This
+is unnecessary and messes up scaling
+- No longer document Plot `:width` attribute (setting the panel width); this
+number should not be changed from its default value 
 - Discrete size scale now draws a legend
 - Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)

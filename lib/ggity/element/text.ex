@@ -9,7 +9,9 @@ defmodule GGity.Element.Text do
   *  `:size` sets value of CSS `font-size`
 
   Other attributes:
-  *  `:angle` argument passed to `transform: rotate()`
+  *  `:angle` sets the value passed to `transform: rotate()` for the
+  purpose of rotating x axis tick labels (has no effect when set for
+  other theme elements)
   """
 
   alias GGity.Element

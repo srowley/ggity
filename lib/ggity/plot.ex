@@ -1198,7 +1198,7 @@ defmodule GGity.Plot do
   Sets geom point size for continuous data.
 
   This scale defines a mapping function that assigns a shape area between
-  the values of the `:size_min` (default: `9`) and `:size_max` (default: `1001) to
+  the values of the `:size_min` (default: `9`) and `:size_max` (default: `1001`) to
   a given value of the mapped variable.
   """
   @spec scale_size_continuous(Plot.t(), keyword()) :: Plot.t()
