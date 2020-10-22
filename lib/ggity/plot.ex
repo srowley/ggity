@@ -78,7 +78,6 @@ defmodule GGity.Plot do
             mapping: %{},
             width: 200,
             aspect_ratio: 1.5,
-            plot_width: 500,
             title_margin: 15,
             layers: [%Geom.Blank{}],
             scales: %{},
@@ -123,8 +122,6 @@ defmodule GGity.Plot do
 
   * `:panel_background_color` - a string value (hex or CSS color name) for the panel background.
   Defaults to grey (`#eeeeee`)
-
-  * `:plot_width` - the width of the SVG inclusive of axes and legends. Defaults to `500.`
 
   * `:width` - the width of the plot area. Defaults to `200`.
 
@@ -366,8 +363,6 @@ defmodule GGity.Plot do
     ]
     |> Draw.svg(
       id: id,
-      width: to_string(plot.plot_width),
-      height: to_string(plot.plot_width / plot.aspect_ratio),
       viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}"
     )
   end
