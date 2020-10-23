@@ -99,7 +99,9 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
       %{date_time: ~N[2001-01-03 03:00:00], price: 0.03},
       %{date_time: ~N[2001-01-03 06:00:00], price: 0.79},
       %{date_time: ~N[2001-01-03 09:00:00], price: 0.78},
-      %{date_time: ~N[2001-01-03 12:00:00], price: 0.08}
+      %{date_time: ~N[2001-01-03 12:00:00], price: 0.08},
+      %{date_time: ~N[2001-01-03 18:00:00], price: 0.3},
+      %{date_time: ~N[2001-01-04 00:00:00], price: 0.7}
     ]
     |> Plot.new(%{x: :date_time, y: :price})
     |> Plot.geom_line(size: 1)
