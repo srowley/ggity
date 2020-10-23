@@ -56,6 +56,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.new(%{x: "date", y: "unemploy"})
     |> Plot.geom_line(size: 1)
     |> Plot.labs(title: "Date data")
+    |> Plot.scale_x_date(breaks: 11, date_labels: "%Y")
     |> Plot.plot()
   end
 
@@ -72,6 +73,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.new(%{x: "date", y: "unemploy"})
     |> Plot.geom_line(color: "red", size: 1)
     |> Plot.labs(title: "Fixed color: \"red\"")
+    |> Plot.scale_x_date(breaks: 6, date_labels: "%m/%d/%Y")
+    |> Plot.theme(axis_text_x: GGity.Element.Text.element_text(angle: 30))
     |> Plot.plot()
   end
 
@@ -110,6 +113,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to color")
     |> Plot.geom_line(%{color: "variable"})
+    |> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
     |> Plot.plot()
   end
 
@@ -118,6 +122,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to linetype, custom glyph")
     |> Plot.geom_line(%{linetype: "variable"}, key_glyph: :path)
+    |> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
     |> Plot.plot()
   end
 end
