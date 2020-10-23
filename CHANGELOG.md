@@ -29,6 +29,7 @@ accommodate layers
 is unnecessary and messes up scaling
 - No longer document Plot `:width` attribute (setting the panel width); this
 number should not be changed from its default value 
+- Date/DateTime tick intervals are now nice time multiples thanks to Contex
 - Discrete size scale now draws a legend
 - Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)
