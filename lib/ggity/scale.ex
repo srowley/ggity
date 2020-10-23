@@ -11,6 +11,9 @@ defprotocol GGity.Scale do
   def train(scale, parameters)
 end
 
+# TODO
+# Consolidate these, and add generic function for training with
+# just one data point
 defimpl GGity.Scale, for: GGity.Scale.Alpha.Continuous do
   def train(scale, {min, max}),
     do: GGity.Scale.Alpha.Continuous.train(scale, {min, max})
