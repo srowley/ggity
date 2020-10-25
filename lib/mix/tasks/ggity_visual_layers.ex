@@ -64,7 +64,7 @@ defmodule Mix.Tasks.Ggity.Visual.Layers do
     |> Plot.labs(title: "Different Mappings")
     |> Plot.geom_point(color: "blue")
     |> Plot.geom_point(%{y: "hwy"}, color: "green")
-    |> Plot.theme(axis_text_x: GGity.Element.Text.element_text(angle: 45))
+    |> Plot.theme(axis_text_x: GGity.Element.Text.element_text(angle: 90))
     |> Plot.labs(y: "City(blue) vs. Highway(green)")
     |> Plot.plot()
   end

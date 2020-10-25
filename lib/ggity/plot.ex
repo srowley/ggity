@@ -342,30 +342,57 @@ defmodule GGity.Plot do
   defp min_max(list), do: Enum.min_max(list)
 
   defp render(%Plot{} = plot) do
-    viewbox_width = plot.width * 7 / 4
+    legend = draw_legend_group(plot)
+    # This is an arbitrary number that works for all the visual tests,
+    # but user can make more room by increasing right margin
+    legend_margin = if legend == [], do: 0, else: 80
+
+    viewbox_width =
+      plot.width + plot.y_label_padding + plot.area_padding * 2 + plot.margins.left +
+        plot.margins.right + legend_margin
+
+    # MAGIC NUMBERS
+    # 45 is a magic number - think it is the height of x-axis label text plus
+    # padding/margin that is hard-coded somewhere
+    height_adjustment =
+      title_margin(plot) + plot.margins.top + 45 + plot.area_padding * 2 +
+        plot.theme.axis_text_x.angle / 90 * 20
+
+    viewbox_height = plot.width / plot.aspect_ratio + height_adjustment
 
     id = "gg-#{System.unique_integer([:positive])}"
 
     [
       Theme.to_stylesheet(plot.theme, id),
-      ["<rect class=\"gg-plot-background\" width=100% height=100%></rect>"],
-      [
-        draw_background(plot),
-        Axis.draw_x_axis(plot),
-        Axis.draw_y_axis(plot),
-        draw_layers(plot)
-      ]
-      |> translate_for_title_and_y_axis(plot),
+      draw_plot_background(),
+      draw_panel(plot),
       draw_title(plot),
-      draw_legend_group(plot)
+      legend
     ]
     |> Draw.svg(
       id: id,
-      viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}"
+      viewBox: "0 0 #{viewbox_width} #{viewbox_height}"
+      # viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}"
     )
   end
 
-  defp draw_background(%Plot{} = plot) do
+  defp draw_plot_background do
+    ["<rect class=\"gg-plot-background\" width=100% height=100%></rect>"]
+  end
+
+  defp draw_panel(plot) do
+    translate_for_title_and_y_axis(
+      [
+        draw_panel_background(plot),
+        Axis.draw_x_axis(plot),
+        Axis.draw_y_axis(plot),
+        draw_layers(plot)
+      ],
+      plot
+    )
+  end
+
+  defp draw_panel_background(%Plot{} = plot) do
     Draw.rect(
       x: "0",
       y: "0",
@@ -419,7 +446,13 @@ defmodule GGity.Plot do
       plot.margins.top + title_margin(plot) + plot.width / plot.aspect_ratio / 2 + 10 -
         legend_group_height / 2 + 10
 
-    Draw.g(legend_group, transform: "translate(#{left_shift}, #{top_shift})")
+    case legend_group do
+      [[], [], [], [], [], []] ->
+        []
+
+      legend_group ->
+        Draw.g(legend_group, transform: "translate(#{left_shift}, #{top_shift})")
+    end
   end
 
   defp draw_legend(%Plot{} = plot, aesthetic, offset) do
