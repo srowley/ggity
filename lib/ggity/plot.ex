@@ -1440,11 +1440,14 @@ defmodule GGity.Plot do
         _key, nil, new_value ->
           new_value
 
-        _key, original_value, new_value ->
+        _key, original_value, new_value when is_map(original_value) ->
           Map.merge(original_value, new_value, fn
             _key, original, nil -> original
             _key, _original, new -> new
           end)
+
+        _key, _original_value, new_value ->
+          new_value
       end)
 
     struct(plot, theme: theme)

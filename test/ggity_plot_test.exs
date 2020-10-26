@@ -634,6 +634,11 @@ defmodule GGityPlotTest do
                height: 15
              }
     end
+
+    test "replaces theme elements that have non-map values", %{plot: plot} do
+      plot = Plot.theme(plot, axis_ticks_length: 10)
+      assert plot.theme.axis_ticks_length == 10
+    end
   end
 
   describe "guides/2" do
