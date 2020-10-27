@@ -65,7 +65,10 @@ defmodule GGity.Geom.Bar do
       end
 
     group_values
-    |> Enum.sort_by(fn row -> row[geom_bar.mapping[:fill]] end, sort_order)
+    |> Enum.sort_by(
+      fn row -> {row[geom_bar.mapping[:fill]], row[geom_bar.mapping[:alpha]]} end,
+      sort_order
+    )
     |> Enum.reduce({0, 0, []}, fn row, {total_width, total_height, rects} ->
       {
         total_width + geom_bar.bar_group_width / count_rows,
