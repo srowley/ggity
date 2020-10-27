@@ -56,6 +56,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
     end)
     |> Plot.new(%{x: "manufacturer"})
     |> Plot.geom_bar()
+    |> Plot.scale_y_continuous(labels: &floor/1)
     |> Plot.plot()
   end
 

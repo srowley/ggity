@@ -1411,7 +1411,7 @@ defmodule GGity.Plot do
       if plot.scales[aesthetic] do
         struct(plot, scales: Map.put(plot.scales, aesthetic, Scale.Y.Continuous.new(options)))
       else
-        plot
+        struct(plot, scales: Map.put(plot.scales, :y, Scale.Y.Continuous.new(options)))
       end
     end)
   end
