@@ -31,6 +31,8 @@ is unnecessary and messes up scaling
 number should not be changed from its default value 
 - Date/DateTime tick intervals are now nice time multiples thanks to Contex
 - Discrete size scale now draws a legend
+- Removed legend whitespace if no legend is drawn
+- Bars sort by alpha, not just fill
 - Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)
 - `Geom.Point.points/2` is fully private (was never part of the public API)
