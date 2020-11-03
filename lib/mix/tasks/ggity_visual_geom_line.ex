@@ -110,7 +110,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.plot()
   end
 
-  def group_by_color do
+  defp group_by_color do
     Examples.economics_long()
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to color")
@@ -119,7 +119,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     |> Plot.plot()
   end
 
-  def group_by_linetype do
+  defp group_by_linetype do
     Examples.economics_long()
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to linetype, custom glyph")
