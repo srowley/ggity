@@ -1043,8 +1043,13 @@ defmodule GGity.Plot do
   @doc """
   Sets geom point opacity for continuous data.
 
-  This scale defines a mapping function that assigns an opacity value between
-  `0.1` and `1` to a given value of the mapped variable.
+  This scale defines a mapping function that assigns an opacity to be mapped to a given
+  value of the mapped variable.
+
+  This function takes the following options:
+
+  - `:range` - a tuple with minimum (default - `0.1`) and maximum (default - `1`)
+  values to be bound to the data
   """
   @spec scale_alpha_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_alpha_continuous(%Plot{} = plot, options \\ []) do
@@ -1056,15 +1061,17 @@ defmodule GGity.Plot do
 
   For categorical data for which a linear mapping of values to opacity is not
   appropriate, this scale generates a palette of evenly spaced opacity values
-  between `0.1` and `1.0` that are mapped to each unique value of the data. The
-  palette is generated such that the difference between each opacity value is
-  maximized. The set of unique data values are sorted for the purpose of assigning
-  them to an opacity and ordering the legend.
+  mapped to each unique value of the data. The palette is generated such that the
+  difference between each opacity value is maximized. The set of unique data values
+  are sorted for the purpose of assigning them to an opacity and ordering the legend.
 
   This function also takes the following options:
 
   - `:labels` - specifies how legend item names (levels of the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
+
+  - `:range` - a tuple with minimum (default - `0.1`) and maximum (default - `1`)
+  values to be bound to the data
   """
   @spec scale_alpha_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_alpha_discrete(%Plot{} = plot, options \\ []) do
@@ -1230,9 +1237,13 @@ defmodule GGity.Plot do
   @doc """
   Sets geom point size for continuous data.
 
-  This scale defines a mapping function that assigns a shape area between
-  the values of the `:size_min` (default: `9`) and `:size_max` (default: `1001`) to
-  a given value of the mapped variable.
+  This scale defines a mapping function that assigns a shape area based on the  given
+  value of the mapped variable.
+
+  This function takes the following options:
+
+  - `:range` - a tuple with minimum (default - `9`) and maximum (default - `100`)
+  values to be bound to the data
   """
   @spec scale_size_continuous(Plot.t(), keyword()) :: Plot.t()
   def scale_size_continuous(%Plot{} = plot, options \\ []) do
@@ -1256,6 +1267,9 @@ defmodule GGity.Plot do
 
   - `:labels` - specifies how legend item names (levels of the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
+
+  - `:range` - a tuple with minimum (default - `2`) and maximum (default - `8`)
+  values to be bound to the data
   """
   @spec scale_size_discrete(Plot.t(), keyword()) :: Plot.t()
   def scale_size_discrete(%Plot{} = plot, options \\ []) do
