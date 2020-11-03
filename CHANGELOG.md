@@ -21,6 +21,8 @@ styled with an external stylesheet.
 - Added ribbon geoms. These are primarily useful for drawing area/stacked area
 charts, but are also good for drawing a confidence interval around a line.
 - Added support for rotating x-axis tick labels.
+- Discrete alpha and size scales accept a tuple with min/max values for 
+creating a palette.
 
 ### Changed
 - Substantial overhaul of plot, geom and scale internals in order to
@@ -33,6 +35,7 @@ number should not be changed from its default value
 - Discrete size scale now draws a legend
 - Removed legend whitespace if no legend is drawn
 - Bars sort by alpha, not just fill
+- Change min/max options for size/alpha continuous scales to conform to ggplot2 API
 - Moved axis drawing code to separate (private) Axis module
 - `Geom.Line.sort_by_x/2` is fully private (was never part of the public API)
 - `Geom.Point.points/2` is fully private (was never part of the public API)
