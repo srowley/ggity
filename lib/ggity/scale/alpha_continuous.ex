@@ -5,8 +5,7 @@ defmodule GGity.Scale.Alpha.Continuous do
 
   @type t() :: %__MODULE__{}
 
-  defstruct alpha_min: 0.1,
-            alpha_max: 1,
+  defstruct range: {0.1, 1},
             transform: nil
 
   @spec new(keyword()) :: Alpha.Continuous.t()
@@ -23,10 +22,11 @@ defmodule GGity.Scale.Alpha.Continuous do
   end
 
   defp transformations(scale, domain, value_min) do
-    range = scale.alpha_max - scale.alpha_min
+    {range_min, range_max} = scale.range
+    range = range_max - range_min
 
     struct(scale,
-      transform: fn value -> scale.alpha_min + (value - value_min) / domain * range end
+      transform: fn value -> range_min + (value - value_min) / domain * range end
     )
   end
 end

@@ -21,7 +21,7 @@ defmodule GGityScaleAlphaContinuousTest do
 
     test "returns a correct scale given custom min and max", %{min_max: min_max} do
       scale =
-        Alpha.Continuous.new(alpha_min: 0.2, alpha_max: 0.8)
+        Alpha.Continuous.new(range: {0.2, 0.8})
         |> Alpha.Continuous.train(min_max)
 
       assert_in_delta scale.transform.(0), 0.2, 0.0000001
