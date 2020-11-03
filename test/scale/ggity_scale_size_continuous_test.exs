@@ -22,7 +22,7 @@ defmodule GGityScaleSizeContinuousTest do
 
     test "returns a correct scale given custom min and max", %{min_max: min_max} do
       scale =
-        Size.Continuous.new(size_min: 4, size_max: 121)
+        Size.Continuous.new(range: {4, 121})
         |> Size.Continuous.train(min_max)
 
       assert_in_delta scale.transform.(0), 2, 0.0000001

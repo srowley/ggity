@@ -112,10 +112,10 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
 
   defp add_size_aesthetic do
     Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{size: :qsec}, alpha: 0.3, color: "green")
+    |> Plot.new(%{x: :qsec, y: :mpg})
+    |> Plot.geom_point(%{size: :wt}, alpha: 0.3, color: "green")
     |> Plot.labs(title: "Size Continuous")
-    |> Plot.scale_size_continuous(size_min: 100, size_max: 1000)
+    |> Plot.scale_size_continuous(range: {100, 1000})
     |> Plot.plot()
   end
 

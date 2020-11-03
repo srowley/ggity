@@ -5,8 +5,7 @@ defmodule GGity.Scale.Size.Continuous do
 
   @type t() :: %__MODULE__{}
 
-  defstruct size_min: 9,
-            size_max: 100,
+  defstruct range: {9, 100},
             transform: nil
 
   @spec new(keyword()) :: Size.Continuous.t()
@@ -15,10 +14,11 @@ defmodule GGity.Scale.Size.Continuous do
   @spec train(Size.Continuous.t(), {number(), number()}) :: Size.Continuous.t()
   def train(scale, {value_min, value_max}) do
     domain = value_max - value_min
-    range = scale.size_max - scale.size_min
+    {range_min, range_max} = scale.range
+    range = range_max - range_min
 
     struct(scale,
-      transform: fn value -> :math.sqrt(scale.size_min + (value - value_min) / domain * range) end
+      transform: fn value -> :math.sqrt(range_min + (value - value_min) / domain * range) end
     )
   end
 end
