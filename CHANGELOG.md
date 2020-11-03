@@ -33,6 +33,7 @@ is unnecessary and messes up scaling
 number should not be changed from its default value 
 - Date/DateTime tick intervals are now nice time multiples thanks to Contex
 - Discrete size scale now draws a legend
+- Size scales map to area, not radius
 - Removed legend whitespace if no legend is drawn
 - Bars sort by alpha, not just fill
 - Change min/max options for size/alpha continuous scales to conform to ggplot2 API

@@ -1254,21 +1254,18 @@ defmodule GGity.Plot do
   Sets geom point size for categorical data.
 
   For categorical data for which a linear mapping of values to marker size is not
-  appropriate, this scale generates a palette of evenly spaced size values
-  between `2` and `8` that are mapped to each unique value of the data. The
+  appropriate, this scale generates a palette of evenly spaced area values
+  between `9` and `100` that are mapped to each unique value of the data. The
   palette is generated such that the difference between each size value is
   maximized. The set of unique data values are sorted for the purpose of assigning
   them to a size and ordering the legend.
-
-  Note that "size" is the marker diameter, not marker area (which is generally
-  preferable but not yet implemented).
 
   This function also takes the following options:
 
   - `:labels` - specifies how legend item names (levels of the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
 
-  - `:range` - a tuple with minimum (default - `2`) and maximum (default - `8`)
+  - `:range` - a tuple with minimum (default - `9`) and maximum (default - `100`)
   values to be bound to the data
   """
   @spec scale_size_discrete(Plot.t(), keyword()) :: Plot.t()

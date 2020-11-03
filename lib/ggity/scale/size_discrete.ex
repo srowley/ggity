@@ -5,7 +5,7 @@ defmodule GGity.Scale.Size.Discrete do
   alias GGity.Scale.Size
 
   defstruct transform: nil,
-            range: {2, 8},
+            range: {9, 100},
             levels: nil,
             labels: :waivers,
             guide: :legend
@@ -19,7 +19,7 @@ defmodule GGity.Scale.Size.Discrete do
   def train(scale, [value] = levels) when is_binary(value) do
     {palette_min, palette_max} = scale.range
     palette_range = palette_max - palette_min
-    transform = fn _value -> palette_min + palette_range / 2 end
+    transform = fn _value -> :math.sqrt(palette_min + palette_range / 2) end
     struct(scale, levels: levels, transform: transform)
   end
 
@@ -34,7 +34,7 @@ defmodule GGity.Scale.Size.Discrete do
       |> Enum.reverse()
       |> Stream.with_index()
       |> Stream.map(fn {level, index} ->
-        {level, palette_max - index * palette_range / intervals}
+        {level, :math.sqrt(palette_max - palette_range / intervals * index)}
       end)
       |> Enum.into(%{})
 

@@ -11,10 +11,10 @@ defmodule GGityScaleSizeDiscreteTest do
 
   describe "new/2" do
     test "returns a proper scale for discrete values", %{scale: scale} do
-      assert_in_delta scale.transform.("beef"), 2, 0.000001
-      assert_in_delta scale.transform.("chicken"), 4, 0.000001
-      assert_in_delta scale.transform.("fish"), 6, 0.000001
-      assert_in_delta scale.transform.("lamb"), 8, 0.000001
+      assert_in_delta scale.transform.("beef"), 3, 0.000001
+      assert_in_delta scale.transform.("chicken"), :math.sqrt(39.3333333), 0.000001
+      assert_in_delta scale.transform.("fish"), :math.sqrt(69.66666667), 0.000001
+      assert_in_delta scale.transform.("lamb"), 10, 0.000001
     end
   end
 
