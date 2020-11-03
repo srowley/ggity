@@ -4,11 +4,8 @@ defmodule GGity.Scale.Size.Discrete do
   alias GGity.{Draw, Labels}
   alias GGity.Scale.Size
 
-  @palette_min 2
-  @palette_max 8
-  @palette_range @palette_max - @palette_min
-
   defstruct transform: nil,
+            range: {2, 8},
             levels: nil,
             labels: :waivers,
             guide: :legend
@@ -20,11 +17,16 @@ defmodule GGity.Scale.Size.Discrete do
 
   @spec train(Size.Discrete.t(), list(binary())) :: Size.Discrete.t()
   def train(scale, [value] = levels) when is_binary(value) do
-    transform = fn _value -> @palette_min + @palette_range / 2 end
+    {palette_min, palette_max} = scale.range
+    palette_range = palette_max - palette_min
+    transform = fn _value -> palette_min + palette_range / 2 end
     struct(scale, levels: levels, transform: transform)
   end
 
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
+    {palette_min, palette_max} = scale.range
+    palette_range = palette_max - palette_min
+
     intervals = length(levels) - 1
 
     values_map =
@@ -32,7 +34,7 @@ defmodule GGity.Scale.Size.Discrete do
       |> Enum.reverse()
       |> Stream.with_index()
       |> Stream.map(fn {level, index} ->
-        {level, @palette_max - index * @palette_range / intervals}
+        {level, palette_max - index * palette_range / intervals}
       end)
       |> Enum.into(%{})
 
