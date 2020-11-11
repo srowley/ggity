@@ -28,6 +28,7 @@ defmodule GGity.Scale.X.DateTime do
     {:days, 10, @duration_day * 10},
     {:months, 1, @duration_month},
     {:months, 3, @duration_month * 3},
+    {:months, 6, @duration_month * 6},
     {:years, 1, @duration_year},
     {:years, 5, @duration_year * 5},
     {:years, 10, @duration_year * 10},
