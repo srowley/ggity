@@ -334,7 +334,8 @@ defmodule GGity.Plot do
 
   defp min_max([single_value]), do: {single_value, single_value}
 
-  defp min_max([%date_type{} | _rest] = dates) when date_type in [DateTime, NaiveDateTime] do
+  defp min_max([%date_type{} | _rest] = dates)
+       when date_type in [Date, DateTime, NaiveDateTime] do
     {Enum.min_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end),
      Enum.max_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end)}
   end

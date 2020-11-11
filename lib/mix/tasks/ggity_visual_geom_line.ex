@@ -53,10 +53,11 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
 
   defp basic do
     Examples.economics()
+    |> Enum.filter(fn record -> Date.compare(record["date"], ~D[1970-12-31]) == :lt end)
     |> Plot.new(%{x: "date", y: "unemploy"})
     |> Plot.geom_line(size: 1)
     |> Plot.labs(title: "Date data")
-    |> Plot.scale_x_date(breaks: 11, date_labels: "%Y")
+    |> Plot.scale_x_date(date_labels: "%Y")
     |> Plot.plot()
   end
 
