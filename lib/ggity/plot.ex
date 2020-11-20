@@ -964,11 +964,11 @@ defmodule GGity.Plot do
 
     {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
 
-    fixed_max = stacked_y_axis_max(data, mapping, :y)
-
     scale_adjustment =
       case geom.position do
         :stack ->
+          fixed_max = stacked_y_axis_max(data, mapping, :y)
+
           {min(0, elem(plot.limits.y, 0) || 0),
            max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
 
@@ -986,11 +986,11 @@ defmodule GGity.Plot do
     {data, mapping} =
       apply(Stat, geom.stat, [updated_plot.data, Map.merge(updated_plot.mapping, mapping)])
 
-    fixed_max = stacked_y_axis_max(data, mapping, :y)
-
     scale_adjustment =
       case geom.position do
         :stack ->
+          fixed_max = stacked_y_axis_max(data, mapping, :y)
+
           {min(0, elem(plot.limits.y, 0) || 0),
            max(fixed_max, fixed_max || elem(plot.limits.y, 1))}
 
