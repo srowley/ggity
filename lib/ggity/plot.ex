@@ -303,8 +303,8 @@ defmodule GGity.Plot do
     |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
     |> Enum.map(fn layer -> layer_min_max(aesthetic, layer) end)
     |> Enum.reduce({fixed_min, fixed_max}, fn {layer_min, layer_max}, {global_min, global_max} ->
-      {min(fixed_min || layer_min, global_min || layer_min),
-       max(fixed_max || layer_max, global_max || layer_max)}
+      {safe_min(fixed_min || layer_min, global_min || layer_min),
+       safe_max(fixed_max || layer_max, global_max || layer_max)}
     end)
   end
 
@@ -329,6 +329,24 @@ defmodule GGity.Plot do
     |> Enum.map(&Kernel.to_string/1)
     |> MapSet.new()
   end
+
+  defp safe_min(%date_type{} = first, second)
+       when date_type in [Date, DateTime, NaiveDateTime] do
+    [first, second]
+    |> min_max()
+    |> elem(0)
+  end
+
+  defp safe_min(first, second), do: min(first, second)
+
+  defp safe_max(%date_type{} = first, second)
+       when date_type in [Date, DateTime, NaiveDateTime] do
+    [first, second]
+    |> min_max()
+    |> elem(1)
+  end
+
+  defp safe_max(first, second), do: max(first, second)
 
   defp min_max([]), do: raise(Enum.EmptyError)
 
