@@ -13,7 +13,7 @@
 * [COMPLETE] Support CSS styling (use themes, but via inline CSS to allow overrides via custom stylesheet)
 * [COMPLETE] Ribbon/area geoms 
 * [COMPLETE] Fix remaining TODOs
-* Sample app
+* [COMPLETE] Sample app
 * Publish to Hex
 
 ## v0.4

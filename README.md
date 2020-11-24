@@ -1,3 +1,5 @@
+**UPDATE** - a website with usage examples is now up and running at: http://www.pocketbookvote.com.
+
 # GGity
 
 GGity is a charting library intended to bring the familiar interface of R's ggplot2 library to the task of drawing SVG plots with Elixir.
