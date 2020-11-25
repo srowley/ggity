@@ -3,7 +3,7 @@ defmodule GGity.Examples do
   @moduledoc false
 
   def diamonds do
-    file_name = Path.join([File.cwd!(), "datasets", "diamonds.csv"])
+    file_name = Path.join([:code.priv_dir(:ggity), "diamonds.csv"])
 
     headers =
       File.stream!(file_name)
@@ -34,7 +34,7 @@ defmodule GGity.Examples do
   end
 
   def economics do
-    file_name = Path.join([File.cwd!(), "datasets", "economics.csv"])
+    file_name = Path.join([:code.priv_dir(:ggity), "economics.csv"])
 
     headers =
       File.stream!(file_name)
@@ -59,7 +59,7 @@ defmodule GGity.Examples do
   end
 
   def economics_long do
-    file_name = Path.join([File.cwd!(), "datasets", "economics_long.csv"])
+    file_name = Path.join([:code.priv_dir(:ggity), "economics_long.csv"])
 
     ["" | headers] =
       File.stream!(file_name)
@@ -122,7 +122,7 @@ defmodule GGity.Examples do
   end
 
   def mpg do
-    file_name = Path.join([File.cwd!(), "datasets", "mpg.csv"])
+    file_name = Path.join([:code.priv_dir(:ggity), "mpg.csv"])
 
     headers =
       File.stream!(file_name)
@@ -152,7 +152,7 @@ defmodule GGity.Examples do
   end
 
   def tx_housing do
-    file_name = Path.join([File.cwd!(), "datasets", "tx_housing.csv"])
+    file_name = Path.join([:code.priv_dir(:ggity), "tx_housing.csv"])
 
     headers =
       File.stream!(file_name)
