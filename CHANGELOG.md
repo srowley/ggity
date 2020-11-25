@@ -2,7 +2,7 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## v0.3 - 2020-11-25
 ### Added
 - Plots can display multiple layers, with each layer supplying its own data and
 mapping. Each layer is added using the applicable `Plot.geom_*` function.

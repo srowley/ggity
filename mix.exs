@@ -4,25 +4,26 @@ defmodule GGity.MixProject do
   def project do
     [
       app: :ggity,
-      version: "0.2.1",
+      version: "0.3.0",
       aliases: aliases(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      package: package(),
       deps: deps(),
       dialyzer: [plt_add_apps: [:mix]],
       name: "GGity",
+      description: "GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.",
       source_url: "https://github.com/srowley/ggity",
+      homepage_url: "http://www.pocketbookvote.com",
+      licenses: "MIT",
       docs: [
-        extras: ["README.md", "ROADMAP.md"]
+        extras: ["README.md", "ROADMAP.md"],
+        main: "readme"
       ]
     ]
   end
 
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
+  def application, do: []
 
   defp deps do
     [
@@ -44,6 +45,18 @@ defmodule GGity.MixProject do
         "format",
         "ggity.visual"
       ]
+    ]
+  end
+
+  defp package() do
+    [
+      name: "ggity",
+      files: ~w(lib priv mix.exs README* LICENSE* ROADMAP* CHANGELOG*),
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/srowley/ggity",
+        "Website" => "http://www.pocketbookvote.com/"
+      }
     ]
   end
 end

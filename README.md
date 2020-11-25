@@ -2,7 +2,7 @@
 
 # GGity
 
-GGity is a charting library intended to bring the familiar interface of R's ggplot2 library to the task of drawing SVG plots with Elixir.
+GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.
 
 ## Examples
 
@@ -83,13 +83,13 @@ Bar charts are also supported. By default they display stacked counts of observa
 I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
 
 ## Non-Goals
-* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed  and validations that should be happening, but for now they are harder to find because I am not using this in the wild. 
+* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed and validations that should be happening, but for now they are harder to find because I am not using this in the wild.
 
-* Optimize for performance generally - I am not trying to make it slow! At the same time I am not using this in the real world, so performance is not as important or apparent to me. I am more interested in adding features than pre-emptively squeezing out performance gains.
+* Optimize for performance pre-emptively - Because I am not using this in a real world application, performance is not as critical or (more importantly) apparent to me, so my focus tends to be on new features.
 
 ## Alternatives
 
-[ContEx](https://github.com/mindok/contex) - has some special LiveView features, actually being used by the author, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
+[ContEx](https://github.com/mindok/contex) - is more widely used, has some special LiveView features, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
 
 [Plotex](https://github.com/elcritch/plotex) - focused on time series. Dates/times are hard, and while I have not looked at it in detail I bet Plotex does them better than GGity.
 
@@ -97,7 +97,7 @@ I am interested in data visualization and after learning a lot from the work bei
 
 ### Roadmap
 
-GGity has a roadmap which is subject to change based on what is interesting to me, how difficult those items turn out to be to implement and issues/ideas/contribution from others. If I get to version 0.3 I will think about publishing to Hex.
+GGity has a roadmap which is subject to change based on what is interesting to me, how difficult those items turn out to be to implement and issues/ideas/contribution from others.
 
 ### Visual tests
 GGity has decent unit test coverage, but given the domain, a picture is worth a thousand words. Therefore the library includes some mix tasks that generate plots of the included datasets to support development. I have used them on Ubuntu Linux and WSL on Windows.
@@ -143,12 +143,12 @@ Acknowledgement is also due to Hadley Wickham and others who have built [ggplot2
 
 ## Installation
 
-The package can be installed from GitHub by adding `ggity` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `ggity` to your list of dependencies in mix.exs:
 
 ```elixir
 def deps do
   [
-    {:ggity, git: "https://github.com/srowley/ggity.git", tag: "v0.2.1"}
+    {:ggity, "~> 0.3.0"}
   ]
 end
 ```
