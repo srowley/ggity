@@ -1,10 +1,13 @@
 defmodule GGity.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/srowley/ggity"
+  @version "0.3.0"
+
   def project do
     [
       app: :ggity,
-      version: "0.3.0",
+      version: @version,
       aliases: aliases(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
@@ -12,12 +15,15 @@ defmodule GGity.MixProject do
       deps: deps(),
       dialyzer: [plt_add_apps: [:mix]],
       name: "GGity",
-      description: "GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.",
-      source_url: "https://github.com/srowley/ggity",
+      description: """
+        GGity brings the familiar interface of R's ggplot2 library to SVG
+        charting in Elixir.
+      """,
       homepage_url: "http://www.pocketbookvote.com",
-      licenses: "MIT",
       docs: [
-        extras: ["README.md", "ROADMAP.md"],
+        source_url: @source_url,
+        source_ref: "v#{@version}",
+        extras: ["README.md", "ROADMAP.md", "CHANGELOG.md"],
         main: "readme"
       ]
     ]
@@ -54,8 +60,10 @@ defmodule GGity.MixProject do
       files: ~w(lib priv mix.exs README* LICENSE* ROADMAP* CHANGELOG*),
       licenses: ["MIT"],
       links: %{
-        "GitHub" => "https://github.com/srowley/ggity",
-        "Website" => "http://www.pocketbookvote.com/"
+        "Website" => "http://www.pocketbookvote.com/",
+        "GitHub" => @source_url,
+        "Changelog" => "#{@source_url}/blob/master/CHANGELOG.md",
+        "Roadmap" => "#{@source_url}/blob/master/ROADMAP.md"
       }
     ]
   end
