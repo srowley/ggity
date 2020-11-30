@@ -11,20 +11,16 @@ defmodule GGity.Plot do
   **GGity does not perform any validation of the data**; data is assumed to be
   clean and not to have missing values.
 
-  ```
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-  ```
+      Examples.mtcars()
+      |> Plot.new(%{x: :wt, y: :mpg})
 
   Mappings are specified using maps, where the map's keys are the names
   of supported aesthetics, and the values are the names of variables in
   the data.
 
-  ```
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point()
-  ```
+      Examples.mtcars()
+      |> Plot.new(%{x: :wt, y: :mpg})
+      |> Plot.geom_point()
 
   A plot layer (represented as a struct that implements the `GGity.Geom` protocol)
   is added to the plot using functions such as `geom_point/3` or `geom_line/3`.
@@ -43,12 +39,10 @@ defmodule GGity.Plot do
   only, GGity will assign at date/datetime scale if the data mapped to the `:x`
   aesthetic is a `Date`, `DateTime` or `NaiveDateTime` struct.
 
-  ```
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point()
-    |> Plot.plot()
-  ```
+      Examples.mtcars()
+      |> Plot.new(%{x: :wt, y: :mpg})
+      |> Plot.geom_point()
+      |> Plot.plot()
 
   `plot/1` generates an iolist that represents the plot. None of the data
   is sanitized, so users will need to be mindful of the risks of generating
@@ -1340,35 +1334,33 @@ defmodule GGity.Plot do
 
   `:date_labels` can be either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
 
-  ```
-    data
-    |> Plot.new(%{x: :date_variable, y: :other_variable})
-    |> Plot.geom_line()
-    |> Plot.scale_x_date(date_labels: "%b %d %Y") # Label format "Jan 01 2001"
-  ```
+      data
+      |> Plot.new(%{x: :date_variable, y: :other_variable})
+      |> Plot.geom_line()
+      |> Plot.scale_x_date(date_labels: "%b %d %Y") # Label format "Jan 01 2001"
 
   or a tuple `{format, options}` where `format` is the pattern and `options` is a keyword
   list of options accepted by `NimbleStrftime.format/3`:
 
-  ```
-    rename_weekdays = fn day_of_week ->
-                    {
-                      "Monday",
-                      "Tuesday",
-                      "Hump Day",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday"
-                    }
-                    |> elem(day_of_week - 1)
-                  end
-    data
-    |> Plot.new(%{x: :date_variable, y: :other_variable})
-    |> Plot.geom_line()
-    |> Plot.scale_x_date(date_labels: {"%A", day_of_week_names: rename_weekdays})
-    # Ticks are just weekday names, Wednesday is Hump Day
-  ```
+      rename_weekdays = fn day_of_week ->
+        {
+          "Monday",
+          "Tuesday",
+          "Hump Day",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        }
+        |> elem(day_of_week - 1)
+      end
+
+      data
+      |> Plot.new(%{x: :date_variable, y: :other_variable})
+      |> Plot.geom_line()
+      |> Plot.scale_x_date(date_labels: {"%A", day_of_week_names: rename_weekdays})
+
+      # Ticks are just weekday names, Wednesday is Hump Day
 
   """
   @spec scale_x_date(Plot.t(), keyword()) :: Plot.t()
@@ -1394,12 +1386,11 @@ defmodule GGity.Plot do
 
   See `scale_x_date/2` for more usage examples.
 
-  ```
-    data
-    |> Plot.new(%{x: :datetime_variable, y: :other_variable})
-    |> Plot.geom_line()
-    |> Plot.scale_x_datetime(date_labels: "%b %d H%H") # Label format "Jan 01 H01"
-  ```
+      data
+      |> Plot.new(%{x: :datetime_variable, y: :other_variable})
+      |> Plot.geom_line()
+      |> Plot.scale_x_datetime(date_labels: "%b %d H%H") # Label format "Jan 01 H01"
+
   """
   @spec scale_x_datetime(Plot.t(), keyword()) :: Plot.t()
   def scale_x_datetime(%Plot{} = plot, options \\ []) do
@@ -1530,11 +1521,11 @@ defmodule GGity.Plot do
 
   ## Example
 
-  ```
-  Plot.new(%{x: "x", y: "y"})
-  |> Plot.geom_point(color: "color", shape: "shape", size: "size")
-  # By default all three legends will be drawn
-  |> Plot.guides(shape: :none, size: :none) # Plot will only draw a legend for the color scale
+      Plot.new(%{x: "x", y: "y"})
+      |> Plot.geom_point(color: "color", shape: "shape", size: "size")
+      # By default all three legends will be drawn
+      |> Plot.guides(shape: :none, size: :none) # Plot will only draw a legend for the color scale
+
   """
   @spec guides(Plot.t(), keyword()) :: Plot.t()
   def guides(plot, guides) do

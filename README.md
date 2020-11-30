@@ -2,6 +2,12 @@
 
 # GGity
 
+[![Module Version](https://img.shields.io/hexpm/v/ggity.svg)](https://hex.pm/packages/ggity)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ggity/)
+[![Total Download](https://img.shields.io/hexpm/dt/ggity.svg)](https://hex.pm/packages/ggity)
+[![License](https://img.shields.io/hexpm/l/ggity.svg)](https://github.com/srowley/ggity/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/srowley/ggity.svg)](https://github.com/srowley/ggity/commits/master)
+
 GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.
 
 ## Examples
@@ -13,11 +19,11 @@ Data must be provided as a list of maps, where each map is an observation, and t
 The mapping is specified with a map containing key-value pairs of variable names and aesthetics. Mappings must be provided for the x and y aesthetics; other aesthetics are optional, with fixed default values applied if a mapping is not specified. See the documentation for supported aesthetics for each geom.
 
 ```elixir
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "Basic Plot", x: "Weight (lbs)", y: "Miles Per Gallon")
-    |> Plot.geom_point()
-    |> Plot.plot()
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.labs(title: "Basic Plot", x: "Weight (lbs)", y: "Miles Per Gallon")
+|> Plot.geom_point()
+|> Plot.plot()
 ```
 ![](./examples/geom_point_basic.svg)
 
@@ -26,11 +32,11 @@ Note that the library includes a few of R's canonical datasets, which are used i
 Mappings can also be specified when a geom is added:
 
 ```elixir
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{shape: :cyl})
-    |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
-    |> Plot.plot()
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(%{shape: :cyl})
+|> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
+|> Plot.plot()
 ```
 ![](./examples/geom_point_shape_mapping.svg)
 
@@ -40,42 +46,42 @@ Aesthetics can be assigned a fixed value (not tied to a variable), and both lege
 and axis labels support custom formatting.
 
 ```elixir
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
-    |> Plot.labs(title: "Custom labels, fixed alpha")
-    |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
-    |> Plot.scale_x_continuous(labels: :commas)
-    |> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
-    |> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
-    |> Plot.plot()
+Examples.tx_housing()
+|> Enum.filter(fn record ->
+  record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
+end)
+|> Plot.new(%{x: "sales", y: "median"})
+|> Plot.labs(title: "Custom labels, fixed alpha")
+|> Plot.geom_point(%{color: "city"}, alpha: 0.4)
+|> Plot.scale_x_continuous(labels: :commas)
+|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
+|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
+|> Plot.plot()
 ```
 ![](./examples/geom_point_custom.svg)
 
 Line geoms support mapping discrete variables to color or line type.
 
 ```elixir
-    Examples.economics_long()
-    |> Plot.new(%{x: "date", y: "value01"})
-    |> Plot.labs(title: "Mapped to color")
-    |> Plot.geom_line(%{color: "variable"})
-    |> Plot.plot()
+Examples.economics_long()
+|> Plot.new(%{x: "date", y: "value01"})
+|> Plot.labs(title: "Mapped to color")
+|> Plot.geom_line(%{color: "variable"})
+|> Plot.plot()
 ```
 ![](./examples/geom_line.svg)
 
 Bar charts are also supported. By default they display stacked counts of observations (as shown below), but they can also display grouped bars (`position = "dodge"` in ggplot2 parlance) as well as raw y values (`geom_col`).
 
 ```elixir
-   Examples.mpg()
-    |> Enum.filter(fn record ->
-      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
-    end)
-    |> Plot.new(%{x: "manufacturer"})
-    |> Plot.geom_bar(%{fill: "class"})
-    |> Plot.scale_fill_viridis(option: :inferno)
-    |> Plot.plot()
+Examples.mpg()
+|> Enum.filter(fn record ->
+  record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
+end)
+|> Plot.new(%{x: "manufacturer"})
+|> Plot.geom_bar(%{fill: "class"})
+|> Plot.scale_fill_viridis(option: :inferno)
+|> Plot.plot()
 ```
 ![](./examples/geom_bar.svg)
 
@@ -106,10 +112,10 @@ Linux examples:
 
 ```bash
 mix ggity.visual.geom.point
-# Generates a file with point geom examples and opens in Firefox. 
+# Generates a file with point geom examples and opens in Firefox.
 
 mix ggity.visual.geom.line google-chrome
-# Generates a file with line geom examples and opens in Chrome. 
+# Generates a file with line geom examples and opens in Chrome.
 # Any browser can be specified using the binary name that would launch it
 # from the terminal; Firefox is the default if nothing is specified.
 
@@ -143,7 +149,7 @@ Acknowledgement is also due to Hadley Wickham and others who have built [ggplot2
 
 ## Installation
 
-The package can be installed by adding `ggity` to your list of dependencies in mix.exs:
+Add `:ggity` to your list of dependencies in mix.exs:
 
 ```elixir
 def deps do
@@ -155,4 +161,6 @@ end
 
 GGity requires Elixir 1.10, and will likely require Elixir 1.11 shortly after that version is released, due to the nice improvements in each version associated with handling dates and datetimes.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc).
+## License
+
+This source code is licensed under the MIT license. Copyright (c) 2020-present, Steve Rowley.
