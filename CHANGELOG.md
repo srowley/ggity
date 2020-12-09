@@ -2,6 +2,11 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## v0.3.1 - 2020-12-08
+### Fixed
+- Fixed visual test error for new cloned repos
+- Miscellaneous doc updates
+
 ## v0.3 - 2020-11-25
 ### Added
 - Plots can display multiple layers, with each layer supplying its own data and

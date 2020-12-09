@@ -154,7 +154,7 @@ Add `:ggity` to your list of dependencies in mix.exs:
 ```elixir
 def deps do
   [
-    {:ggity, "~> 0.3.0"}
+    {:ggity, "~> 0.3.1"}
   ]
 end
 ```
