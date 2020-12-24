@@ -652,6 +652,57 @@ defmodule GGity.Plot do
   end
 
   @doc """
+  Adds a boxplot geom to the plot.
+
+  Accepts an alternative dataset to be used; if one is not provided defaults to
+  the plot dataset.
+
+  Accepts a mapping and/or additonal options to be used. The provided mapping
+  is merged with the plot mapping for purposes of the geom - there is no need
+  to re-specify the `:x` mapping, for example.
+
+  Boxplot geoms support mapping data to the following aesthetics, which use the noted scales:
+
+  * `:x` (required - should be a discrete variable)
+  * `:y` (required - the value for which percentile statistics are calculated)
+  * `:alpha`
+  * `:color`
+  * `:fill`
+
+  `geom_boxplot/3` uses the `:boxplot` stat, which calculates the following for the variable
+  mapped to the `:y` aesthetic:
+
+  * 25th and 75th percentiles (the y-coordinates of the top and bottom of the box)
+  * median (the y-coordinate of the line in the middle of the box)
+  * "ymin" and "ymax" (the outlying y-coordinates of the vertical lines extending from the
+  top and bottom of each box.
+
+  "ymin" and "ymax" represent the range of values between the 25th/75th percentiles minus/plus
+  1.58 multiplied by the interquartile range, respectively. The interquartile range is the
+  difference between the 75th and 25th percentile values.
+
+  Values mapped to `:y` that are less than "ymin" or greater than "ymax" ("outiers") are
+  plotted as individual points.
+
+  GGity uses method "Type 7" to calculate percentiles, in conformance with
+  [the default used by R](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html).
+  """
+  @spec geom_boxplot(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
+  def geom_boxplot(plot, mapping \\ [], options \\ [])
+
+  def geom_boxplot(%Plot{} = plot, [], []) do
+    add_geom(plot, Geom.Boxplot)
+  end
+
+  def geom_boxplot(%Plot{} = plot, mapping_or_options, []) do
+    add_geom(plot, Geom.Boxplot, mapping_or_options)
+  end
+
+  def geom_boxplot(%Plot{} = plot, mapping, options) do
+    add_geom(plot, Geom.Boxplot, [mapping, options])
+  end
+
+  @doc """
   Shorthand for `geom_bar(plot, stat: :identity)`.
 
   Produces a bar chart similar to `geom_bar/3`, but uses the values of

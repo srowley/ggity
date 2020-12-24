@@ -1477,6 +1477,42 @@ defmodule GGity.Scale.Color.Viridis do
     )
   end
 
+  defp draw_key_glyph(scale, level, index, :boxplot, key_height) do
+    offset = key_height * index
+
+    [
+      Draw.line(
+        x1: key_height / 2,
+        x2: key_height / 2,
+        y1: offset + 2,
+        y2: offset + 4,
+        stroke: scale.transform.(level)
+      ),
+      Draw.line(
+        x1: key_height / 2,
+        x2: key_height / 2,
+        y1: offset + key_height - 2,
+        y2: offset + key_height - 4,
+        stroke: scale.transform.(level)
+      ),
+      Draw.rect(
+        x: 2,
+        y: offset + 4,
+        width: key_height - 4,
+        height: key_height - 8,
+        stroke: scale.transform.(level),
+        fill: "white"
+      ),
+      Draw.line(
+        x1: 2,
+        x2: key_height - 2,
+        y1: key_height / 2 + key_height * index,
+        y2: key_height / 2 + key_height * index,
+        stroke: scale.transform.(level)
+      )
+    ]
+  end
+
   defp get_palette(palette_name) do
     cond do
       palette_name in Map.values(@palette_names) ->

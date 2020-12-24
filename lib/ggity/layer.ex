@@ -9,7 +9,14 @@ defprotocol GGity.Layer do
 end
 
 defimpl GGity.Layer,
-  for: [GGity.Geom.Bar, GGity.Geom.Line, GGity.Geom.Point, GGity.Geom.Ribbon, GGity.Geom.Text] do
+  for: [
+    GGity.Geom.Bar,
+    GGity.Geom.Boxplot,
+    GGity.Geom.Line,
+    GGity.Geom.Point,
+    GGity.Geom.Ribbon,
+    GGity.Geom.Text
+  ] do
   def new(%geom_type{} = _geom, mapping, options) do
     apply(geom_type, :new, [mapping, options])
   end
