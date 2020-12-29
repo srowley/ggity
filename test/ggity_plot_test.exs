@@ -1,7 +1,7 @@
 defmodule GGityPlotTest do
   use ExUnit.Case
 
-  alias GGity.{Element, Geom, Labels, Plot, Scale}
+  alias GGity.{Element, Examples, Geom, Labels, Plot, Scale}
 
   setup do
     data = [
@@ -109,6 +109,24 @@ defmodule GGityPlotTest do
       assert geom.mapping == %{y: :b, fill: :c}
       assert geom.stat == :identity
       assert geom.position == :dodge
+    end
+  end
+
+  describe "geom_boxplot/3" do
+    setup do
+      data = Examples.mpg()
+      mapping = %{x: "class", y: "hwy"}
+      %{data: data, mapping: mapping, plot: Plot.new(data, mapping)}
+    end
+
+    test "adds a boxplot geom with stat boxplot by default", %{plot: plot} do
+      plot = Plot.geom_boxplot(plot)
+      assert %Geom.Boxplot{stat: :boxplot} = hd(plot.layers)
+    end
+
+    test "adds a boxplot geom with specified mapping", %{plot: plot} do
+      plot = Plot.geom_boxplot(plot, %{fill: "drv"})
+      assert %Geom.Boxplot{mapping: %{fill: "drv"}} = hd(plot.layers)
     end
   end
 

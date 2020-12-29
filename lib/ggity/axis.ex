@@ -184,6 +184,7 @@ defmodule GGity.Axis do
       case transformed_tick_values do
         [_just_one_y_value] ->
           plot.width / plot.aspect_ratio
+
         [first, second] ->
           (second - first) / 2 / plot.aspect_ratio
       end
