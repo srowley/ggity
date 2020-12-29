@@ -4,7 +4,7 @@
 * Support attaching custom attributes to plot elements
 * Add other non-fillable shapes to shapes palette
 * Add fillable shapes to shapes palette
-* Boxplots
+* [COMPLETE] Boxplots
 * General annotation drawing
 
 ## v0.5

@@ -2,6 +2,14 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+### Added
+- Boxplot geoms with `Plot.geom_boxplot/3`
+
+### Fixed
+- Y-coordinate scale and axis functions properly handle dataset
+with no range (same min and max value, or only one value)
+
 ## v0.3.1 - 2020-12-08
 ### Fixed
 - Fixed visual test error for new cloned repos

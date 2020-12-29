@@ -1,5 +1,3 @@
-**UPDATE** - a website with usage examples is now up and running at: http://www.pocketbookvote.com.
-
 # GGity
 
 [![Module Version](https://img.shields.io/hexpm/v/ggity.svg)](https://hex.pm/packages/ggity)
@@ -12,7 +10,9 @@ GGity brings the familiar interface of R's ggplot2 library to SVG charting in El
 
 ## Examples
 
-A GGity plot is constructed from data, a geom (such as points, bars or lines) and a mapping of aesthetics (x, y, color, size, etc.) to variables in the data.
+A website with additional usage examples is up at: http://www.pocketbookvote.com.
+
+A GGity plot is constructed from data, a geom (such as points, bars or lines), mapping of aesthetics (x, y, color, size, etc.) to variables in the data. These three elements comprise a layer; a plot is a collection of one or more layers.
 
 Data must be provided as a list of maps, where each map is an observation, and the map's keys are the names of the variables observed.
 
@@ -97,7 +97,7 @@ I am interested in data visualization and after learning a lot from the work bei
 
 [ContEx](https://github.com/mindok/contex) - is more widely used, has some special LiveView features, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
 
-[Plotex](https://github.com/elcritch/plotex) - focused on time series. Dates/times are hard, and while I have not looked at it in detail I bet Plotex does them better than GGity.
+[Plotex](https://github.com/elcritch/plotex) - focused on time series and may be better optimized for that data in some situations.
 
 ## Development
 
@@ -130,7 +130,7 @@ WSL example:
 ```bash
 mix ggity.visual.geom.point --wsl
 # The --wsl option works for WSL users by generating a file with
-# point geom examples and opening the file in Firefox in Windows
+# point geom examples and opening the file in Firefox in Windows,
 # assuming Firefox is installed in the default location.
 # If a browser window is already opened, each example will open a new tab;
 # otherwise the behavior is the same as in Linux.
