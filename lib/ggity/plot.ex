@@ -710,7 +710,7 @@ defmodule GGity.Plot do
   end
 
   def geom_boxplot(%Plot{} = plot, mapping, options) do
-    add_geom(plot, Geom.Boxplot, [mapping, options])
+    add_geom(plot, Geom.Boxplot, mapping, options)
   end
 
   @doc """
