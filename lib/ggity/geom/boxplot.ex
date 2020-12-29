@@ -12,6 +12,10 @@ defmodule GGity.Geom.Boxplot do
             stat: :boxplot,
             position: :dodge,
             key_glyph: :boxplot,
+            outlier_color: nil,
+            outlier_fill: nil,
+            outlier_shape: :circle,
+            outlier_size: 2,
             color: "black",
             fill: "white",
             alpha: 1,
@@ -133,10 +137,20 @@ defmodule GGity.Geom.Boxplot do
 
   defp draw_outlier(value, box_middle, row, geom_boxplot, transforms, plot) do
     y_coord = plot.area_padding + (200 - plot.scales.y.transform.(value)) / plot.aspect_ratio
+    fill = geom_boxplot.outlier_fill || transforms.color.(row[geom_boxplot.mapping[:color]])
+    color = geom_boxplot.outlier_color || transforms.color.(row[geom_boxplot.mapping[:color]])
 
-    Draw.circle({box_middle, y_coord}, 1.5,
-      fill: transforms.color.(row[geom_boxplot.mapping[:color]])
-    )
+    # This will break when we have fillable shapes
+    case geom_boxplot.outlier_shape do
+      :na ->
+        []
+
+      :circle ->
+        Draw.marker(:circle, {box_middle, y_coord}, geom_boxplot.outlier_size, fill: color)
+
+      shape ->
+        Draw.marker(shape, {box_middle, y_coord}, geom_boxplot.outlier_size, fill: fill)
+    end
   end
 
   defp position_adjust_x(

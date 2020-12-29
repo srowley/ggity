@@ -15,6 +15,7 @@ defmodule Mix.Tasks.Ggity.Visual do
       Visual.Geom.Bar,
       Visual.Geom.Text,
       Visual.Geom.Ribbon,
+      Visual.Geom.Boxplot,
       Visual.Layers,
       Visual.Scale.Color.Viridis
     ]

@@ -17,6 +17,9 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Boxplot do
       Enum.join(
         [
           basic(),
+          fixed_color(),
+          outlier_color(),
+          no_outliers(),
           mapped_color()
         ],
         "\n"
@@ -44,13 +47,38 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Boxplot do
   end
 
   defp grid_style do
-    "style='display: grid;grid-template-columns: repeat(2, 1fr)'"
+    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
   end
 
   defp basic do
     Examples.mpg()
     |> Plot.new(%{x: "class", y: "hwy"})
     |> Plot.geom_boxplot()
+    |> Plot.scale_y_continuous(labels: &floor/1)
+    |> Plot.plot()
+  end
+
+  defp fixed_color do
+    Examples.mpg()
+    |> Plot.new(%{x: "class", y: "hwy"})
+    |> Plot.geom_boxplot(color: "blue")
+    |> Plot.scale_y_continuous(labels: &floor/1)
+    |> Plot.plot()
+  end
+
+  defp outlier_color do
+    Examples.mpg()
+    |> Plot.new(%{x: "class", y: "hwy"})
+    |> Plot.geom_boxplot(outlier_color: "red")
+    |> Plot.scale_y_continuous(labels: &floor/1)
+    |> Plot.plot()
+  end
+
+  defp no_outliers do
+    Examples.mpg()
+    |> Plot.new(%{x: "class", y: "hwy"})
+    |> Plot.geom_boxplot(outlier_shape: :na)
+    |> Plot.geom_point(color: "red", size: 2)
     |> Plot.scale_y_continuous(labels: &floor/1)
     |> Plot.plot()
   end

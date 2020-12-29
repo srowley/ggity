@@ -684,6 +684,17 @@ defmodule GGity.Plot do
   Values mapped to `:y` that are less than "ymin" or greater than "ymax" ("outiers") are
   plotted as individual points.
 
+  Other supported options:
+
+  * `:outlier_color` - color of outlier points.
+    Defaults to `"black"`.
+
+  * `:outlier_shape` - shape of outlier points (`:circle`, `:triangle`, `:square`, `:diamond`)
+    Defaults to `:circle`. Setting this value to `:na` omits the outliers from the plot entirely.
+
+  * `:outlier_size` - size of outlier points.
+    Defaults to `2`.
+
   GGity uses method "Type 7" to calculate percentiles, in conformance with
   [the default used by R](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html).
   """
