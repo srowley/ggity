@@ -176,11 +176,17 @@ defmodule GGity.Axis do
   end
 
   defp y_gridlines(%Plot{scales: scales} = plot) do
-    [first, second] =
+    transformed_tick_values =
       Enum.slice(scales.y.tick_values, 0..1)
       |> Enum.map(scales.y.inverse)
 
-    interval = (second - first) / 2 / plot.aspect_ratio
+    interval =
+      case transformed_tick_values do
+        [_just_one_y_value] ->
+          plot.width / plot.aspect_ratio
+        [first, second] ->
+          (second - first) / 2 / plot.aspect_ratio
+      end
 
     [_last_tick | all_but_last_tick] = ticks = Enum.reverse(scales.y.tick_values)
     minor_gridlines = Enum.map(all_but_last_tick, &draw_y_minor_gridline(plot, &1, interval))

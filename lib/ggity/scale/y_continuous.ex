@@ -26,8 +26,8 @@ defmodule GGity.Scale.Y.Continuous do
 
   defp transformations(0, min, _max, %Y.Continuous{} = scale) do
     [
-      tick_values: min,
-      inverse: fn _value -> min end,
+      tick_values: [min],
+      inverse: fn _value -> scale.width / 2 end,
       transform: fn _value -> scale.width / 2 end
     ]
   end

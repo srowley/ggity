@@ -96,6 +96,8 @@ defmodule GGity.Stat do
     }
   end
 
+  defp percentile([single_value], 1, _percentile), do: single_value
+
   defp percentile(data, sample_size, percentile) when percentile >= 0 and percentile <= 1 do
     p = percentile * (sample_size - 1) + 1
     k = trunc(p)
