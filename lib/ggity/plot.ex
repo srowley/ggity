@@ -537,6 +537,25 @@ defmodule GGity.Plot do
   end
 
   @doc """
+  Adds geoms to a plot from raw data.
+
+  `annotate/3` can be used to add annotations to a plot. The function
+  takes a plot, a type of geom and a keyword list of values and options. The
+  keyword list must include values for the aesthetics required to draw
+  the geom, and can also include any other options that could be passed to
+  constructor for that geom.
+
+  Supported geoms and required aesthetics include:
+
+  * `:text` - `:x`, `:y`, `:label`
+  """
+  @spec annotate(Plot.t(), atom(), keyword()) :: Plot.t()
+  def annotate(%Plot{} = plot, geom_type, data) do
+    geom = GGity.Annotate.annotate(geom_type, data)
+    struct(plot, layers: [geom | plot.layers])
+  end
+
+  @doc """
   Adds a ribbon geom to the plot with the `position: :stack` option set.
 
   `geom_area/3` is a convenience alias for `geom_ribbon/3` that sets the

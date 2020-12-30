@@ -10,6 +10,7 @@ defmodule Mix.Tasks.Ggity.Visual do
   @spec run(list(any)) :: any
   def run(argv) do
     [
+      Visual.Annotate,
       Visual.Geom.Point,
       Visual.Geom.Line,
       Visual.Geom.Bar,
