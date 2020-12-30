@@ -4,6 +4,12 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 ### Added
+- Added `:custom_attributes` to the `Bar`, `Boxplot`, `Point`, `Rect`,
+`Segment` and `Text` geoms. This option can contain a function that takes
+the plot and a row of data and returns a keyword list of custom attribute/value
+pairs that are then added to the the SVG element representing that data on
+the plot. Custom attributes could be data attributes, Phoenix LiveView event
+handlers or Alpine.js snippets, for example.
 - Boxplot geoms with `Plot.geom_boxplot/3`
 - Added `Plot.annotate/2`, which supports adding text, rectangle and line
 (`:segment`) annotations

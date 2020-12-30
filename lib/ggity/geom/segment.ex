@@ -15,7 +15,8 @@ defmodule GGity.Geom.Segment do
             key_glyph: :line,
             alpha: 1,
             color: "black",
-            size: 0
+            size: 0,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Segment.t()
   def new(mapping, options) do
@@ -67,6 +68,8 @@ defmodule GGity.Geom.Segment do
     y1 = (plot.width - labelled_values[:y]) / plot.aspect_ratio + plot.area_padding
     y2 = (plot.width - labelled_values[:yend]) / plot.aspect_ratio + plot.area_padding
 
-    Draw.line([{:x1, x1}, {:x2, x2}, {:y1, y1}, {:y2, y2} | options])
+    custom_attributes = GGity.Layer.custom_attributes(geom_segment, plot, row)
+
+    Draw.line([{:x1, x1}, {:x2, x2}, {:y1, y1}, {:y2, y2} | options] ++ custom_attributes)
   end
 end

@@ -16,7 +16,8 @@ defmodule GGity.Geom.Point do
             alpha: 1,
             color: "black",
             shape: :circle,
-            size: 4
+            size: 4,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Point.t()
   def new(mapping, options) do
@@ -42,26 +43,31 @@ defmodule GGity.Geom.Point do
       end)
       |> Map.merge(scale_transforms)
 
-    data
-    |> Stream.map(fn row ->
-      [
-        transforms.x.(row[geom_point.mapping.x]),
-        transforms.y.(row[geom_point.mapping.y]),
-        transforms.alpha.(row[geom_point.mapping[:alpha]]),
-        transforms.color.(row[geom_point.mapping[:color]]),
-        transforms.shape.(row[geom_point.mapping[:shape]]),
-        transforms.size.(row[geom_point.mapping[:size]])
-      ]
-    end)
-    |> Stream.map(fn row -> Enum.zip([:x, :y, :fill_opacity, :fill, :shape, :size], row) end)
-    |> Enum.map(fn row ->
-      Draw.marker(
-        row[:shape],
-        {row[:x] + plot.area_padding,
-         (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding},
-        row[:size],
-        Keyword.take(row, [:fill, :fill_opacity])
-      )
-    end)
+    Enum.map(data, fn row -> point(row, transforms, geom_point, plot) end)
+  end
+
+  defp point(row, transforms, geom_point, plot) do
+    mapping = geom_point.mapping
+
+    custom_attributes = GGity.Layer.custom_attributes(geom_point, plot, row)
+
+    transformed_values = [
+      transforms.x.(row[mapping.x]),
+      transforms.y.(row[mapping.y]),
+      transforms.alpha.(row[mapping[:alpha]]),
+      transforms.color.(row[mapping[:color]]),
+      transforms.shape.(row[mapping[:shape]]),
+      transforms.size.(row[mapping[:size]])
+    ]
+
+    labelled_values = Enum.zip([:x, :y, :fill_opacity, :fill, :shape, :size], transformed_values)
+
+    Draw.marker(
+      labelled_values[:shape],
+      {labelled_values[:x] + plot.area_padding,
+       (plot.width - labelled_values[:y]) / plot.aspect_ratio + plot.area_padding},
+      labelled_values[:size],
+      Keyword.take(labelled_values, [:fill, :fill_opacity]) ++ custom_attributes
+    )
   end
 end

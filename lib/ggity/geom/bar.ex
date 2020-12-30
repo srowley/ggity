@@ -14,7 +14,8 @@ defmodule GGity.Geom.Bar do
             key_glyph: :rect,
             fill: "black",
             alpha: 1,
-            bar_group_width: nil
+            bar_group_width: nil,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Bar.t()
   def new(mapping, options \\ []) do
@@ -70,20 +71,25 @@ defmodule GGity.Geom.Bar do
       sort_order
     )
     |> Enum.reduce({0, 0, []}, fn row, {total_width, total_height, rects} ->
+      custom_attributes = GGity.Layer.custom_attributes(geom_bar, plot, row)
+
       {
         total_width + geom_bar.bar_group_width / count_rows,
         total_height +
           transforms.y.(row[geom_bar.mapping[:y]]) / plot.aspect_ratio,
         [
           Draw.rect(
-            x: position_adjust_x(geom_bar, row, group_index, total_width, plot),
-            y:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                position_adjust_y(geom_bar, row, total_height, plot),
-            width: position_adjust_bar_width(geom_bar, count_rows),
-            height: transforms.y.(row[geom_bar.mapping[:y]]) / plot.aspect_ratio,
-            fill: transforms.fill.(row[geom_bar.mapping[:fill]]),
-            fill_opacity: transforms.alpha.(row[geom_bar.mapping[:alpha]])
+            [
+              x: position_adjust_x(geom_bar, row, group_index, total_width, plot),
+              y:
+                plot.area_padding + plot.width / plot.aspect_ratio -
+                  position_adjust_y(geom_bar, row, total_height, plot),
+              width: position_adjust_bar_width(geom_bar, count_rows),
+              height: transforms.y.(row[geom_bar.mapping[:y]]) / plot.aspect_ratio,
+              fill: transforms.fill.(row[geom_bar.mapping[:fill]]),
+              fill_opacity: transforms.alpha.(row[geom_bar.mapping[:alpha]])
+            ] ++
+              custom_attributes
           )
           | rects
         ]

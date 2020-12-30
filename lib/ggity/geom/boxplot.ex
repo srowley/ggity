@@ -19,7 +19,8 @@ defmodule GGity.Geom.Boxplot do
             color: "black",
             fill: "white",
             alpha: 1,
-            box_group_width: nil
+            box_group_width: nil,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Boxplot.t()
   def new(mapping, options \\ []) do
@@ -79,16 +80,19 @@ defmodule GGity.Geom.Boxplot do
         total_width + geom_boxplot.box_group_width / count_rows,
         [
           Draw.rect(
-            x: box_left,
-            y:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                position_adjust_y(row, plot),
-            width: box_width,
-            height: (transforms.y.(row[:upper]) - transforms.y.(row[:lower])) / plot.aspect_ratio,
-            fill: transforms.fill.(row[geom_boxplot.mapping[:fill]]),
-            fill_opacity: transforms.alpha.(row[geom_boxplot.mapping[:alpha]]),
-            stroke: transforms.color.(row[geom_boxplot.mapping[:color]]),
-            stroke_width: 0.5
+            [
+              x: box_left,
+              y:
+                plot.area_padding + plot.width / plot.aspect_ratio -
+                  position_adjust_y(row, plot),
+              width: box_width,
+              height:
+                (transforms.y.(row[:upper]) - transforms.y.(row[:lower])) / plot.aspect_ratio,
+              fill: transforms.fill.(row[geom_boxplot.mapping[:fill]]),
+              fill_opacity: transforms.alpha.(row[geom_boxplot.mapping[:alpha]]),
+              stroke: transforms.color.(row[geom_boxplot.mapping[:color]]),
+              stroke_width: 0.5
+            ] ++ GGity.Layer.custom_attributes(geom_boxplot, plot, row)
           ),
           Draw.line(
             x1: box_left,

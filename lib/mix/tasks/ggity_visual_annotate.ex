@@ -50,7 +50,13 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
 
   defp text do
     p()
-    |> Plot.annotate(:text, x: 4, y: 25, label: "Some text", color: "red")
+    |> Plot.annotate(:text,
+      x: 4,
+      y: 25,
+      label: "Some text",
+      color: "red",
+      custom_attributes: fn _plot, _row -> [onclick: "alert('I am a text annotation.')"] end
+    )
     |> Plot.geom_point()
     |> Plot.plot()
   end
@@ -62,7 +68,10 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
       xmax: 4.2,
       ymin: 12,
       ymax: 21,
-      alpha: 0.2
+      alpha: 0.2,
+      custom_attributes: fn _plot, row ->
+        [onclick: "alert('I am #{row.xmax - row.xmin} wide.')"]
+      end
     )
     |> Plot.geom_point()
     |> Plot.plot()
@@ -75,7 +84,13 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
       xend: 4,
       y: 15,
       yend: 26.25,
-      color: "blue"
+      color: "blue",
+      custom_attributes: fn plot, _row ->
+        [
+          onclick:
+            "alert('I am a line on a plot with #{length(plot.layers) - 1} non-blank layers.')"
+        ]
+      end
     )
     |> Plot.geom_point()
     |> Plot.plot()

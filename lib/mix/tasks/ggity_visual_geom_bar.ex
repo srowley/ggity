@@ -55,7 +55,11 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
       record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
     end)
     |> Plot.new(%{x: "manufacturer"})
-    |> Plot.geom_bar()
+    |> Plot.geom_bar(
+      custom_attributes: fn plot, row ->
+        [onclick: "alert('#{plot.labels.y}: #{row.count}')"]
+      end
+    )
     |> Plot.scale_y_continuous(labels: &floor/1)
     |> Plot.plot()
   end
@@ -66,7 +70,12 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
       record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
     end)
     |> Plot.new(%{x: "manufacturer"})
-    |> Plot.geom_bar(%{fill: "class"})
+    |> Plot.geom_bar(
+      %{fill: "class"},
+      custom_attributes: fn plot, row ->
+        [onclick: "alert('#{plot.labels.y}: #{row.count}')"]
+      end
+    )
     |> Plot.scale_fill_viridis(option: :inferno)
     |> Plot.plot()
   end

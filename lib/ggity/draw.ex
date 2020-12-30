@@ -100,12 +100,8 @@ defmodule GGity.Draw do
       "r=\"",
       to_string(radius),
       "\" ",
-      "fill=\"",
-      options[:fill],
-      "\" ",
-      "fill-opacity=\"",
-      to_string(options[:fill_opacity]),
-      "\">",
+      options_to_attributes(options),
+      ">",
       "</circle>",
       "\n"
     ]
@@ -161,7 +157,7 @@ defmodule GGity.Draw do
     [
       name,
       "=\"",
-      to_string(value),
+      HTML.escape_to_iodata(to_string(value)),
       "\""
     ]
   end

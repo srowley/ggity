@@ -60,7 +60,11 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
     |> Plot.labs(title: "Basic Plot")
-    |> Plot.geom_point()
+    |> Plot.geom_point(
+      custom_attributes: fn plot, row ->
+        [onclick: "alert('#{plot.labels.y}: #{row.mpg}')"]
+      end
+    )
     |> Plot.xlab("Weight (lbs)")
     |> Plot.ylab("Miles Per Gallon")
     |> Plot.plot()

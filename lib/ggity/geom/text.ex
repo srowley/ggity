@@ -1,7 +1,7 @@
 defmodule GGity.Geom.Text do
   @moduledoc false
 
-  alias GGity.{Draw, Geom, Plot, Scale}
+  alias GGity.{Draw, Geom, Layer, Plot, Scale}
 
   @hjust_anchor_map %{left: "start", center: "middle", right: "end"}
   @vjust_anchor_map %{top: "baseline", middle: "middle", bottom: "hanging"}
@@ -27,7 +27,8 @@ defmodule GGity.Geom.Text do
             hjust: :center,
             vjust: :middle,
             nudge_x: "0",
-            nudge_y: "0"
+            nudge_y: "0",
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Text.t()
   def new(mapping, options) do
@@ -72,17 +73,19 @@ defmodule GGity.Geom.Text do
     |> Enum.map(fn row ->
       Draw.text(
         to_string(row[:label]),
-        x: row[:x] + plot.area_padding,
-        y: (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding,
-        fill: row[:fill],
-        fill_opacity: row[:fill_opacity],
-        font_size: "#{row[:size]}px",
-        text_anchor: @hjust_anchor_map[geom_text.hjust],
-        dominant_baseline: @vjust_anchor_map[geom_text.vjust],
-        dx: geom_text.nudge_x,
-        dy: geom_text.nudge_y,
-        font_family: geom_text.family,
-        font_weight: geom_text.fontface
+        [
+          x: row[:x] + plot.area_padding,
+          y: (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding,
+          fill: row[:fill],
+          fill_opacity: row[:fill_opacity],
+          font_size: "#{row[:size]}px",
+          text_anchor: @hjust_anchor_map[geom_text.hjust],
+          dominant_baseline: @vjust_anchor_map[geom_text.vjust],
+          dx: geom_text.nudge_x,
+          dy: geom_text.nudge_y,
+          font_family: geom_text.family,
+          font_weight: geom_text.fontface
+        ] ++ Layer.custom_attributes(geom_text, plot, row)
       )
     end)
   end
@@ -110,20 +113,29 @@ defmodule GGity.Geom.Text do
         [
           Draw.text(
             to_string(row[geom_text.mapping[:label]]),
-            x:
-              position_adjust_x(geom_text, row, group_index, total_width, plot, number_of_groups),
-            y:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                position_adjust_y(geom_text, row, total_height, plot),
-            fill: geom_text.color,
-            fill_opacity: geom_text.alpha,
-            font_size: "#{transforms.size.(row[geom_text.mapping[:size]])}pt",
-            text_anchor: @hjust_anchor_map[geom_text.hjust],
-            dominant_baseline: @vjust_anchor_map[geom_text.vjust],
-            dx: geom_text.nudge_x,
-            dy: geom_text.nudge_y,
-            font_family: geom_text.family,
-            font_weight: geom_text.fontface
+            [
+              x:
+                position_adjust_x(
+                  geom_text,
+                  row,
+                  group_index,
+                  total_width,
+                  plot,
+                  number_of_groups
+                ),
+              y:
+                plot.area_padding + plot.width / plot.aspect_ratio -
+                  position_adjust_y(geom_text, row, total_height, plot),
+              fill: geom_text.color,
+              fill_opacity: geom_text.alpha,
+              font_size: "#{transforms.size.(row[geom_text.mapping[:size]])}pt",
+              text_anchor: @hjust_anchor_map[geom_text.hjust],
+              dominant_baseline: @vjust_anchor_map[geom_text.vjust],
+              dx: geom_text.nudge_x,
+              dy: geom_text.nudge_y,
+              font_family: geom_text.family,
+              font_weight: geom_text.fontface
+            ] ++ Layer.custom_attributes(geom_text, plot, row)
           )
           | text
         ]

@@ -618,6 +618,15 @@ defmodule GGity.Plot do
 
   Other supported options:
 
+  * `:custom_attributes` - a function that takes two arguments: first, the Plot
+  struct, and second, the data record (a map - note that this is the data AFTER the
+  statistical transformation has been supplied) to be mapped to the bar geom. The function
+  must return a keyword list of property-value pairs, which are added to the point
+  element drawn in the generated SVG. This can be used to add Phoenix event handlers
+  or any other attributes based on characteristic of the plot and the data being
+  mapped to the geom. See `geom_point/3` for a more explanation of the
+  `:custom_attributes` option.
+
   * `:key_glyph` - Type of glyph to use in the legend key. Available values are
   `:a`, `:point`, `:path`, `:rect` and `:timeseries`. Defaults to `:rect`.
 
@@ -707,6 +716,15 @@ defmodule GGity.Plot do
   plotted as individual points.
 
   Other supported options:
+
+  * `:custom_attributes` - a function that takes two arguments: first, the Plot
+  struct, and second, the data record (a map - note that this is the data AFTER the
+  statistical transformation has been supplied) to be mapped to the boxplot geom. The function
+  must return a keyword list of property-value pairs, which are added to the point
+  element drawn in the generated SVG. This can be used to add Phoenix event handlers
+  or any other attributes based on characteristic of the plot and the data being
+  mapped to the geom. See `geom_point/3` for a more explanation of the
+  `:custom_attributes` option.
 
   * `:outlier_color` - color of outlier points.
     Defaults to `"black"`.
@@ -868,12 +886,46 @@ defmodule GGity.Plot do
   all observations.
 
   Other supported options:
+
+  * `:custom_attributes` - a function that takes two arguments: first, the Plot
+  struct, and second, the data record (a map) to be mapped to the point geom. The function
+  must return a keyword list of property-value pairs, which are added to the point
+  element drawn in the generated SVG. This can be used to add Phoenix event handlers
+  or any other attributes based on characteristic of the plot and the data being
+  mapped to the geom.
+
   * `:key_glyph` - Type of glyph to use in the legend key. Available values are
   `:point`, `:path` and `:timeseries`; defaults to `:point`.
 
   * `:stat` - an atom referring to a statistical transformation function in the
   `GGity.Stat` module that is to be applied to the data. Defaults to `:identity`
   (i.e., no transformation).
+
+  ## Custom Attributes
+
+  Custom attributes are a powerful hook for interactivity. For example, to add a simple
+  javascript alert based tooltip:
+
+      Plot.new(data, %{x: "x", y: "y"})
+      |> Plot.geom_point(
+        custom_attributes: fn plot, row ->
+          [onclick: "alert('\#{plot.labels.x}: \#{row["x"]}')"]
+        end
+      )
+      # I hope the plot x-axis label is trusted data...
+
+  or a Phoenix LiveView event handler:
+
+      Plot.new(data, %{x: "x", y: "y"})
+      |> Plot.geom_point(
+        custom_attributes: fn _plot, row ->
+          [phx_click: "filter_by_y", phx_value_y: row["y"]]
+        end
+      )
+
+  The values (but not the keys) generated are HTML-escaped but otherwise not sanitized;
+  users should be mindful of the risks of using untrusted data to generate custom
+  attribute values.
   """
   @spec geom_point(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_point(plot, mapping \\ [], options \\ [])
@@ -1007,6 +1059,14 @@ defmodule GGity.Plot do
   all observations.
 
   Other supported options:
+
+  * `:custom_attributes` - a function that takes two arguments: first, the Plot
+  struct, and second, the data record (a map) to be mapped to the text geom. The function
+  must return a keyword list of property-value pairs, which are added to the point
+  element drawn in the generated SVG. This can be used to add Phoenix event handlers
+  or any other attributes based on characteristic of the plot and the data being
+  mapped to the geom. See `geom_point/3` for a more explanation of the
+  `:custom_attributes` option.
 
   * `:family` - The font family used to display the text; equivalent to the
   SVG `font-family` attribute. Defaults to `"Helvetica, Arial, sans-serif"`.

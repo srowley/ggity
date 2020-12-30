@@ -6,6 +6,9 @@ defprotocol GGity.Layer do
 
   @spec draw(GGity.Layer.t(), list(map()), GGity.Plot.t()) :: iolist()
   def draw(geom, data, plot)
+
+  @spec custom_attributes(GGity.Layer.t(), GGity.Plot.t(), map()) :: keyword()
+  def custom_attributes(geom, plot, row)
 end
 
 defimpl GGity.Layer,
@@ -26,10 +29,18 @@ defimpl GGity.Layer,
   def draw(%geom_type{} = geom, data, plot) do
     apply(geom_type, :draw, [geom, data, plot])
   end
+
+  def custom_attributes(%{custom_attributes: nil}, _plot, _row), do: []
+
+  def custom_attributes(geom, plot, row) do
+    geom.custom_attributes.(plot, row)
+  end
 end
 
 defimpl GGity.Layer, for: GGity.Geom.Blank do
   def new(_geom, _mapping, _options), do: struct(GGity.Geom.Blank)
 
   def draw(_geom, _data, _plot), do: GGity.Geom.Blank.draw()
+
+  def custom_attributes(_geom, _data, _plot), do: []
 end

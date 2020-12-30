@@ -16,7 +16,8 @@ defmodule GGity.Geom.Rect do
             alpha: 1,
             fill: "black",
             color: "black",
-            size: 0
+            size: 0,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Rect.t()
   def new(mapping, options) do
@@ -69,6 +70,10 @@ defmodule GGity.Geom.Rect do
     height = (labelled_values[:ymax] - labelled_values[:ymin]) / plot.aspect_ratio
     width = labelled_values[:xmax] - labelled_values[:xmin]
 
-    Draw.rect([{:x, x}, {:y, y}, {:height, height}, {:width, width} | options])
+    custom_attributes = GGity.Layer.custom_attributes(geom_rect, plot, row)
+
+    Draw.rect(
+      [{:x, x}, {:y, y}, {:height, height}, {:width, width} | options] ++ custom_attributes
+    )
   end
 end

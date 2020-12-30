@@ -1,7 +1,7 @@
 # Roadmap
 
 ## v0.4
-* Support attaching custom attributes to plot elements
+* [COMPLETE] Support attaching custom attributes to plot elements
 * Add other non-fillable shapes to shapes palette
 * Add fillable shapes to shapes palette
 * [COMPLETE] Escape text elements
