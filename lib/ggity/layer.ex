@@ -14,6 +14,7 @@ defimpl GGity.Layer,
     GGity.Geom.Boxplot,
     GGity.Geom.Line,
     GGity.Geom.Point,
+    GGity.Geom.Rect,
     GGity.Geom.Ribbon,
     GGity.Geom.Text
   ] do

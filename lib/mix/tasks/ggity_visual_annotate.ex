@@ -16,7 +16,8 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
     plots =
       Enum.join(
         [
-          text()
+          text(),
+          rect()
         ],
         "\n"
       )
@@ -43,17 +44,31 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
   end
 
   defp grid_style do
-    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
+    "style='display: grid;grid-template-columns: repeat(2, 1fr)'"
   end
 
   defp text do
+    p()
+    |> Plot.annotate(:text, x: 4, y: 25, label: "Some text", color: "red")
+    |> Plot.geom_point()
+    |> Plot.plot()
+  end
+
+  defp rect do
+    p()
+    |> Plot.annotate(:rect,
+      xmin: 3,
+      xmax: 4.2,
+      ymin: 12,
+      ymax: 21,
+      alpha: 0.2
+    )
+    |> Plot.geom_point()
+    |> Plot.plot()
+  end
+
+  defp p do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.labs(title: "Basic Plot")
-    |> Plot.geom_point()
-    |> Plot.annotate(:text, x: 4, y: 25, label: "Some text", color: "red")
-    |> Plot.xlab("Weight (lbs)")
-    |> Plot.ylab("Miles Per Gallon")
-    |> Plot.plot()
   end
 end

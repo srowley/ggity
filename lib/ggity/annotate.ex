@@ -3,15 +3,17 @@ defmodule GGity.Annotate do
 
   alias GGity.{Geom, Layer}
 
-  @type geom :: Geom.Text.t()
+  @type geom :: Geom.Rect.t() | Geom.Text.t()
 
-  @supported_geoms [:text]
+  @supported_geoms [:rect, :text]
 
   @required_parameters [
+    rect: [:xmin, :xmax, :ymin, :ymax],
     text: [:x, :y, :label]
   ]
 
   @geom_structs [
+    rect: %Geom.Rect{},
     text: %Geom.Text{}
   ]
 
