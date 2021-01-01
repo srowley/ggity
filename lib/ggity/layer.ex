@@ -16,6 +16,7 @@ defimpl GGity.Layer,
     GGity.Geom.Point,
     GGity.Geom.Rect,
     GGity.Geom.Ribbon,
+    GGity.Geom.Segment,
     GGity.Geom.Text
   ] do
   def new(%geom_type{} = _geom, mapping, options) do

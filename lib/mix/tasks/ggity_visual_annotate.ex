@@ -17,7 +17,8 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
       Enum.join(
         [
           text(),
-          rect()
+          rect(),
+          segment()
         ],
         "\n"
       )
@@ -44,7 +45,7 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
   end
 
   defp grid_style do
-    "style='display: grid;grid-template-columns: repeat(2, 1fr)'"
+    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
   end
 
   defp text do
@@ -62,6 +63,19 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
       ymin: 12,
       ymax: 21,
       alpha: 0.2
+    )
+    |> Plot.geom_point()
+    |> Plot.plot()
+  end
+
+  defp segment do
+    p()
+    |> Plot.annotate(:segment,
+      x: 2.5,
+      xend: 4,
+      y: 15,
+      yend: 26.25,
+      color: "blue"
     )
     |> Plot.geom_point()
     |> Plot.plot()

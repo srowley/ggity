@@ -3,17 +3,19 @@ defmodule GGity.Annotate do
 
   alias GGity.{Geom, Layer}
 
-  @type geom :: Geom.Rect.t() | Geom.Text.t()
+  @type geom :: Geom.Rect.t() | Geom.Segment.t() | Geom.Text.t()
 
-  @supported_geoms [:rect, :text]
+  @supported_geoms [:rect, :segment, :text]
 
   @required_parameters [
     rect: [:xmin, :xmax, :ymin, :ymax],
+    segment: [:x, :xend, :y, :yend],
     text: [:x, :y, :label]
   ]
 
   @geom_structs [
     rect: %Geom.Rect{},
+    segment: %Geom.Segment{},
     text: %Geom.Text{}
   ]
 
