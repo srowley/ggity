@@ -5,7 +5,7 @@
 * Add other non-fillable shapes to shapes palette
 * Add fillable shapes to shapes palette
 * [COMPLETE] Boxplots
-* General annotation drawing
+* [COMPLETE] General annotation drawing
 
 ## v0.5
 * Faceting

@@ -5,6 +5,15 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## Unreleased
 ### Added
 - Boxplot geoms with `Plot.geom_boxplot/3`
+- Added `Plot.annotate/2`, which supports adding text, rectangle and line
+(`:segment`) annotations
+- Added `Geom.Rect` and `Geom.Segment`. These geoms can be added to a plot
+indirectly using annotations (for a single row of data) or by creating a
+a layer using `Layer.new/3` and prepending it to the list contained in the
+`:layers` value for a `Plot` struct. `Plot.geom_rect/3` and
+`Plot.geom_segment/3` as well as visual tests for the conventional approach
+will come, but most of the time these geoms are best suited for annotations
+as opposed to mapping multiple rows of data to a plot.
 
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset
