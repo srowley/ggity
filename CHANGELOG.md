@@ -15,6 +15,11 @@ a layer using `Layer.new/3` and prepending it to the list contained in the
 will come, but most of the time these geoms are best suited for annotations
 as opposed to mapping multiple rows of data to a plot.
 
+### Changed
+- Text that is rendered in a SVG `<text>` element is escaped using the code
+from Plug.HTML. This includes plot/axis/legend labels and `Geom.Text`
+elements.
+
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset
 with no range (same min and max value, or only one value)

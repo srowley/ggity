@@ -1,6 +1,8 @@
 defmodule GGity.Draw do
   @moduledoc false
 
+  alias GGity.HTML
+
   @type options() :: keyword()
 
   @spec svg(iolist(), options()) :: iolist()
@@ -60,7 +62,7 @@ defmodule GGity.Draw do
       "<text ",
       attributes,
       ">",
-      text_element,
+      HTML.escape_to_iodata(text_element),
       "</text>",
       "\n"
     ]

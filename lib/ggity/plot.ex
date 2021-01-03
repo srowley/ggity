@@ -44,9 +44,10 @@ defmodule GGity.Plot do
       |> Plot.geom_point()
       |> Plot.plot()
 
-  `plot/1` generates an iolist that represents the plot. None of the data
-  is sanitized, so users will need to be mindful of the risks of generating
-  plots using user-supplied data or parameters.
+  `plot/1` generates an iolist that represents the plot. Text elements (e.g. the
+  plot title, axis labels, legend labels) are escaped using the logic from
+  `Plug.HTML`, but other values are not, so users still need to be mindful of
+  the risks of generating plots using user-supplied data or parameters.
   """
 
   alias __MODULE__
@@ -175,8 +176,9 @@ defmodule GGity.Plot do
   @doc """
   Generates an iolist of SVG markup representing a `Plot`.
 
-  The data is not sanitized; users should be mindful of the risks of generating a plot
-  with user-defined data and parameters.
+  SVG text elements (e.g. the plot title, axis labels, legend labels) are escaped using
+  the logic from `Plug.HTML`, but other values are not, so users need to be mindful of
+  the risks of generating plots using user-supplied data or parameters.
 
   The `Plot` struct's `:plot_width` and `:aspect_ratio` values are used to set the height
   and width properties of the SVG. The viewBox property is set by the plot's `:width` and

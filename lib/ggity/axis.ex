@@ -147,9 +147,12 @@ defmodule GGity.Axis do
     x_position = (plot.width + plot.area_padding * 2) / 2
     y_position = plot.width / plot.aspect_ratio + plot.area_padding * 2 + top_padding
 
-    ~s|<text x="#{x_position}" y="#{y_position}" class="gg-text gg-axis-title" text-anchor="middle">#{
-      labels.x
-    }</text>\n|
+    Draw.text(to_string(labels.x),
+      x: x_position,
+      y: y_position,
+      class: "gg-text gg-axis-title",
+      text_anchor: "middle"
+    )
   end
 
   @spec draw_y_axis(Plot.t()) :: iolist()
@@ -251,8 +254,16 @@ defmodule GGity.Axis do
   defp draw_y_axis_label(%Plot{labels: %{y: nil}}), do: ""
 
   defp draw_y_axis_label(%Plot{labels: labels} = plot) do
-    ~s|<text x="-#{110 / plot.aspect_ratio}" y="-40" class= "gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">#{
-      labels.y
-    }</text>\n|
+    # MAGIC NUMBERS
+    x_position = -1 * (plot.width + plot.area_padding * 2) / 2 / plot.aspect_ratio
+    y_position = -40
+
+    Draw.text(to_string(labels.y),
+      x: x_position,
+      y: y_position,
+      class: "gg-text gg-axis-title",
+      text_anchor: "middle",
+      transform: "rotate(-90)"
+    )
   end
 end
