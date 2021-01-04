@@ -5,7 +5,7 @@
 * Add other non-fillable shapes to shapes palette
 * Add fillable shapes to shapes palette
 * [COMPLETE] Escape text elements
-* Validate inline stylesheet inputs 
+* [COMPLETE] Filter out invalid properties/values in embedded stylesheet
 * [COMPLETE] Boxplots
 * [COMPLETE] General annotation drawing
 

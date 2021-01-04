@@ -94,7 +94,7 @@ defmodule GGity.Axis do
     [text_anchor: "middle"]
   end
 
-  defp attributes_for_angle(angle, tick_length) do
+  defp attributes_for_angle(angle, tick_length) when angle > 0 and angle <= 90 do
     x_adjust = angle / 10 * -1
     y_adjust = (angle - 45) / 15
 
@@ -102,6 +102,10 @@ defmodule GGity.Axis do
       text_anchor: "end",
       transform: "translate(#{x_adjust}, #{y_adjust + tick_length}),rotate(-#{angle})"
     ]
+  end
+
+  defp attributes_for_angle(_angle, tick_length) do
+    attributes_for_angle(0, tick_length)
   end
 
   defp draw_x_tick(%Plot{} = plot, value) do

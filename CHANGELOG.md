@@ -19,10 +19,22 @@ as opposed to mapping multiple rows of data to a plot.
 - Text that is rendered in a SVG `<text>` element is escaped using the code
 from Plug.HTML. This includes plot/axis/legend labels and `Geom.Text`
 elements.
+- Values for attributes in the inline stylesheet generated from a theme
+are validated. Numerical attributes are confirmed to be numbers, values
+for colors are confirmed to be hex values or valid CSS color names, and
+the value for `:face` is checked against a list of allowed values. 
+Invalid property-value pairs are not included in the rendered stylesheet.
+
+    The only attribute not validated is `:family`. This value is HTML-escaped,
+but still poses a security risk if it is set with untrusted data.
+- Replaced interpolated strings with IO Lists in various parts of the stylesheet
+generation function chain.
 
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset
-with no range (same min and max value, or only one value)
+with no range (same min and max value, or only one value).
+- A theme's `:face` property sets the value of the CSS `font-weight`
+attribute in conformance with the ggplot2 API.
 
 ## v0.3.1 - 2020-12-08
 ### Fixed

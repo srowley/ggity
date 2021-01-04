@@ -7,6 +7,7 @@ defmodule GGity.Element.Line do
   *  `:size` sets value of CSS `stroke-width`
   """
 
+  import GGity.Color, only: [valid_color?: 1]
   alias GGity.Element
 
   @derive [Element]
@@ -41,15 +42,15 @@ defmodule GGity.Element.Line do
     |> Enum.map(&attribute_for/1)
   end
 
-  defp attribute_for({_attribute, nil}), do: ""
+  defp attribute_for({_attribute, nil}), do: []
 
   defp attribute_for({:color, value}) do
-    "stroke: #{value};"
+    if valid_color?(value), do: ["stroke: ", value, ";"], else: []
   end
 
-  defp attribute_for({:size, value}) do
-    "stroke-width: #{value};"
+  defp attribute_for({:size, value}) when is_number(value) do
+    if valid_color?(value), do: ["stroke-width: ", to_string(value), ";"], else: []
   end
 
-  defp attribute_for(_element), do: ""
+  defp attribute_for(_element), do: []
 end

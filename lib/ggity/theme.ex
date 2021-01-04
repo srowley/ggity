@@ -37,7 +37,7 @@ defmodule GGity.Theme do
   #=> equivalent to Plot.theme(plot, axis_text: %GGity.Element.Text{color: "green", size 12})
   ```
 
-  The following elements are supported:
+  The following attributes are supported:
 
   * `:text` style for all non-data text; overriden by other text attributes (`Element.Text`)
   * `:axis_line` x- and y axes lines (`Element.Line`)
@@ -66,6 +66,32 @@ defmodule GGity.Theme do
   * `:plot_title` plot title text (`Element.Text`)
   * `:plot_background` plot (entire SVG element) background (`Element.Rect`)
 
+  ## Security Considerations
+
+  There is a [significant security literature](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md)
+  highlighting the risk associated with using embedded stylesheets. As a GGity user,
+  you can address this risk in a few ways:
+
+  1) Do not use GGity themes at all, by setting the `:theme` attribute of the `Plot`
+  struct to `nil`. Use an external stylesheet that takes advantage of
+  the classes that GGity attaches to elements of the plot. This option works well if
+  plot styles do not need to be updated dynamically or stored in the same file as the
+  SVG document. An external stylesheet also eliminates the overhead associated with
+  generating and transmitting an embedded stylesheet every time the plot is rendered.
+
+  2) Do not pass untrusted data (directly or indirectly) to `Plot.theme/2`. Depending
+  on your use case, this may or may not be difficult to enforce with confidence.
+
+  If neither of these approaches are an option, GGity attempts to mitigate risk by
+  HTML-escaping data that is rendered in a `<text>` element and by validating the values
+  in each kind of `Element` struct prior to rendering. Most `Element` struct attributes
+  are either colors (represented with strings) or numbers. GGity will not render those
+  attributes if the value is invalid (colors must be a valid CSS color name or a hex
+  value). Similarly, the `:face` attribute of an `Element.Text` struct is compared
+  against a list of acceptable values.
+
+  This leaves the `:family` attribute of an `Element.Text` struct. These values are HTML-escaped,
+  but are not otherwise sanitized and should not be set using untrusted data.
   """
 
   import GGity.Element.{Line, Rect, Text}
@@ -78,8 +104,8 @@ defmodule GGity.Theme do
             axis_line: nil,
             axis_line_x: nil,
             axis_line_y: nil,
-            axis_text: element_text(color: "#808080", size: "8px"),
-            axis_text_x: element_text(color: "#808080", size: "8px", angle: 0),
+            axis_text: element_text(color: "#808080", size: 8),
+            axis_text_x: element_text(color: "#808080", size: 8, angle: 0),
             axis_text_y: nil,
             axis_ticks: element_line(color: "#000000"),
             axis_ticks_x: nil,
@@ -87,7 +113,7 @@ defmodule GGity.Theme do
             axis_ticks_length: 2,
             axis_ticks_length_x: nil,
             axis_ticks_length_y: nil,
-            axis_title: element_text(color: "#000000", size: "10px"),
+            axis_title: element_text(color: "#000000", size: 10),
             axis_title_x: nil,
             axis_title_y: nil,
             legend_key:
@@ -97,18 +123,18 @@ defmodule GGity.Theme do
                 size: 0.5,
                 height: 15
               ),
-            legend_text: element_text(fill: "#000000", size: "8px"),
-            legend_title: element_text(fill: "#000000", size: "9px"),
+            legend_text: element_text(fill: "#000000", size: 8),
+            legend_title: element_text(fill: "#000000", size: 9),
             panel_background: element_rect(fill: "#EEEEEE"),
             panel_border: element_line(color: "none"),
             panel_grid: element_line(color: "#FFFFFF"),
             panel_grid_major: element_line(size: 1),
             panel_grid_minor: element_line(size: 0.5),
             plot_background: element_rect(fill: "#FFFFFF"),
-            plot_title: element_text(size: "12px")
+            plot_title: element_text(size: 12)
 
   @doc false
-  @spec to_stylesheet(Theme.t() | nil, String.t()) :: iolist()
+  @spec to_stylesheet(Theme.t() | nil, binary()) :: iolist()
   def to_stylesheet(nil, _id), do: []
 
   def to_stylesheet(%Theme{} = theme, id) do
@@ -126,10 +152,10 @@ defmodule GGity.Theme do
   end
 
   defp generate_attribute_style(theme, {attribute, element}, id) when is_struct(element) do
-    "##{id} #{Element.to_css(Map.get(theme, attribute), gg_class(attribute))}"
+    ["#", id, " ", Element.to_css(Map.get(theme, attribute), gg_class(attribute)), " "]
   end
 
-  defp generate_attribute_style(_theme_, _attribute, _id), do: ""
+  defp generate_attribute_style(_theme_, _attribute, _id), do: []
 
   defp gg_class(key) when is_atom(key) do
     attribute =

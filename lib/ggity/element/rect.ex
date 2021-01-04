@@ -3,14 +3,22 @@ defmodule GGity.Element.Rect do
   Defines the data and functions used to style non-geom rect elements.
 
   CSS presentation attributes:
-  *  `:fill` sets value of CSS `fill`
-  *  `:color` sets value of CSS `stroke`
-  *  `:size` sets value of CSS `stroke-width`
+  *  `:fill` - string: sets value of CSS `fill`
+
+      Values must be valid CSS color names or hex values.
+
+  *  `:color` - string: sets value of CSS `stroke`
+
+      Values must be valid CSS color names or hex values.
+
+  *  `:size` - number: sets value of CSS `stroke-width`
+
 
   Other attributes:
-  *  `:height` sets value of SVG `height` (height of the key glyph box)
+  *  `:height` - number: sets value of SVG `height` (height of the key glyph box)
   """
 
+  import GGity.Color, only: [valid_color?: 1]
   alias GGity.Element
 
   @derive [Element]
@@ -45,19 +53,19 @@ defmodule GGity.Element.Rect do
     |> Enum.map(&attribute_for/1)
   end
 
-  defp attribute_for({_attribute, nil}), do: ""
+  defp attribute_for({_attribute, nil}), do: []
 
   defp attribute_for({:fill, value}) do
-    "fill: #{value};"
+    if valid_color?(value), do: ["fill: ", value, ";"], else: []
   end
 
   defp attribute_for({:color, value}) do
-    "stroke: #{value};"
+    if valid_color?(value), do: ["stroke: ", value, ";"], else: []
   end
 
-  defp attribute_for({:size, value}) do
-    "stroke-width: #{value};"
+  defp attribute_for({:size, value}) when is_number(value) do
+    ["stroke-width: ", to_string(value), ";"]
   end
 
-  defp attribute_for(_element), do: ""
+  defp attribute_for(_element), do: []
 end

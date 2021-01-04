@@ -470,7 +470,8 @@ defmodule GGity.Plot do
     end
   end
 
-  defp draw_legend(%Plot{} = plot, aesthetic, offset) do
+  defp draw_legend(%Plot{theme: %{legend_key: %{height: height}}} = plot, aesthetic, offset)
+       when is_number(height) do
     scale = Map.get(plot.scales, aesthetic)
 
     if display_legend?(plot, scale) do
