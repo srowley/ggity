@@ -1119,12 +1119,11 @@ defmodule GGity.Plot do
 
   defp stacked_y_axis_max(data, mapping, y_aesthetic) do
     data
-    |> Enum.group_by(fn item -> item[mapping[:x]] end)
-    |> Enum.map(fn {_category, values} ->
-      Enum.map(values, fn value -> value[mapping[y_aesthetic]] end)
-    end)
-    |> Enum.map(fn counts -> Enum.sum(counts) end)
-    |> Enum.max()
+    |> Enum.group_by(
+      fn item -> item[mapping[:x]] end,
+      fn values -> values[mapping[y_aesthetic]] end
+    )
+    |> Enum.reduce(0, fn {_category, counts}, max_count -> max(Enum.sum(counts), max_count) end)
   end
 
   defp position_adjusted_scale_min_max(geom, plot, fixed_max) do
