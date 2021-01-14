@@ -91,10 +91,21 @@ defmodule GGity.Draw do
   def circle({x, y}, radius, options) do
     [
       "<circle ",
-      ~s|cx="#{x}" cy="#{y}" r="#{radius}" fill="#{options[:fill]}" fill-opacity="#{
-        options[:fill_opacity]
-      }"|,
-      ">",
+      "cx=\"",
+      to_string(x),
+      "\" ",
+      "cy=\"",
+      to_string(y),
+      "\" ",
+      "r=\"",
+      to_string(radius),
+      "\" ",
+      "fill=\"",
+      options[:fill],
+      "\" ",
+      "fill-opacity=\"",
+      to_string(options[:fill_opacity]),
+      "\">",
       "</circle>",
       "\n"
     ]
@@ -113,16 +124,26 @@ defmodule GGity.Draw do
 
   @spec polyline(list({number(), number()}), binary(), number(), number(), binary()) :: iolist()
   def polyline(coords, color, size, alpha, linetype) do
-    coord_list =
-      Stream.map(coords, fn {x, y} -> "#{x},#{y} " end)
-      |> Enum.join("")
+    coord_list = Enum.map(coords, fn {x, y} -> [to_string(x), ",", to_string(y), " "] end)
 
     [
       "<polyline ",
-      ~s|points="#{coord_list}" fill="none" stroke-width="#{size}" stroke="#{color}" stroke-opacity="#{
-        alpha
-      }" stroke-dasharray="#{linetype}"|,
-      ">",
+      "points=\"",
+      coord_list,
+      "\" ",
+      "fill=\"none\" ",
+      "stroke-width=\"",
+      to_string(size),
+      "\" ",
+      "stroke=\"",
+      color,
+      "\" ",
+      "stroke-opacity=\"",
+      to_string(alpha),
+      "\" ",
+      "stroke-dasharray=\"",
+      linetype,
+      "\">",
       "</polyline>",
       "\n"
     ]
@@ -149,8 +170,8 @@ defmodule GGity.Draw do
     polygon("5,0 10,10 0,10", options)
     |> svg(
       viewBox: "0 0 10 10",
-      x: "#{x - size / 2}",
-      y: "#{y - size / 2}",
+      x: x - size / 2,
+      y: y - size / 2,
       height: to_string(size),
       width: to_string(size)
     )
@@ -161,8 +182,8 @@ defmodule GGity.Draw do
     |> rect()
     |> svg(
       viewBox: "0 0 10 10",
-      x: "#{x - size / 2}",
-      y: "#{y - size / 2}",
+      x: x - size / 2,
+      y: y - size / 2,
       height: to_string(size),
       width: to_string(size)
     )
@@ -172,8 +193,8 @@ defmodule GGity.Draw do
     polygon("5,0 10,5 5,10 0,5", options)
     |> svg(
       viewBox: "0 0 10 10",
-      x: "#{x - size / 2}",
-      y: "#{y - size / 2}",
+      x: x - size / 2,
+      y: y - size / 2,
       height: to_string(size),
       width: to_string(size)
     )
