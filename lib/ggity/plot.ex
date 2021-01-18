@@ -392,7 +392,7 @@ defmodule GGity.Plot do
   end
 
   defp draw_plot_background do
-    ["<rect class=\"gg-plot-background\" width=100% height=100%></rect>"]
+    ["<rect class=\"gg-plot-background\" width=\"100%\" height=\"100%\"></rect>"]
   end
 
   defp draw_panel(plot) do
