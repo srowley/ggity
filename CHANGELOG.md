@@ -22,6 +22,13 @@ will come, but most of the time these geoms are best suited for annotations
 as opposed to mapping multiple rows of data to a plot.
 
 ### Changed
+- Replaced `Plot.to_file/2` with `Plot.to_xml/1`. The former returned a file;
+the new version simply adds an XML declaration and allows the user to pass
+the IO List to `File.write!/3` or otherwise. `Plot.to_xml/2` takes the plot
+height as a second argument and adds a fixed height and width to the SVG
+element. Width is calculated using the plot's aspect ratio. This is helpful
+for generating files where there is no control over dimensions of the parent
+element (e.g., Markdown-generated documentation).
 - Text that is rendered in a SVG `<text>` element is escaped using the code
 from Plug.HTML. This includes plot/axis/legend labels and `Geom.Text`
 elements.
@@ -34,7 +41,7 @@ Invalid property-value pairs are not included in the rendered stylesheet.
     The only attribute not validated is `:family`. This value is HTML-escaped,
 but still poses a security risk if it is set with untrusted data.
 - Replaced interpolated strings with IO Lists in various parts of the stylesheet
-generation function chain.
+generation function chain
 
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset

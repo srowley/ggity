@@ -180,9 +180,7 @@ defmodule GGity.Plot do
   the logic from `Plug.HTML`, but other values are not, so users need to be mindful of
   the risks of generating plots using user-supplied data or parameters.
 
-  The `Plot` struct's `:plot_width` and `:aspect_ratio` values are used to set the height
-  and width properties of the SVG. The viewBox property is set by the plot's `:width` and
-  `:aspect_ratio` values.
+  The SVG's viewBox is set by the plot's `:width` and `:aspect_ratio` values.
   """
   @spec plot(Plot.t()) :: iolist()
   def plot(%Plot{} = plot) do
@@ -1684,10 +1682,23 @@ defmodule GGity.Plot do
   end
 
   @doc """
-  Saves the plot to a file at the given path.
+  Convenience method that returns an IO List with an XML declaration, in order
+  to support output to a standalone `.svg` file. `Plot.to_xml/2` takes a second
+  argument specifying a fixed height for the SVG element. A fixed width is also
+  added, equal to the height multiplied by the plot's aspect ration.
   """
-  @spec to_file(Plot.t(), list(binary)) :: :ok
-  def to_file(%Plot{} = plot, path) do
-    File.write!(path, plot(plot))
+  @spec to_xml(Plot.t()) :: iolist()
+  def to_xml(%Plot{} = plot) do
+    xml_declaration = ~s|<?xml version="1.0" encoding="utf-8"?>|
+    [xml_declaration | Plot.plot(plot)]
+  end
+
+  @spec to_xml(Plot.t(), number()) :: iolist()
+  def to_xml(%Plot{} = plot, height) do
+    xml_declaration = ~s|<?xml version="1.0" encoding="utf-8"?>|
+    dimensions = ~s| height="#{height}" width="#{height * plot.aspect_ratio}"|
+
+    [first, second | tail] = Plot.plot(plot)
+    [xml_declaration, first, second, dimensions | tail]
   end
 end

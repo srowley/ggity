@@ -659,6 +659,27 @@ defmodule GGityPlotTest do
     end
   end
 
+  describe "to_file/1" do
+    test "returns an IO List with xml declaration at the top", %{plot: plot} do
+      assert hd(Plot.to_xml(plot)) == ~s|<?xml version="1.0" encoding="utf-8"?>|
+    end
+  end
+
+  describe "to_file/2" do
+    test "returns an IO List with xml declaration at the top", %{plot: plot} do
+      assert hd(Plot.to_xml(plot, 666)) == ~s|<?xml version="1.0" encoding="utf-8"?>|
+    end
+
+    test "sets the height and width of the parent SVG element", %{plot: plot} do
+      xml =
+        plot
+        |> Plot.to_xml(666)
+        |> IO.chardata_to_string()
+
+      assert String.contains?(xml, "height=\"666\" width=\"999.0\"")
+    end
+  end
+
   describe "guides/2" do
     test "sets the legends for the specified scales", %{
       data: data,
