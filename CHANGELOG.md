@@ -43,6 +43,7 @@ but still poses a security risk if it is set with untrusted data.
 - Replaced interpolated strings with IO Lists in various parts of the stylesheet
 generation function chain
 - Changed some default theme values to improve quality of sample charts
+- Added top and right default margins to improve quality of sample charts
 
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset

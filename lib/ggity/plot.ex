@@ -81,7 +81,7 @@ defmodule GGity.Plot do
             breaks: 5,
             area_padding: 10,
             theme: %Theme{},
-            margins: %{left: 30, top: 5, right: 0, bottom: 0},
+            margins: %{left: 30, top: 10, right: 10, bottom: 0},
             width: 200,
             combined_layers: []
 
