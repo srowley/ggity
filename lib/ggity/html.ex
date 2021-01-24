@@ -16,40 +16,15 @@
 # limitations under the License.
 
 defmodule GGity.HTML do
-  @moduledoc """
-  Conveniences for generating escaped HTML.
-  """
+  @moduledoc false
 
-  @doc ~S"""
-  Escapes the given HTML to string.
-
-      iex> GGity.HTML.escape("foo")
-      "foo"
-
-      iex> GGity.HTML.escape("<foo>")
-      "&lt;foo&gt;"
-
-      iex> GGity.HTML.escape("quotes: \" & \'")
-      "quotes: &quot; &amp; &#39;"
-  """
+  @doc false
   @spec escape(String.t()) :: String.t()
   def escape(data) when is_binary(data) do
     IO.iodata_to_binary(to_iodata(data, 0, data, []))
   end
 
-  @doc ~S"""
-  Escapes the given HTML to iodata.
-
-      iex> GGity.HTML.escape_to_iodata("foo")
-      "foo"
-
-      iex> GGity.HTML.escape_to_iodata("<foo>")
-      [[[] | "&lt;"], "foo" | "&gt;"]
-
-      iex> GGity.HTML.escape_to_iodata("quotes: \" & \'")
-      [[[[], "quotes: " | "&quot;"], " " | "&amp;"], " " | "&#39;"]
-
-  """
+  @doc false
   @spec escape_to_iodata(String.t()) :: iodata
   def escape_to_iodata(data) when is_binary(data) do
     to_iodata(data, 0, data, [])
