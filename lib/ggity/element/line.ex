@@ -49,8 +49,10 @@ defmodule GGity.Element.Line do
   end
 
   defp attribute_for({:size, value}) when is_number(value) do
-    if valid_color?(value), do: ["stroke-width: ", to_string(value), ";"], else: []
+    ["stroke-width: ", to_string(value), ";"]
   end
+
+  defp attribute_for({:size, _value}), do: []
 
   defp attribute_for(_element), do: []
 end
