@@ -26,8 +26,8 @@ defmodule GGity.Geom.Text do
             fontface: "normal",
             hjust: :center,
             vjust: :middle,
-            nudge_x: "0",
-            nudge_y: "0",
+            nudge_x: 0,
+            nudge_y: 0,
             custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Text.t()
@@ -82,7 +82,7 @@ defmodule GGity.Geom.Text do
           text_anchor: @hjust_anchor_map[geom_text.hjust],
           dominant_baseline: @vjust_anchor_map[geom_text.vjust],
           dx: geom_text.nudge_x,
-          dy: geom_text.nudge_y,
+          dy: -1 * geom_text.nudge_y,
           font_family: geom_text.family,
           font_weight: geom_text.fontface
         ] ++ Layer.custom_attributes(geom_text, plot, row)
@@ -132,7 +132,7 @@ defmodule GGity.Geom.Text do
               text_anchor: @hjust_anchor_map[geom_text.hjust],
               dominant_baseline: @vjust_anchor_map[geom_text.vjust],
               dx: geom_text.nudge_x,
-              dy: geom_text.nudge_y,
+              dy: -1 * geom_text.nudge_y,
               font_family: geom_text.family,
               font_weight: geom_text.fontface
             ] ++ Layer.custom_attributes(geom_text, plot, row)

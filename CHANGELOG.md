@@ -41,15 +41,16 @@ Invalid property-value pairs are not included in the rendered stylesheet.
     The only attribute not validated is `:family`. This value is HTML-escaped,
 but still poses a security risk if it is set with untrusted data.
 - Replaced interpolated strings with IO Lists in various parts of the stylesheet
-generation function chain
-- Changed some default theme values to improve quality of sample charts
-- Added top and right default margins to improve quality of sample charts
+generation function chain.
+- Changed some default theme values to improve quality of sample charts.
+- Added top and right default margins to improve quality of sample charts.
 
 ### Fixed
 - Y-coordinate scale and axis functions properly handle dataset
 with no range (same min and max value, or only one value).
 - A theme's `:face` property sets the value of the CSS `font-weight`
 attribute in conformance with the ggplot2 API.
+- `:nudge_y` property sign for `Geom.Text` reversed to conform to ggplot2 API.
 
 ## v0.3.1 - 2020-12-08
 ### Fixed
