@@ -62,7 +62,7 @@ defmodule GGity.Element.Text do
   Setting the value of an attributed to `nil` will remove that property
   from the generated stylesheet altogether.
 
-  Calling `element_text(attributes)` is equivalent to `struct(GGity.Element.Line, attributes)`.
+  Calling `element_text(attributes)` is equivalent to `struct(GGity.Element.Text, attributes)`.
   """
   @spec element_text(keyword()) :: Element.Text.t()
   def element_text(attributes) do
