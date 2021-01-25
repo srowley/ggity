@@ -105,7 +105,7 @@ defmodule GGity.Theme do
             axis_line_x: nil,
             axis_line_y: nil,
             axis_text: element_text(color: "#808080", size: 6),
-            axis_text_x: element_text(color: "#808080", size: 6, angle: 0),
+            axis_text_x: element_text(angle: 0),
             axis_text_y: nil,
             axis_ticks: element_line(color: "#000000"),
             axis_ticks_x: nil,
@@ -123,15 +123,15 @@ defmodule GGity.Theme do
                 size: 0.5,
                 height: 15
               ),
-            legend_text: element_text(fill: "#000000", size: 6),
-            legend_title: element_text(fill: "#000000", size: 8),
+            legend_text: element_text(color: "#000000", size: 6),
+            legend_title: element_text(color: "#000000", size: 8),
             panel_background: element_rect(fill: "#EEEEEE"),
             panel_border: element_line(color: "none"),
             panel_grid: element_line(color: "#FFFFFF"),
             panel_grid_major: element_line(size: 1),
             panel_grid_minor: element_line(size: 0.5),
             plot_background: element_rect(fill: "#FFFFFF"),
-            plot_title: element_text(size: 12)
+            plot_title: element_text(size: 8)
 
   @doc false
   @spec to_stylesheet(Theme.t() | nil, binary()) :: iolist()
