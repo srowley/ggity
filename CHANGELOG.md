@@ -51,6 +51,7 @@ with no range (same min and max value, or only one value).
 - A theme's `:face` property sets the value of the CSS `font-weight`
 attribute in conformance with the ggplot2 API.
 - `:nudge_y` property sign for `Geom.Text` reversed to conform to ggplot2 API.
+- Gridlines are beneath axis ticks.
 
 ## v0.3.1 - 2020-12-08
 ### Fixed

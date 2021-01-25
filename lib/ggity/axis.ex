@@ -5,7 +5,7 @@ defmodule GGity.Axis do
 
   @spec draw_x_axis(Plot.t()) :: iolist()
   def draw_x_axis(%Plot{} = plot) do
-    [x_axis_line(plot), x_ticks(plot), x_gridlines(plot), draw_x_axis_label(plot)]
+    [x_axis_line(plot), x_gridlines(plot), x_ticks(plot), draw_x_axis_label(plot)]
   end
 
   defp x_axis_line(%Plot{} = plot) do
@@ -161,7 +161,7 @@ defmodule GGity.Axis do
 
   @spec draw_y_axis(Plot.t()) :: iolist()
   def draw_y_axis(%Plot{} = plot) do
-    [y_axis_line(plot), y_ticks(plot), y_gridlines(plot), draw_y_axis_label(plot)]
+    [y_axis_line(plot), y_gridlines(plot), y_ticks(plot), draw_y_axis_label(plot)]
   end
 
   defp y_axis_line(%Plot{} = plot) do
