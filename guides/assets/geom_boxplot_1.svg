@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-994" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-994 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-994 .gg-axis-text-x {} #gg-994 .gg-axis-ticks {stroke: #000000;} #gg-994 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-994 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-994 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-994 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-994 .gg-panel-background {fill: #EEEEEE;} #gg-994 .gg-panel-border {} #gg-994 .gg-panel-grid {stroke: #FFFFFF;} #gg-994 .gg-panel-grid-major {stroke-width: 1;} #gg-994 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-994 .gg-plot-background {fill: #FFFFFF;} #gg-994 .gg-plot-title {font-size: 8px;} #gg-994 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
+<g opacity="1" transform="translate(0, 153.33333333333334)">
+<line x2="220" class="gg-axis-line gg-axis-line-x"></line>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">suv</text>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">subcompact</text>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">pickup</text>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">minivan</text>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">midsize</text>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">compact</text>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">2seater</text>
+</g>
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+</g>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+</g>
+<text x="110.0" y="188.33333333333334" class="gg-text gg-axis-title" text-anchor="middle">class</text>
+<g transform="translate(0, 0)">
+<line y2="153.33333333333334" class="gg-axis-line gg-axis-line-y"></line>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">50.0</text>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">40.0</text>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">30.0</text>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">20.0</text>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">10.0</text>
+</g>
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+</g>
+<text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">hwy</text>
+<rect x="10.0" y="90.0" width="24.571428571428573" height="6.666666666666667" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="10.0" x2="34.57142857142857" y1="93.33333333333334" y2="93.33333333333334" stroke="black"></line>
+<line x1="22.285714285714285" x2="22.285714285714285" y1="90.0" y2="90.0" stroke="black" stroke-width="0.5"></line>
+<line x1="22.285714285714285" x2="22.285714285714285" y1="96.66666666666669" y2="100.0" stroke="black" stroke-width="0.5"></line>
+<rect x="39.57142857142857" y="80.0" width="24.571428571428573" height="10.0" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="39.57142857142857" x2="64.14285714285714" y1="86.66666666666669" y2="86.66666666666669" stroke="black"></line>
+<line x1="51.857142857142854" x2="51.857142857142854" y1="80.0" y2="67.33333333333334" stroke="black" stroke-width="0.5"></line>
+<line x1="51.857142857142854" x2="51.857142857142854" y1="90.0" y2="100.0" stroke="black" stroke-width="0.5"></line>
+<circle cx="51.857142857142854" cy="60.0" r="1.0" fill="black"></circle>
+<circle cx="51.857142857142854" cy="60.0" r="1.0" fill="black"></circle>
+<circle cx="51.857142857142854" cy="53.333333333333336" r="1.0" fill="black"></circle>
+<circle cx="51.857142857142854" cy="30.0" r="1.0" fill="black"></circle>
+<rect x="69.14285714285714" y="80.0" width="24.571428571428573" height="10.0" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="69.14285714285714" x2="93.71428571428571" y1="86.66666666666669" y2="86.66666666666669" stroke="black"></line>
+<line x1="81.42857142857143" x2="81.42857142857143" y1="80.0" y2="70.00000000000001" stroke="black" stroke-width="0.5"></line>
+<line x1="81.42857142857143" x2="81.42857142857143" y1="90.0" y2="100.0" stroke="black" stroke-width="0.5"></line>
+<rect x="98.71428571428572" y="96.66666666666669" width="24.571428571428573" height="6.666666666666667" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="98.71428571428572" x2="123.28571428571429" y1="100.0" y2="100.0" stroke="black"></line>
+<line x1="111.00000000000001" x2="111.00000000000001" y1="96.66666666666669" y2="96.66666666666669" stroke="black" stroke-width="0.5"></line>
+<line x1="111.00000000000001" x2="111.00000000000001" y1="103.33333333333334" y2="106.66666666666669" stroke="black" stroke-width="0.5"></line>
+<circle cx="111.00000000000001" cy="120.0" r="1.0" fill="black"></circle>
+<rect x="128.28571428571428" y="116.66666666666667" width="24.571428571428573" height="6.666666666666667" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="128.28571428571428" x2="152.85714285714286" y1="120.00000000000001" y2="120.00000000000001" stroke="black"></line>
+<line x1="140.57142857142856" x2="140.57142857142856" y1="116.66666666666667" y2="110.0" stroke="black" stroke-width="0.5"></line>
+<line x1="140.57142857142856" x2="140.57142857142856" y1="123.33333333333334" y2="126.66666666666667" stroke="black" stroke-width="0.5"></line>
+<circle cx="140.57142857142856" cy="136.66666666666669" r="1.0" fill="black"></circle>
+<circle cx="140.57142857142856" cy="136.66666666666669" r="1.0" fill="black"></circle>
+<circle cx="140.57142857142856" cy="136.66666666666669" r="1.0" fill="black"></circle>
+<circle cx="140.57142857142856" cy="103.33333333333333" r="1.0" fill="black"></circle>
+<rect x="157.85714285714286" y="75.33333333333334" width="24.571428571428573" height="20.0" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="157.85714285714286" x2="182.42857142857144" y1="90.0" y2="90.0" stroke="black"></line>
+<line x1="170.14285714285714" x2="170.14285714285714" y1="75.33333333333334" y2="56.66666666666667" stroke="black" stroke-width="0.5"></line>
+<line x1="170.14285714285714" x2="170.14285714285714" y1="95.33333333333334" y2="110.0" stroke="black" stroke-width="0.5"></line>
+<circle cx="170.14285714285714" cy="40.0" r="1.0" fill="black"></circle>
+<circle cx="170.14285714285714" cy="30.0" r="1.0" fill="black"></circle>
+<rect x="187.42857142857144" y="113.33333333333334" width="24.571428571428573" height="6.666666666666667" fill="white" fill-opacity="1" stroke="black" stroke-width="0.5"></rect>
+<line x1="187.42857142857144" x2="212.00000000000003" y1="118.66666666666667" y2="118.66666666666667" stroke="black"></line>
+<line x1="199.71428571428572" x2="199.71428571428572" y1="113.33333333333334" y2="103.33333333333334" stroke="black" stroke-width="0.5"></line>
+<line x1="199.71428571428572" x2="199.71428571428572" y1="120.00000000000001" y2="130.0" stroke="black" stroke-width="0.5"></line>
+<circle cx="199.71428571428572" cy="136.66666666666669" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="136.66666666666669" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="100.0" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="96.66666666666667" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="93.33333333333333" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="93.33333333333333" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="90.0" r="1.0" fill="black"></circle>
+<circle cx="199.71428571428572" cy="86.66666666666667" r="1.0" fill="black"></circle>
+</g>
+</svg>

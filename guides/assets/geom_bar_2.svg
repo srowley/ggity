@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-930" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-930 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-930 .gg-axis-text-x {} #gg-930 .gg-axis-ticks {stroke: #000000;} #gg-930 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-930 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-930 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-930 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-930 .gg-panel-background {fill: #EEEEEE;} #gg-930 .gg-panel-border {} #gg-930 .gg-panel-grid {stroke: #FFFFFF;} #gg-930 .gg-panel-grid-major {stroke-width: 1;} #gg-930 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-930 .gg-plot-background {fill: #FFFFFF;} #gg-930 .gg-plot-title {font-size: 8px;} #gg-930 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
+<g opacity="1" transform="translate(0, 153.33333333333334)">
+<line x2="220" class="gg-axis-line gg-axis-line-x"></line>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">suv</text>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">subcompact</text>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">pickup</text>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">minivan</text>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">midsize</text>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">compact</text>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">2seater</text>
+</g>
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+</g>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(189.71428571428572,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(160.14285714285714,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(130.57142857142858,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(101.0,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(71.42857142857143,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(41.85714285714286,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(12.285714285714286,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+</g>
+<text x="110.0" y="188.33333333333334" class="gg-text gg-axis-title" text-anchor="middle">class</text>
+<g transform="translate(0, 0)">
+<line y2="153.33333333333334" class="gg-axis-line gg-axis-line-y"></line>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">80.0</text>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">60.0</text>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">40.0</text>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">20.0</text>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">0.0</text>
+</g>
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+</g>
+<text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">count</text>
+<rect x="10.0" y="135.33333333333334" width="24.571428571428573" height="8.0" fill="#FAE622" fill-opacity="1"></rect>
+<rect x="39.57142857142857" y="65.33333333333334" width="24.571428571428573" height="20.0" fill="#440154" fill-opacity="1"></rect>
+<rect x="39.57142857142857" y="85.33333333333334" width="24.571428571428573" height="58.0" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="69.14285714285714" y="75.33333333333334" width="24.571428571428573" height="4.666666666666667" fill="#440154" fill-opacity="1"></rect>
+<rect x="69.14285714285714" y="80.0" width="24.571428571428573" height="63.333333333333336" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="98.71428571428572" y="125.33333333333334" width="24.571428571428573" height="18.0" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="128.28571428571428" y="88.66666666666669" width="24.571428571428573" height="54.666666666666664" fill="#440154" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="85.33333333333334" width="24.571428571428573" height="6.666666666666667" fill="#440154" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="92.00000000000001" width="24.571428571428573" height="36.666666666666664" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="128.66666666666669" width="24.571428571428573" height="14.666666666666666" fill="#FAE622" fill-opacity="1"></rect>
+<rect x="187.42857142857144" y="40.66666666666667" width="24.571428571428573" height="84.66666666666667" fill="#440154" fill-opacity="1"></rect>
+<rect x="187.42857142857144" y="125.33333333333334" width="24.571428571428573" height="18.0" fill="#FAE622" fill-opacity="1"></rect>
+</g>
+<g transform="translate(275, 64.16666666666667)">
+<g transform="translate(0, 0)">
+<text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left">drv</text>
+<rect x="0" y="0" height="15" width="15" style="fill:#440154" class="gg-legend-key"></rect>
+<text x="20" y="10" class="gg-text gg-legend-text" text-anchor="left">4</text>
+<rect x="0" y="15" height="15" width="15" style="fill:#208F8C" class="gg-legend-key"></rect>
+<text x="20" y="25" class="gg-text gg-legend-text" text-anchor="left">f</text>
+<rect x="0" y="30" height="15" width="15" style="fill:#FAE622" class="gg-legend-key"></rect>
+<text x="20" y="40" class="gg-text gg-legend-text" text-anchor="left">r</text>
+</g>
+</g>
+</svg>

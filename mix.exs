@@ -20,12 +20,7 @@ defmodule GGity.MixProject do
         charting in Elixir.
       """,
       homepage_url: "http://www.pocketbookvote.com",
-      docs: [
-        source_url: @source_url,
-        source_ref: "v#{@version}",
-        extras: ["README.md", "ROADMAP.md", "CHANGELOG.md"],
-        main: "readme"
-      ]
+      docs: docs()
     ]
   end
 
@@ -50,12 +45,17 @@ defmodule GGity.MixProject do
         "dialyzer",
         "format",
         "ggity.visual"
+      ],
+      docs: [
+        "ggity.docs",
+        "docs"
       ]
     ]
   end
 
   defp package() do
     [
+      maintainers: "Steve Rowley",
       name: "ggity",
       files: ~w(lib priv mix.exs README* LICENSE* ROADMAP* CHANGELOG*),
       licenses: ["MIT"],
@@ -65,6 +65,64 @@ defmodule GGity.MixProject do
         "Changelog" => "#{@source_url}/blob/master/CHANGELOG.md",
         "Roadmap" => "#{@source_url}/blob/master/ROADMAP.md"
       }
+    ]
+  end
+
+  defp docs do
+    [
+      source_url: @source_url,
+      source_ref: "v#{@version}",
+      main: "readme",
+      extra_section: "CONCEPTS & EXAMPLES",
+      assets: "guides/assets",
+      formatters: ["html", "epub"],
+      groups_for_modules: groups_for_modules(),
+      extras: extras(),
+      groups_for_extras: groups_for_extras(),
+      api_reference: false
+    ]
+  end
+
+  defp extras() do
+    [
+      "README.md",
+      "guides/geom_point.md": [title: "Points"],
+      "guides/geom_line.md": [title: "Lines"],
+      "guides/geom_bar.md": [title: "Bars"],
+      "guides/geom_boxplot.md": [title: "Boxplot"],
+      "guides/geom_text.md": [title: "Text"],
+      "guides/scale_color_viridis.md": [title: "Color/Fill Viridis"],
+      "guides/theme.md": [title: "Theme"],
+      "guides/annotate.md": [title: "Annotate"]
+    ]
+  end
+
+  defp groups_for_extras do
+    [
+      Geoms: [
+        "guides/geom_point.md",
+        "guides/geom_line.md",
+        "guides/geom_bar.md",
+        "guides/geom_boxplot.md",
+        "guides/geom_text.md"
+      ],
+      Scales: [
+        "guides/scale_color_viridis.md"
+      ],
+      Themes: [
+        "guides/theme.md"
+      ],
+      Annotations: [
+        "guides/annotate.md"
+      ]
+    ]
+  end
+
+  defp groups_for_modules do
+    [
+      "Plot API": [GGity.Plot],
+      Themes: [GGity.Theme, GGity.Element.Line, GGity.Element.Rect, GGity.Element.Text],
+      Helpers: [GGity.Labels]
     ]
   end
 end

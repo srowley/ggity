@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-2690" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-2690 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-2690 .gg-axis-text-x {} #gg-2690 .gg-axis-ticks {stroke: #000000;} #gg-2690 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-2690 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-2690 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-2690 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-2690 .gg-panel-background {fill: #EEEEEE;} #gg-2690 .gg-panel-border {} #gg-2690 .gg-panel-grid {stroke: #FFFFFF;} #gg-2690 .gg-panel-grid-major {stroke-width: 1;} #gg-2690 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-2690 .gg-plot-background {fill: #FFFFFF;} #gg-2690 .gg-plot-title {font-size: 8px;} #gg-2690 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
+<g opacity="1" transform="translate(0, 153.33333333333334)">
+<line x2="220" class="gg-axis-line gg-axis-line-x"></line>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(200,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">6.0</text>
+</g>
+<g opacity="1" transform="translate(160,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">5.0</text>
+</g>
+<g opacity="1" transform="translate(120,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">4.0</text>
+</g>
+<g opacity="1" transform="translate(80,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">3.0</text>
+</g>
+<g opacity="1" transform="translate(40,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">2.0</text>
+</g>
+<g opacity="1" transform="translate(0,0)">
+<text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">1.0</text>
+</g>
+<g opacity="1" transform="translate(200,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(120,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(80,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(40,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(160,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
+</g>
+<g opacity="1" transform="translate(120,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
+</g>
+<g opacity="1" transform="translate(80,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
+</g>
+<g opacity="1" transform="translate(40,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
+</g>
+<g opacity="1" transform="translate(0,0)">
+<line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
+</g>
+</g>
+<g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
+<g opacity="1" transform="translate(200,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(160,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(120,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(80,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(40,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+<g opacity="1" transform="translate(0,0)">
+<line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
+</g>
+</g>
+<text x="110.0" y="188.33333333333334" class="gg-text gg-axis-title" text-anchor="middle">Weight (1000 lbs)</text>
+<g transform="translate(0, 0)">
+<line y2="153.33333333333334" class="gg-axis-line gg-axis-line-y"></line>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">37.5</text>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">30.0</text>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">22.5</text>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">15.0</text>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<text x="-11" dy="0.32em" class="gg-text gg-axis-text gg-axis-text-y">7.5</text>
+</g>
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-major"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="220" class="gg-panel-grid gg-panel-grid-minor" transform="translate(0, -16.666666666666668)"></line>
+</g>
+</g>
+<g transform="translate(0, 0)" font-size="10" text-anchor="end">
+<g opacity="1" transform="translate(0,10.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,43.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,76.66666666666667)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,110.0)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+<g opacity="1" transform="translate(0,143.33333333333334)">
+<line x2="-2" class="gg-axis-ticks gg-axis-ticks-y"></line>
+</g>
+</g>
+<text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">Fuel economy (mpg)</text>
+<circle cx="74" cy="83.33333333333333" r="2.0" fill-opacity="1" fill="#208F8C"></circle>
+<circle cx="85" cy="83.33333333333333" r="2.0" fill-opacity="1" fill="#208F8C"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="60.0" y="73.33333333333333" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="96.0" y="80.0" height="4" width="4">
+<rect fill-opacity="1" fill="#208F8C" height="10" width="10"></rect>
+</svg><circle cx="107" cy="94.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="106.0" y="94.66666666666667" height="4" width="4">
+<rect fill-opacity="1" fill="#208F8C" height="10" width="10"></rect>
+</svg><circle cx="112" cy="113.33333333333333" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="95.0" y="66.66666666666666" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="94.0" y="73.33333333333333" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.0" y="90.0" height="4" width="4">
+<rect fill-opacity="1" fill="#208F8C" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.0" y="96.0" height="4" width="4">
+<rect fill-opacity="1" fill="#208F8C" height="10" width="10"></rect>
+</svg><circle cx="132" cy="104.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="119" cy="100.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="121" cy="109.33333333333333" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="180" cy="130.66666666666669" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="186" cy="130.66666666666669" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="183" cy="112.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="56.0" y="30.66666666666667" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="32.0" y="40.0" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="41.0" y="24.0" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="66.0" y="79.33333333333333" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><circle cx="110" cy="108.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="107" cy="109.33333333333333" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="123" cy="118.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="123" cy="92.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="45.0" y="53.333333333333336" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><circle cx="55" cy="61.333333333333336" r="2.0" fill-opacity="1" fill="#440154"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="28.0" y="40.0" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg><circle cx="96" cy="106.66666666666667" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<circle cx="80" cy="89.33333333333333" r="2.0" fill-opacity="1" fill="#208F8C"></circle>
+<circle cx="112" cy="110.0" r="2.0" fill-opacity="1" fill="#FAE622"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="79.0" y="80.0" height="4" width="4">
+<rect fill-opacity="1" fill="#440154" height="10" width="10"></rect>
+</svg></g>
+<g transform="translate(275, 39.16666666666667)">
+<g transform="translate(0, 65)">
+<text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left">Transmission</text>
+<rect x="0" y="0" height="15" width="15" class="gg-legend-key"></rect>
+<circle cx="7.5" cy="7.5" r="2.5" fill="black" fill-opacity="1"></circle>
+<text x="20" y="10" class="gg-text gg-legend-text" text-anchor="left">0</text>
+<rect x="0" y="15" height="15" width="15" class="gg-legend-key"></rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="5.0" y="20.0" height="5.0" width="5.0">
+<rect fill="black" fill-opacity="1" height="10" width="10"></rect>
+</svg><text x="20" y="25" class="gg-text gg-legend-text" text-anchor="left">1</text>
+</g>
+<g transform="translate(0, 0)">
+<text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left">Cylinders</text>
+<rect x="0" y="0" height="15" width="15" class="gg-legend-key"></rect>
+<circle cx="7.5" cy="7.5" r="2.5" fill="#440154" fill-opacity="1"></circle>
+<text x="20" y="10" class="gg-text gg-legend-text" text-anchor="left">4</text>
+<rect x="0" y="15" height="15" width="15" class="gg-legend-key"></rect>
+<circle cx="7.5" cy="22.5" r="2.5" fill="#208F8C" fill-opacity="1"></circle>
+<text x="20" y="25" class="gg-text gg-legend-text" text-anchor="left">6</text>
+<rect x="0" y="30" height="15" width="15" class="gg-legend-key"></rect>
+<circle cx="7.5" cy="37.5" r="2.5" fill="#FAE622" fill-opacity="1"></circle>
+<text x="20" y="40" class="gg-text gg-legend-text" text-anchor="left">8</text>
+</g>
+</g>
+</svg>

@@ -20,6 +20,9 @@ a layer using `Layer.new/3` and prepending it to the list contained in the
 `Plot.geom_segment/3` as well as visual tests for the conventional approach
 will come, but most of the time these geoms are best suited for annotations
 as opposed to mapping multiple rows of data to a plot.
+- Docs now include guides with examples similar to those in the ggplot2
+documentation. (ggplot2 and documentation are [copyrighted by the ggplot2
+authors subject to the MIT License](https://github.com/tidyverse/ggplot2/blob/master/LICENSE.md).)
 
 ### Changed
 - Replaced `Plot.to_file/2` with `Plot.to_xml/1`. The former returned a file;
