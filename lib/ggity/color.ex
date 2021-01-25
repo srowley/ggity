@@ -152,13 +152,14 @@ defmodule GGity.Color do
     "yellowgreen"
   ]
 
+  # TODO: write some tests for this
   @doc false
   @spec valid_color?(any()) :: boolean()
-  def valid_color?(<<code::binary-size(3)>>) do
+  def valid_color?(<<code::binary-size(3)>>) when code not in @valid_css_color_names do
     String.match?(code, ~r/^[[:xdigit:]]{3}$/)
   end
 
-  def valid_color?(<<code::binary-size(6)>>) do
+  def valid_color?(<<code::binary-size(6)>>) when code not in @valid_css_color_names do
     String.match?(code, ~r/^[[:xdigit:]]{6}$/)
   end
 
