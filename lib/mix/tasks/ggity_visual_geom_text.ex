@@ -79,7 +79,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Text do
       color: "cornflowerblue",
       stat: :count,
       size: 8,
-      nudge_y: -5
+      nudge_y: 5
     )
     |> Plot.plot()
   end
