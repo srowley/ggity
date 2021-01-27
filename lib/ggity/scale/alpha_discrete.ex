@@ -16,31 +16,8 @@ defmodule GGity.Scale.Alpha.Discrete do
   def new(options \\ []), do: struct(Alpha.Discrete, options)
 
   @spec train(Alpha.Discrete.t(), list(binary())) :: Alpha.Discrete.t()
-  def train(scale, [_value] = levels) do
-    {palette_min, palette_max} = scale.range
-    palette_range = palette_max - palette_min
-
-    transform = fn _value -> palette_min + palette_range / 2 end
-    struct(scale, levels: levels, transform: transform)
-  end
-
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
-    {palette_min, palette_max} = scale.range
-    palette_range = palette_max - palette_min
-
-    intervals = length(levels) - 1
-
-    values_map =
-      levels
-      |> Enum.reverse()
-      |> Stream.with_index()
-      |> Stream.map(fn {level, index} ->
-        {level, palette_max - index * palette_range / intervals}
-      end)
-      |> Enum.into(%{})
-
-    transform = fn value -> values_map[to_string(value)] end
-
+    transform = GGity.Scale.Discrete.transform(levels, scale.range)
     struct(scale, levels: levels, transform: transform)
   end
 

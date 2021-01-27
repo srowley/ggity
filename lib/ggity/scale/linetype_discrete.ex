@@ -4,16 +4,21 @@ defmodule GGity.Scale.Linetype.Discrete do
   alias GGity.{Draw, Labels}
   alias GGity.Scale.Linetype
 
-  @linetype_specs %{
-    solid: "",
-    dashed: "4",
-    dotted: "1",
-    longdash: "6 2",
-    dotdash: "1 2 3 2",
-    twodash: "2 2 6 2"
-  }
+  #  solid: "",
+  #  dashed: "4",
+  #  dotted: "1",
+  #  longdash: "6 2",
+  #  dotdash: "1 2 3 2",
+  #  twodash: "2 2 6 2"
 
-  @palette [:solid, :dashed, :dotted, :longdash, :dotdash, :twodash]
+  @palette [
+    "",
+    "4",
+    "1",
+    "6 2",
+    "1 2 3 2",
+    "2 2 6 2"
+  ]
 
   defstruct transform: nil,
             levels: nil,
@@ -27,24 +32,7 @@ defmodule GGity.Scale.Linetype.Discrete do
 
   @spec train(Linetype.Discrete.t(), list(binary())) :: Linetype.Discrete.t()
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
-    number_of_levels = length(levels)
-
-    palette =
-      @palette
-      |> Stream.cycle()
-      |> Enum.take(number_of_levels)
-      |> List.to_tuple()
-
-    values_map =
-      levels
-      |> Stream.with_index()
-      |> Stream.map(fn {level, index} ->
-        {level, elem(palette, index)}
-      end)
-      |> Enum.into(%{})
-
-    transform = fn value -> @linetype_specs[values_map[value]] end
-
+    transform = GGity.Scale.Discrete.transform(levels, @palette)
     struct(scale, levels: levels, transform: transform)
   end
 

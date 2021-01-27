@@ -18,23 +18,7 @@ defmodule GGity.Scale.Shape do
 
   @spec train(Shape.t(), list(binary())) :: Shape.t()
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
-    number_of_levels = length(levels)
-
-    palette =
-      @palette
-      |> Stream.cycle()
-      |> Enum.take(number_of_levels)
-      |> List.to_tuple()
-
-    values_map =
-      levels
-      |> Stream.with_index()
-      |> Stream.map(fn {level, index} ->
-        {level, elem(palette, index)}
-      end)
-      |> Enum.into(%{})
-
-    transform = fn value -> values_map[to_string(value)] end
+    transform = GGity.Scale.Discrete.transform(levels, @palette)
     struct(scale, levels: levels, transform: transform)
   end
 
