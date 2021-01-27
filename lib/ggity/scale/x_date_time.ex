@@ -1,7 +1,8 @@
 defmodule GGity.Scale.X.DateTime do
   @moduledoc false
 
-  alias GGity.Scale.X
+  alias GGity.Scale.{Continuous, X}
+
   @duration_sec 1000
   @duration_min @duration_sec * 60
   @duration_hour @duration_min * 60
@@ -81,12 +82,8 @@ defmodule GGity.Scale.X.DateTime do
     struct(
       scale,
       tick_values: tick_values,
-      inverse: fn value ->
-        floor(diff(value, adjusted_min) / diff(adjusted_max, adjusted_min) * scale.width)
-      end,
-      transform: fn value ->
-        diff(value, adjusted_min) / diff(adjusted_max, adjusted_min) * scale.width
-      end
+      inverse: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width}),
+      transform: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width})
     )
   end
 

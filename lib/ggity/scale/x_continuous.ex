@@ -1,7 +1,7 @@
 defmodule GGity.Scale.X.Continuous do
   @moduledoc false
 
-  alias GGity.Scale.X
+  alias GGity.Scale.{Continuous, X}
 
   @base_axis_intervals [0.1, 0.2, 0.25, 0.4, 0.5, 0.75, 1.0, 2.0, 2.5, 4.0, 5.0, 7.5, 10]
 
@@ -74,12 +74,8 @@ defmodule GGity.Scale.X.Continuous do
 
     [
       tick_values: tick_values,
-      inverse: fn value ->
-        floor((value - adjusted_min) / (adjusted_max - adjusted_min) * scale.width)
-      end,
-      transform: fn value ->
-        floor((value - adjusted_min) / (adjusted_max - adjusted_min) * scale.width)
-      end
+      inverse: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width}),
+      transform: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width})
     ]
   end
 

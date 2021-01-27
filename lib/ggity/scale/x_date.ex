@@ -1,7 +1,7 @@
 defmodule GGity.Scale.X.Date do
   @moduledoc false
 
-  alias GGity.Scale.X
+  alias GGity.Scale.{Continuous, X}
 
   @duration_day 1
   @duration_month @duration_day * 30
@@ -65,14 +65,8 @@ defmodule GGity.Scale.X.Date do
     struct(
       scale,
       tick_values: tick_values,
-      inverse: fn value ->
-        floor(
-          Date.diff(value, adjusted_min) / Date.diff(adjusted_max, adjusted_min) * scale.width
-        )
-      end,
-      transform: fn value ->
-        Date.diff(value, adjusted_min) / Date.diff(adjusted_max, adjusted_min) * scale.width
-      end
+      inverse: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width}),
+      transform: Continuous.transform({adjusted_min, adjusted_max}, {0, scale.width})
     )
   end
 
