@@ -11,7 +11,7 @@ defmodule GGity.Scale.Linetype.Discrete do
   #  dotdash: "1 2 3 2",
   #  twodash: "2 2 6 2"
 
-  @palette [
+  @palette_values [
     "",
     "4",
     "1",
@@ -32,8 +32,14 @@ defmodule GGity.Scale.Linetype.Discrete do
 
   @spec train(Linetype.Discrete.t(), list(binary())) :: Linetype.Discrete.t()
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
-    transform = GGity.Scale.Discrete.transform(levels, @palette)
+    transform = GGity.Scale.Discrete.transform(levels, palette(levels))
     struct(scale, levels: levels, transform: transform)
+  end
+
+  defp palette(levels) do
+    @palette_values
+    |> Stream.cycle()
+    |> Enum.take(length(levels))
   end
 
   @spec draw_legend(Linetype.Discrete.t(), binary(), atom(), number()) :: iolist()

@@ -4,7 +4,7 @@ defmodule GGity.Scale.Shape do
   alias GGity.{Draw, Labels}
   alias GGity.Scale.Shape
 
-  @palette [:circle, :square, :diamond, :triangle]
+  @palette_values [:circle, :square, :diamond, :triangle]
 
   defstruct transform: nil,
             levels: nil,
@@ -18,8 +18,14 @@ defmodule GGity.Scale.Shape do
 
   @spec train(Shape.t(), list(binary())) :: Shape.t()
   def train(scale, [level | _other_levels] = levels) when is_list(levels) and is_binary(level) do
-    transform = GGity.Scale.Discrete.transform(levels, @palette)
+    transform = GGity.Scale.Discrete.transform(levels, palette(levels))
     struct(scale, levels: levels, transform: transform)
+  end
+
+  defp palette(levels) do
+    @palette_values
+    |> Stream.cycle()
+    |> Enum.take(length(levels))
   end
 
   @spec draw_legend(Shape.t(), binary(), number()) :: iolist()
