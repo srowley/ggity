@@ -89,11 +89,12 @@ defmodule GGity.Scale.Shape.Manual do
         width: key_height,
         class: "gg-legend-key"
       ),
-      Draw.marker(
+      GGity.Shapes.draw(
         marker,
         {key_height / 2, key_height / 2 + key_height * index},
-        size,
+        :math.pow(1 + size, 2),
         fill: "black",
+        color: "black",
         fill_opacity: "1"
       ),
       Draw.text(

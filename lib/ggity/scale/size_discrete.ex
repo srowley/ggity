@@ -95,11 +95,11 @@ defmodule GGity.Scale.Size.Discrete do
   end
 
   defp draw_key_glyph(scale, level, index, _key_glyph, key_height) do
-    Draw.marker(
+    GGity.Shapes.draw(
       :circle,
       {key_height / 2, key_height / 2 + key_height * index},
-      scale.transform.(level),
-      fill: "black",
+      :math.pow(1 + scale.transform.(level), 2),
+      color: "black",
       fill_opacity: "1"
     )
   end

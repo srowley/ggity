@@ -18,12 +18,12 @@ defmodule GGityDrawTest do
   describe "g/2" do
     test "wraps given elements in <g> tags with given attributes" do
       g =
-        Draw.marker(:circle, {0, 0}, 3, fill: "black", fill_opacity: 0.5)
+        Draw.text("meat", fill: "black", fill_opacity: 0.5)
         |> Draw.g(transform: "translate(0,0)")
         |> IO.chardata_to_string()
 
       assert g ==
-               ~s|<g transform="translate(0,0)">\n<circle cx="0" cy="0" r="1.5" fill="black" fill-opacity="0.5"></circle>\n</g>\n|
+               ~s|<g transform="translate(0,0)">\n<text fill="black" fill-opacity="0.5">meat</text>\n</g>\n|
     end
   end
 
@@ -47,18 +47,6 @@ defmodule GGityDrawTest do
     test "draws text element with given value and attributes" do
       text = IO.chardata_to_string(Draw.text("foo", text_anchor: "middle"))
       assert text == ~s|<text text-anchor="middle">foo</text>\n|
-    end
-  end
-
-  describe "marker/3" do
-    test "draws a marker with given params" do
-      diamond =
-        :diamond
-        |> Draw.marker({0, 0}, 3, fill: "black", fill_opacity: 0.5)
-        |> IO.chardata_to_string()
-
-      assert diamond ==
-               ~s|<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="-1.5" y="-1.5" height="3" width="3">\n<polygon points="5,0 10,5 5,10 0,5" fill="black" fill-opacity="0.5"/>\n</svg>|
     end
   end
 end

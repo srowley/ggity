@@ -4,7 +4,7 @@ defmodule GGity.Scale.Shape do
   alias GGity.{Draw, Labels}
   alias GGity.Scale.Shape
 
-  @palette_values [:circle, :square, :diamond, :triangle]
+  @palette_values [:circle, :triangle, :square, :plus, :square_cross]
 
   defstruct transform: nil,
             levels: nil,
@@ -56,11 +56,12 @@ defmodule GGity.Scale.Shape do
         width: key_height,
         class: "gg-legend-key"
       ),
-      Draw.marker(
+      GGity.Shapes.draw(
         scale.transform.(level),
         {key_height / 2, key_height / 2 + key_height * index},
-        key_height / 3,
+        :math.pow(1 + key_height / 3, 2),
         fill: "black",
+        color: "black",
         fill_opacity: "1"
       ),
       Draw.text(

@@ -1437,11 +1437,11 @@ defmodule GGity.Scale.Color.Viridis do
   end
 
   defp draw_key_glyph(scale, level, index, :point, key_height) do
-    Draw.marker(
+    GGity.Shapes.draw(
       :circle,
       {key_height / 2, key_height / 2 + key_height * index},
-      key_height / 3,
-      fill: "#{scale.transform.(level)}",
+      :math.pow(1 + key_height / 3, 2),
+      color: "#{scale.transform.(level)}",
       fill_opacity: "1"
     )
   end

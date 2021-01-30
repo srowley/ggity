@@ -1,7 +1,7 @@
 defmodule GGity.Geom.Boxplot do
   @moduledoc false
 
-  alias GGity.{Draw, Geom, Plot}
+  alias GGity.{Draw, Geom, Plot, Shapes}
 
   @type t() :: %__MODULE__{}
   @type record() :: map()
@@ -15,7 +15,7 @@ defmodule GGity.Geom.Boxplot do
             outlier_color: nil,
             outlier_fill: nil,
             outlier_shape: :circle,
-            outlier_size: 2,
+            outlier_size: 5,
             color: "black",
             fill: "white",
             alpha: 1,
@@ -150,10 +150,16 @@ defmodule GGity.Geom.Boxplot do
         []
 
       :circle ->
-        Draw.marker(:circle, {box_middle, y_coord}, geom_boxplot.outlier_size, fill: color)
+        Shapes.draw(:circle, {box_middle, y_coord}, :math.pow(geom_boxplot.outlier_size, 2),
+          fill: fill,
+          color: color
+        )
 
       shape ->
-        Draw.marker(shape, {box_middle, y_coord}, geom_boxplot.outlier_size, fill: fill)
+        Shapes.draw(shape, {box_middle, y_coord}, :math.pow(geom_boxplot.outlier_size, 2),
+          fill: fill,
+          color: color
+        )
     end
   end
 

@@ -42,7 +42,7 @@ defmodule GGityScaleSizeDiscreteTest do
              ]
 
       assert xpath(legend, ~x"//circle/@r"lf) ==
-               Enum.map(scale.levels, fn value -> scale.transform.(value) / 2 end)
+               Enum.map(scale.levels, fn _value -> 4.0 end)
     end
   end
 end

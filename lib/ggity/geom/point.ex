@@ -1,7 +1,7 @@
 defmodule GGity.Geom.Point do
   @moduledoc false
 
-  alias GGity.{Draw, Geom, Plot}
+  alias GGity.{Geom, Plot}
 
   @type t() :: %__MODULE__{}
   @type plot() :: %Plot{}
@@ -16,7 +16,7 @@ defmodule GGity.Geom.Point do
             alpha: 1,
             color: "black",
             shape: :circle,
-            size: 4,
+            size: 6,
             custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Point.t()
@@ -60,14 +60,14 @@ defmodule GGity.Geom.Point do
       transforms.size.(row[mapping[:size]])
     ]
 
-    labelled_values = Enum.zip([:x, :y, :fill_opacity, :fill, :shape, :size], transformed_values)
+    labelled_values = Enum.zip([:x, :y, :fill_opacity, :color, :shape, :size], transformed_values)
 
-    Draw.marker(
+    GGity.Shapes.draw(
       labelled_values[:shape],
       {labelled_values[:x] + plot.area_padding,
        (plot.width - labelled_values[:y]) / plot.aspect_ratio + plot.area_padding},
-      labelled_values[:size],
-      Keyword.take(labelled_values, [:fill, :fill_opacity]) ++ custom_attributes
+      :math.pow(labelled_values[:size], 2),
+      Keyword.take(labelled_values, [:color, :fill_opacity]) ++ custom_attributes
     )
   end
 end

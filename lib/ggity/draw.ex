@@ -68,25 +68,6 @@ defmodule GGity.Draw do
     ]
   end
 
-  @spec marker(atom(), {number(), number()}, number(), keyword()) :: iolist()
-  def marker(shape, coords, size, options \\ [])
-  def marker(:triangle, coords, size, options), do: triangle(coords, size, options)
-  def marker(:square, coords, size, options), do: square(coords, size, options)
-  def marker(:diamond, coords, size, options), do: diamond(coords, size, options)
-  def marker(:circle, coords, size, options), do: circle(coords, size / 2, options)
-
-  def marker(character, coords, size, options) when is_binary(character) do
-    {x, y} = coords
-
-    text(character, [
-      {:x, x},
-      {:y, y},
-      {:font_size, size},
-      {:text_anchor, "middle"},
-      {:dominant_baseline, "middle"} | options
-    ])
-  end
-
   @spec circle({number(), number()}, number(), keyword()) :: iolist()
   def circle({x, y}, radius, options) do
     [
@@ -160,39 +141,5 @@ defmodule GGity.Draw do
       HTML.escape_to_iodata(to_string(value)),
       "\""
     ]
-  end
-
-  defp triangle({x, y}, size, options) do
-    polygon("5,0 10,10 0,10", options)
-    |> svg(
-      viewBox: "0 0 10 10",
-      x: x - size / 2,
-      y: y - size / 2,
-      height: to_string(size),
-      width: to_string(size)
-    )
-  end
-
-  defp square({x, y}, size, options) do
-    Keyword.merge(options, height: "10", width: "10")
-    |> rect()
-    |> svg(
-      viewBox: "0 0 10 10",
-      x: x - size / 2,
-      y: y - size / 2,
-      height: to_string(size),
-      width: to_string(size)
-    )
-  end
-
-  defp diamond({x, y}, size, options) do
-    polygon("5,0 10,5 5,10 0,5", options)
-    |> svg(
-      viewBox: "0 0 10 10",
-      x: x - size / 2,
-      y: y - size / 2,
-      height: to_string(size),
-      width: to_string(size)
-    )
   end
 end

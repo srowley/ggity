@@ -6,15 +6,16 @@ defmodule GGityScaleShapeTest do
   alias GGity.Scale.Shape
 
   setup do
-    %{scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "shrimp"])}
+    %{scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "scallops", "shrimp"])}
   end
 
   describe "new/2" do
     test "returns a proper scale for discrete values", %{scale: scale} do
       assert scale.transform.("beef") == :circle
-      assert scale.transform.("chicken") == :square
-      assert scale.transform.("fish") == :diamond
-      assert scale.transform.("lamb") == :triangle
+      assert scale.transform.("chicken") == :triangle
+      assert scale.transform.("fish") == :square
+      assert scale.transform.("lamb") == :plus
+      assert scale.transform.("scallops") == :square_cross
       assert scale.transform.("shrimp") == :circle
     end
   end
@@ -40,12 +41,13 @@ defmodule GGityScaleShapeTest do
                "chicken",
                "fish",
                "lamb",
+               "scallops",
                "shrimp"
              ]
 
       assert xpath(legend, ~x"//circle"l) |> length() == 2
-      assert xpath(legend, ~x"//polygon"l) |> length() == 2
-      assert xpath(legend, ~x"//rect"l) |> length() == 6
+      assert xpath(legend, ~x"//polygon"l) |> length() == 1
+      assert xpath(legend, ~x"//rect"l) |> length() == 8
     end
   end
 end
