@@ -13,6 +13,7 @@
 * Faceting
 * Histograms
 * Continuous color scale (including legends)
+* `coord_flip` (support horizontal bar charts)
 
 ## Later 
 * Implement a method for rendering new points and updating scales only (LiveView optimization)
