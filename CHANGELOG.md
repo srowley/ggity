@@ -52,6 +52,8 @@ generation function chain.
 - Added top and right default margins to improve quality of sample charts.
 
 ### Fixed
+- Size scale is based on accurate (rather than approximate) calcluations
+of point area for each shape
 - Y-coordinate scale and axis functions properly handle dataset
 with no range (same min and max value, or only one value).
 - A theme's `:face` property sets the value of the CSS `font-weight`
