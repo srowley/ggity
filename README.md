@@ -38,19 +38,37 @@ a stat.
 ## Example
 
 ```elixir
-Examples.tx_housing() # GGity includes several sample datasets in the Examples module
+
+# GGity includes several sample datasets in the Examples module
+Examples.tx_housing()
+
+# Only plot specific cities
 |> Enum.filter(fn record ->
   record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-end) # Only plot specific cities
-|> Plot.new(%{x: "sales", y: "median"}) # Plot sales (x) by median price (y)
-|> Plot.labs(title: "Texas Home Values") # Add a title
-|> Plot.geom_point(%{color: "city"}, alpha: 0.4) # Add a scatterplot layer; point color by city, with 40% opacity
-|> Plot.scale_x_continuous(labels: :commas) # Use built-in format for the x-axis labels
-|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end) # Custom format y labels
-|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end) # Custom format legend labels
-|> Plot.plot() # Generate SVG chart as an IO list for use in a Phoenix template or string
+end)
+
+# Plot sales (x) by median price (y)
+|> Plot.new(%{x: "sales", y: "median"})
+
+# Add a title
+|> Plot.labs(title: "Texas Home Values")
+
+# Add a scatterplot layer; point color by city, with 40% opacity
+|> Plot.geom_point(%{color: "city"}, alpha: 0.4)
+
+# Use built-in format for the x-axis labels
+|> Plot.scale_x_continuous(labels: :commas)
+
+# Custom format y-axis labels
+|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
+
+# Choose color palette for color scale and custom format legend labels
+|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
+
+# Generate SVG chart as an IO list for use in a Phoenix template or string
+|> Plot.plot()
 ```
-![](./examples/geom_point_custom.svg)
+![](assets/geom_point_custom.svg)
 
 GGity supports scatterplots, bar charts, line charts, area/ribbon charts and boxplots. The GGity documentation includes
 guides for each geom and other key concepts with several examples of code and output. The plot background, axes, legends
