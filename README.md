@@ -8,96 +8,101 @@
 
 GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.
 
-## Examples
+## Overview
 
-A website with additional usage examples is up at: http://www.pocketbookvote.com.
+GGity brings a subset of the functionality of ggplot2 to creating data visualizations in Elixir.
 
-A GGity plot is constructed from data, a geom (such as points, bars or lines), mapping of aesthetics (x, y, color, size, etc.) to variables in the data. These three elements comprise a layer; a plot is a collection of one or more layers.
+As such constructing a plot in GGity is based on the same priniciples - a plot is composed of one or more layers,
+where each layer includes:
 
-Data must be provided as a list of maps, where each map is an observation, and the map's keys are the names of the variables observed.
+* Data - in GGity, data is represented as a list of maps, is an observation/row, and the keys of the
+map are the associated variable name (i.e. the column name, if the maps were ordered and the data structured as table).
+Note that GGity does not check for missing values or otherwise validate the data passed to it.
 
-The mapping is specified with a map containing key-value pairs of variable names and aesthetics. Mappings must be provided for the x and y aesthetics; other aesthetics are optional, with fixed default values applied if a mapping is not specified. See the documentation for supported aesthetics for each geom.
+* Geom - a visible shape/object (such a point, a bar or a line), the characteristics of which will be determined based on
+the values of the data (e.g., the x-coordinate mapped to one variable, the y-coordinate to another, the color of a point
+to a third variable)
 
-```elixir
-Examples.mtcars()
-|> Plot.new(%{x: :wt, y: :mpg})
-|> Plot.labs(title: "Basic Plot", x: "Weight (lbs)", y: "Miles Per Gallon")
-|> Plot.geom_point()
-|> Plot.plot()
-```
-![](./examples/geom_point_basic.svg)
+* Mapping - a map that indicates which characteristics (aesthetics, in ggplot2 parlance) will be tied to which variables
 
-Note that the library includes a few of R's canonical datasets, which are used in these examples and available to support development as described further below.
+* Position adjustment - a method for adjusting the position of overlapping geoms. For example, a stacked bar chart maps
+x-coordinates and colors based on variables, but the y-coordinates for each part of the stack need to be adjusted in order
+to avoid placing all of the bars for one x value on top of one another.
 
-Mappings can also be specified when a geom is added:
+* Stat (statistical transformation) - sometimes we do not actually want to map the data to shapes on plot. Instead we
+want to perform some calculations on the data and plot that. For example, a histogram plots the number of observations
+of a given value for a given variable organized into groups based on ranges of values ("bins"). Given a dataset, the plot
+is mapping those ranges and value counts to shapes, not the raw data. The calculation of those transformed values is
+a stat.
 
-```elixir
-Examples.mtcars()
-|> Plot.new(%{x: :wt, y: :mpg})
-|> Plot.geom_point(%{shape: :cyl})
-|> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
-|> Plot.plot()
-```
-![](./examples/geom_point_shape_mapping.svg)
-
-Legends are currently only supported for discrete scales.
-
-Aesthetics can be assigned a fixed value (not tied to a variable), and both legend
-and axis labels support custom formatting.
+## Example
 
 ```elixir
-Examples.tx_housing()
+Examples.tx_housing() # GGity includes several sample datasets in the Examples module
 |> Enum.filter(fn record ->
   record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-end)
-|> Plot.new(%{x: "sales", y: "median"})
-|> Plot.labs(title: "Custom labels, fixed alpha")
-|> Plot.geom_point(%{color: "city"}, alpha: 0.4)
-|> Plot.scale_x_continuous(labels: :commas)
-|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
-|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
-|> Plot.plot()
+end) # Only plot specific cities
+|> Plot.new(%{x: "sales", y: "median"}) # Plot sales (x) by median price (y)
+|> Plot.labs(title: "Texas Home Values") # Add a title
+|> Plot.geom_point(%{color: "city"}, alpha: 0.4) # Add a scatterplot layer; point color by city, with 40% opacity
+|> Plot.scale_x_continuous(labels: :commas) # Use built-in format for the x-axis labels
+|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end) # Custom format y labels
+|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end) # Custom format legend labels
+|> Plot.plot() # Generate SVG chart as an IO list for use in a Phoenix template or string
 ```
 ![](./examples/geom_point_custom.svg)
 
-Line geoms support mapping discrete variables to color or line type.
+GGity supports scatterplots, bar charts, line charts, area/ribbon charts and boxplots. The GGity documentation includes
+guides for each geom and other key concepts with several examples of code and output. The plot background, axes, legends
+and other non-geom elements can be styled using the ```Theme``` interface (useful when there could be dynamic changes) or
+with an external stylesheet (plots generated by GGity include custom classes on these elements for this purpose).
+
+## LiveView
+
+Earlier versions of GGity could be used with LiveView for all sorts of neat things without any issues, but the magic of
+LiveView was really limited to updating the plot in response to events external to the graphic (a form submission, for example).
+The [demo website](http://www.pocketbookvote.com) includes several such examples.
+
+Version 0.4 introduces the concept of custom attributes, whereby each layer includes a function to which each row of data is passed (along with the plot itself). This function must return a keyword list of values that will be added to the SVG element drawn for that data point. Custom attributes let the developer embed LiveView event handlers, Alpine.js directives, or even plain Javascript to each shape drawn on the plot, tied to the data represented by that shape. 
+
+For example:
 
 ```elixir
-Examples.economics_long()
-|> Plot.new(%{x: "date", y: "value01"})
-|> Plot.labs(title: "Mapped to color")
-|> Plot.geom_line(%{color: "variable"})
-|> Plot.plot()
+data
+|> Plot.new(%{x: "x", y: "y"})
+|> Plot.geom_point(
+  custom_attributes: fn _plot, row ->
+    [phx_click: "filter_by_y", phx_value_y: row["y"]]
+  end
+)
 ```
-![](./examples/geom_line.svg)
 
-Bar charts are also supported. By default they display stacked counts of observations (as shown below), but they can also display grouped bars (`position = "dodge"` in ggplot2 parlance) as well as raw y values (`geom_col`).
-
-```elixir
-Examples.mpg()
-|> Enum.filter(fn record ->
-  record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
-end)
-|> Plot.new(%{x: "manufacturer"})
-|> Plot.geom_bar(%{fill: "class"})
-|> Plot.scale_fill_viridis(option: :inferno)
-|> Plot.plot()
-```
-![](./examples/geom_bar.svg)
+Draws a scatterplot where each `<circle>` element (which represents one row in the dataset) will include a `phx-click` handler
+and a `phx-value-y` data attribute with the value of the y variable for the shape clicked on. The event handler for that event
+could return a new plot with a dataset filtered to show only points within some specified range of the points clicked.
 
 ## Goals
-I am interested in data visualization and after learning a lot from the work being done on [ContEx](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
+I am interested in data visualization and after learning a lot from the work being done on [Contex](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
+
+GGity's core design principle is that, if GGity supports a ggplot2 feature, it should be obvious to someone familiar with ggplot2 how to
+access that feature in the GGity API. Hewing as closely as possible to ggplot2 also has the benefit of keeping the API more stable. To the
+extent GGity supports features that extend or differ from the ggplot2 API, those interfaces are more likely to change. Extensions (things ggplot2 doesn't do, such as custom attributes) are likely to persist but could change as issues/improvements are discovered. Differences (things ggplot2 does, but in a different way) are almost always driven by my lack of figuring out how to implement a feature in a way that conforms to the ggplot2 approach. Those will change if/when I figure out how to do so.
 
 ## Non-Goals
-* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. There are probably edge cases unaddressed and validations that should be happening, but for now they are harder to find because I am not using this in the wild.
+* Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. I would love for people to try the
+library and provide feedback to help overcome this. That said, Version 0.4 includes several improvements with respect to validations and edge cases that can be hard to find without day-to-day use. 
 
-* Optimize for performance pre-emptively - Because I am not using this in a real world application, performance is not as critical or (more importantly) apparent to me, so my focus tends to be on new features.
+* Optimize for performance pre-emptively - Because I am not using this in a real world application, performance is not as critical or (more importantly) apparent to me, so my focus tends to be on new features. That said, after the items planned for version 0.5 are
+implemented, I envision taking a break from adding things to focus on refactoring and measuring/optimizing performance.
 
 ## Alternatives
 
-[ContEx](https://github.com/mindok/contex) - is more widely used, has some special LiveView features, Gantt charts and (very cool) sparklines. It is also guided by grammar of graphics concepts but is not as dogmatic about it as this library will be.
+[Contex](https://github.com/mindok/contex) - GGity is getting close to feature parity with Contex. At present, Contex's Gantt charts
+and horizontal bar charts are the primary missing pieces. Contex is, however, more widely used, so some of the kinks are worked out.
+Also and maybe more importantly, Contex is simpler those who just want to draw a simple bar chart and are not familiar with grammar of graphics concepts will likely find Contex easier to use. 
 
-[Plotex](https://github.com/elcritch/plotex) - focused on time series and may be better optimized for that data in some situations.
+[Plotex](https://github.com/elcritch/plotex) - focused on time series; it is possible that for some time series-related needs Plotex
+may be better optimized or easier to learn. 
 
 ## Development
 
@@ -137,13 +142,16 @@ mix ggity.visual.geom.point --wsl
 # The --wsl option doesn't support other browsers on Windows at this time.
 ```
 
-### Other checks
+## Build Process
 
-The library also includes an alias (```mix checks```) that runs Credo, Dialyzer, the visual tests and formatter in sequence. I prefer to have all of those things in order before committing a change.
+The library includes an alias (```mix checks```) that runs Credo, Dialyzer, the visual tests and formatter in sequence. I prefer to have all of those things in order before committing a change.
+
+GGity also includes guides that serve as a sort of visual doctest - the guides include several code examples, and those code examples are used to generate the graphics in the documents (so as a user you know that the code in the example will definitely generate the graphic in the documentation). Before pushing a new feature, the docs are rebuilt using ```mix build_docs```. I am still working out how best to do
+this without making the commit history somewhat messy.
 
 ## Acknowledgements
 
-I am very grateful to @mindok, the author of ContEx, who graciously accepted and provided feedback on contributions to that library, which in turn inspired me to write this (and flat out copy some a few parts of ContEx in so doing). I do not view GGity as a replacement for ContEx; it is a personal opportunity for me to learn a lot at my own pace. I made it public in case it might be helpful to others as an example.
+I am very grateful to @mindok, the author of Contex, who graciously accepted and provided feedback on contributions to that library, which in turn inspired me to write this (and flat out copy some a few parts of Contex in so doing). I do not view GGity as a replacement for Contex; it is a personal opportunity for me to learn a lot at my own pace. I made it public in case it might be helpful to others as an example.
 
 Acknowledgement is also due to Hadley Wickham and others who have built [ggplot2](https://ggplot2.tidyverse.org/); the library is great, but Wickham's grammar of graphics is really an excellent piece of academic work in its own right. Along with Edward Tufte's book I think it is safe to say a golden age of visualization ensued.
 
@@ -154,12 +162,13 @@ Add `:ggity` to your list of dependencies in mix.exs:
 ```elixir
 def deps do
   [
-    {:ggity, "~> 0.3.1"}
+    {:ggity, "~> 0.4.0"}
   ]
 end
 ```
 
-GGity requires Elixir 1.10, and will likely require Elixir 1.11 shortly after that version is released, due to the nice improvements in each version associated with handling dates and datetimes.
+GGity requires Elixir 1.10, and will likely require Elixir 1.11 soon in order to take advantage of the nice improvements
+associated with handling dates and datetimes.
 
 ## License
 
