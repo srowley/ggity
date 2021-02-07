@@ -20,6 +20,8 @@ a layer using `Layer.new/3` and prepending it to the list contained in the
 `Plot.geom_segment/3` as well as visual tests for the conventional approach
 will come, but most of the time these geoms are best suited for annotations
 as opposed to mapping multiple rows of data to a plot.
+- Shape scale now includes all point shapes (fillable and non-fillable) that
+are available in ggplot2.
 - Docs now include guides with examples similar to those in the ggplot2
 documentation. (ggplot2 and documentation are [copyrighted by the ggplot2
 authors subject to the MIT License](https://github.com/tidyverse/ggplot2/blob/master/LICENSE.md).)
@@ -43,6 +45,7 @@ Invalid property-value pairs are not included in the rendered stylesheet.
 
     The only attribute not validated is `:family`. This value is HTML-escaped,
 but still poses a security risk if it is set with untrusted data.
+- Changed the order of shapes in the shape scale palette to conform to ggplot2 API. 
 - Replaced interpolated strings with IO Lists in various parts of the stylesheet
 generation function chain.
 - Changed some default theme values to improve quality of sample charts.

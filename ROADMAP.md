@@ -2,8 +2,8 @@
 
 ## v0.4
 * [COMPLETE] Support attaching custom attributes to plot elements
-* Add other non-fillable shapes to shapes palette
-* Add fillable shapes to shapes palette
+* [COMPLETE] Add other non-fillable shapes to shapes palette
+* [COMPLETE] Add fillable shapes to shapes palette
 * [COMPLETE] Escape text elements
 * [COMPLETE] Filter out invalid properties/values in embedded stylesheet
 * [COMPLETE] Boxplots
