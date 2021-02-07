@@ -46,7 +46,7 @@ defmodule GGity.MixProject do
         "format",
         "ggity.visual"
       ],
-      docs: [
+      build_docs: [
         "ggity.docs",
         "docs"
       ]

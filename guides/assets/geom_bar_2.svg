@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-930" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-930 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-930 .gg-axis-text-x {} #gg-930 .gg-axis-ticks {stroke: #000000;} #gg-930 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-930 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-930 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-930 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-930 .gg-panel-background {fill: #EEEEEE;} #gg-930 .gg-panel-border {} #gg-930 .gg-panel-grid {stroke: #FFFFFF;} #gg-930 .gg-panel-grid-major {stroke-width: 1;} #gg-930 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-930 .gg-plot-background {fill: #FFFFFF;} #gg-930 .gg-plot-title {font-size: 8px;} #gg-930 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-386" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-386 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-386 .gg-axis-text-x {} #gg-386 .gg-axis-ticks {stroke: #000000;} #gg-386 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-386 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-386 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-386 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-386 .gg-panel-background {fill: #EEEEEE;} #gg-386 .gg-panel-border {} #gg-386 .gg-panel-grid {stroke: #FFFFFF;} #gg-386 .gg-panel-grid-major {stroke-width: 1;} #gg-386 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-386 .gg-plot-background {fill: #FFFFFF;} #gg-386 .gg-plot-title {font-size: 8px;} #gg-386 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -149,18 +149,18 @@
 </g>
 </g>
 <text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">count</text>
-<rect x="10.0" y="135.33333333333334" width="24.571428571428573" height="8.0" fill="#FAE622" fill-opacity="1"></rect>
-<rect x="39.57142857142857" y="65.33333333333334" width="24.571428571428573" height="20.0" fill="#440154" fill-opacity="1"></rect>
-<rect x="39.57142857142857" y="85.33333333333334" width="24.571428571428573" height="58.0" fill="#208F8C" fill-opacity="1"></rect>
-<rect x="69.14285714285714" y="75.33333333333334" width="24.571428571428573" height="4.666666666666667" fill="#440154" fill-opacity="1"></rect>
+<rect x="10.0" y="135.0" width="24.571428571428573" height="8.333333333333334" fill="#FAE622" fill-opacity="1"></rect>
+<rect x="39.57142857142857" y="65.0" width="24.571428571428573" height="20.0" fill="#440154" fill-opacity="1"></rect>
+<rect x="39.57142857142857" y="85.0" width="24.571428571428573" height="58.333333333333336" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="69.14285714285714" y="75.0" width="24.571428571428573" height="5.0" fill="#440154" fill-opacity="1"></rect>
 <rect x="69.14285714285714" y="80.0" width="24.571428571428573" height="63.333333333333336" fill="#208F8C" fill-opacity="1"></rect>
-<rect x="98.71428571428572" y="125.33333333333334" width="24.571428571428573" height="18.0" fill="#208F8C" fill-opacity="1"></rect>
-<rect x="128.28571428571428" y="88.66666666666669" width="24.571428571428573" height="54.666666666666664" fill="#440154" fill-opacity="1"></rect>
-<rect x="157.85714285714286" y="85.33333333333334" width="24.571428571428573" height="6.666666666666667" fill="#440154" fill-opacity="1"></rect>
-<rect x="157.85714285714286" y="92.00000000000001" width="24.571428571428573" height="36.666666666666664" fill="#208F8C" fill-opacity="1"></rect>
-<rect x="157.85714285714286" y="128.66666666666669" width="24.571428571428573" height="14.666666666666666" fill="#FAE622" fill-opacity="1"></rect>
-<rect x="187.42857142857144" y="40.66666666666667" width="24.571428571428573" height="84.66666666666667" fill="#440154" fill-opacity="1"></rect>
-<rect x="187.42857142857144" y="125.33333333333334" width="24.571428571428573" height="18.0" fill="#FAE622" fill-opacity="1"></rect>
+<rect x="98.71428571428572" y="125.0" width="24.571428571428573" height="18.333333333333336" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="128.28571428571428" y="88.33333333333334" width="24.571428571428573" height="55.0" fill="#440154" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="85.0" width="24.571428571428573" height="6.666666666666667" fill="#440154" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="91.66666666666667" width="24.571428571428573" height="36.66666666666667" fill="#208F8C" fill-opacity="1"></rect>
+<rect x="157.85714285714286" y="128.33333333333334" width="24.571428571428573" height="15.0" fill="#FAE622" fill-opacity="1"></rect>
+<rect x="187.42857142857144" y="40.00000000000003" width="24.571428571428573" height="84.99999999999999" fill="#440154" fill-opacity="1"></rect>
+<rect x="187.42857142857144" y="125.0" width="24.571428571428573" height="18.333333333333336" fill="#FAE622" fill-opacity="1"></rect>
 </g>
 <g transform="translate(275, 64.16666666666667)">
 <g transform="translate(0, 0)">

@@ -38,17 +38,7 @@ defmodule GGity.Docs.Geom.Point do
       # Varying alpha is useful for large datasets
       Examples.diamonds()
       |> Plot.new(%{x: "carat", y: "price"})
-      |> Plot.geom_point(alpha: 1/10)
-      """,
-      """
-      Examples.diamonds()
-      |> Plot.new(%{x: "carat", y: "price"})
-      |> Plot.geom_point(alpha: 1/20)
-      """,
-      """
-      Examples.diamonds()
-      |> Plot.new(%{x: "carat", y: "price"})
-      |> Plot.geom_point(alpha: 1/100)
+      |> Plot.geom_point(alpha: 1/50)
       """
     ]
   end

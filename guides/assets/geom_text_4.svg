@@ -1,79 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-1442" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-1442 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-1442 .gg-axis-text-x {} #gg-1442 .gg-axis-ticks {stroke: #000000;} #gg-1442 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-1442 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-1442 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-1442 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-1442 .gg-panel-background {fill: #EEEEEE;} #gg-1442 .gg-panel-border {} #gg-1442 .gg-panel-grid {stroke: #FFFFFF;} #gg-1442 .gg-panel-grid-major {stroke-width: 1;} #gg-1442 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-1442 .gg-plot-background {fill: #FFFFFF;} #gg-1442 .gg-plot-title {font-size: 8px;} #gg-1442 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-898" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-898 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-898 .gg-axis-text-x {} #gg-898 .gg-axis-ticks {stroke: #000000;} #gg-898 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-898 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-898 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-898 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-898 .gg-panel-background {fill: #EEEEEE;} #gg-898 .gg-panel-border {} #gg-898 .gg-panel-grid {stroke: #FFFFFF;} #gg-898 .gg-panel-grid-major {stroke-width: 1;} #gg-898 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-898 .gg-plot-background {fill: #FFFFFF;} #gg-898 .gg-plot-title {font-size: 8px;} #gg-898 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
 </g>
 <g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
-<g opacity="1" transform="translate(200,0)">
+<g opacity="1" transform="translate(200.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">6.0</text>
 </g>
-<g opacity="1" transform="translate(160,0)">
+<g opacity="1" transform="translate(160.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">5.0</text>
 </g>
-<g opacity="1" transform="translate(120,0)">
+<g opacity="1" transform="translate(120.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">4.0</text>
 </g>
-<g opacity="1" transform="translate(80,0)">
+<g opacity="1" transform="translate(80.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">3.0</text>
 </g>
-<g opacity="1" transform="translate(40,0)">
+<g opacity="1" transform="translate(40.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">2.0</text>
 </g>
-<g opacity="1" transform="translate(0,0)">
+<g opacity="1" transform="translate(0.0,0)">
 <text y="11" class="gg-text gg-axis-text gg-axis-text-x" text-anchor="middle">1.0</text>
 </g>
-<g opacity="1" transform="translate(200,0)">
+<g opacity="1" transform="translate(200.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(160,0)">
+<g opacity="1" transform="translate(160.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(120,0)">
+<g opacity="1" transform="translate(120.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(80,0)">
+<g opacity="1" transform="translate(80.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(40,0)">
+<g opacity="1" transform="translate(40.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(0,0)">
+<g opacity="1" transform="translate(0.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-major"></line>
 </g>
-<g opacity="1" transform="translate(160,0)">
+<g opacity="1" transform="translate(160.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
 </g>
-<g opacity="1" transform="translate(120,0)">
+<g opacity="1" transform="translate(120.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
 </g>
-<g opacity="1" transform="translate(80,0)">
+<g opacity="1" transform="translate(80.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
 </g>
-<g opacity="1" transform="translate(40,0)">
+<g opacity="1" transform="translate(40.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
 </g>
-<g opacity="1" transform="translate(0,0)">
+<g opacity="1" transform="translate(0.0,0)">
 <line y2="-153.33333333333334" class="gg-panel-grid gg-panel-grid-minor" transform="translate(20.0, 0)"></line>
 </g>
 </g>
 <g transform="translate(10,153.33333333333334)" font-size="10" text-anchor="middle">
-<g opacity="1" transform="translate(200,0)">
+<g opacity="1" transform="translate(200.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
-<g opacity="1" transform="translate(160,0)">
+<g opacity="1" transform="translate(160.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
-<g opacity="1" transform="translate(120,0)">
+<g opacity="1" transform="translate(120.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
-<g opacity="1" transform="translate(80,0)">
+<g opacity="1" transform="translate(80.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
-<g opacity="1" transform="translate(40,0)">
+<g opacity="1" transform="translate(40.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
-<g opacity="1" transform="translate(0,0)">
+<g opacity="1" transform="translate(0.0,0)">
 <line y2="2" class="gg-axis-ticks gg-axis-ticks-x"></line>
 </g>
 </g>
@@ -143,69 +143,101 @@
 </g>
 </g>
 <text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">mpg</text>
-<circle cx="74" cy="83.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="85" cy="83.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="62" cy="75.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="98" cy="82.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="107" cy="94.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="108" cy="96.66666666666667" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="112" cy="113.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="97" cy="68.66666666666666" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="96" cy="75.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="107" cy="92.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="107" cy="98.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="132" cy="104.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="119" cy="100.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="121" cy="109.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="180" cy="130.66666666666669" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="186" cy="130.66666666666669" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="183" cy="112.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="58" cy="32.66666666666667" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="34" cy="42.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="43" cy="26.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="68" cy="81.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="110" cy="108.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="107" cy="109.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="123" cy="118.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="123" cy="92.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="47" cy="55.333333333333336" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="55" cy="61.333333333333336" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="30" cy="42.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="96" cy="106.66666666666667" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="80" cy="89.33333333333333" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="112" cy="110.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<circle cx="81" cy="82.0" r="1.0" fill-opacity="1" fill="black"></circle>
-<text x="74" y="83.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Mazda RX4</text>
-<text x="85" y="83.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Mazda RX4 Wag</text>
-<text x="62" y="75.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Datsun 710</text>
-<text x="98" y="82.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Hornet 4 Drive</text>
-<text x="107" y="94.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Hornet Sportabout</text>
-<text x="108" y="96.66666666666667" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Valiant</text>
-<text x="112" y="113.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Duster 360</text>
-<text x="97" y="68.66666666666666" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 240D</text>
-<text x="96" y="75.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 230</text>
-<text x="107" y="92.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 280</text>
-<text x="107" y="98.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 280C</text>
-<text x="132" y="104.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SE</text>
-<text x="119" y="100.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SL</text>
-<text x="121" y="109.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SLC</text>
-<text x="180" y="130.66666666666669" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Cadillac Fleetwood</text>
-<text x="186" y="130.66666666666669" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Lincoln Continental</text>
-<text x="183" y="112.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Chrysler Imperial</text>
-<text x="58" y="32.66666666666667" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Fiat 128</text>
-<text x="34" y="42.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Honda Civic</text>
-<text x="43" y="26.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Toyota Corolla</text>
-<text x="68" y="81.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Toyota Corona</text>
-<text x="110" y="108.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Dodge Challenger</text>
-<text x="107" y="109.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">AMC Javelin</text>
-<text x="123" y="118.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Camaro Z28</text>
-<text x="123" y="92.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Pontiac Firebird</text>
-<text x="47" y="55.333333333333336" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Fiat X1-9</text>
-<text x="55" y="61.333333333333336" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Porsche 914-2</text>
-<text x="30" y="42.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Lotus Europa</text>
-<text x="96" y="106.66666666666667" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Ford Pantera L</text>
-<text x="80" y="89.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Ferrari Dino</text>
-<text x="112" y="110.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Maserati Bora</text>
-<text x="81" y="82.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Volvo 142E</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="73.67162083290448" y="82.20495416623781" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="83.87162083290448" y="82.20495416623781" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="61.67162083290448" y="74.20495416623781" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="97.47162083290448" y="80.42717638846004" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="106.47162083290448" y="92.42717638846004" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="107.27162083290449" y="95.0938430551267" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="111.67162083290448" y="111.98273194401558" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="96.47162083290448" y="67.09384305512671" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="94.87162083290448" y="74.20495416623781" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="106.47162083290448" y="90.20495416623783" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="106.47162083290448" y="96.42717638846003" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="131.6716208329045" y="102.64939861068227" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="118.07162083290449" y="98.64939861068225" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="120.07162083290447" y="107.98273194401561" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="178.87162083290448" y="129.31606527734894" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="185.8316208329045" y="129.31606527734894" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="182.6716208329045" y="110.20495416623781" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="56.8716208329045" y="31.538287499571158" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="33.47162083290449" y="40.42717638846005" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="42.27162083290449" y="24.871620832904487" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="67.47162083290448" y="79.9827319440156" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="109.67162083290448" y="106.64939861068225" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="106.27162083290447" y="107.98273194401561" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="122.47162083290448" y="116.42717638846003" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="122.6716208329045" y="90.20495416623783" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="46.27162083290449" y="54.204954166237826" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="54.4716208329045" y="59.9827319440156" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="29.391620832904483" y="40.42717638846005" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="95.67162083290448" y="105.31606527734893" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="79.67162083290448" y="87.9827319440156" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="111.67162083290448" y="108.87162083290448" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="80.07162083290449" y="80.42717638846004" height="2.256758334191025" width="2.256758334191025">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><text x="74.8" y="83.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Mazda RX4</text>
+<text x="85.0" y="83.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Mazda RX4 Wag</text>
+<text x="62.79999999999999" y="75.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Datsun 710</text>
+<text x="98.6" y="81.55555555555556" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Hornet 4 Drive</text>
+<text x="107.6" y="93.55555555555556" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Hornet Sportabout</text>
+<text x="108.4" y="96.22222222222221" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Valiant</text>
+<text x="112.8" y="113.1111111111111" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Duster 360</text>
+<text x="97.6" y="68.22222222222223" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 240D</text>
+<text x="96.0" y="75.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 230</text>
+<text x="107.6" y="91.33333333333334" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 280</text>
+<text x="107.6" y="97.55555555555554" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 280C</text>
+<text x="132.8" y="103.77777777777779" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SE</text>
+<text x="119.2" y="99.77777777777777" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SL</text>
+<text x="121.19999999999999" y="109.11111111111113" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Merc 450SLC</text>
+<text x="180.0" y="130.44444444444446" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Cadillac Fleetwood</text>
+<text x="186.96" y="130.44444444444446" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Lincoln Continental</text>
+<text x="183.8" y="111.33333333333333" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Chrysler Imperial</text>
+<text x="58.00000000000001" y="32.66666666666667" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Fiat 128</text>
+<text x="34.6" y="41.55555555555556" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Honda Civic</text>
+<text x="43.4" y="26.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Toyota Corolla</text>
+<text x="68.6" y="81.11111111111111" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Toyota Corona</text>
+<text x="110.8" y="107.77777777777777" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Dodge Challenger</text>
+<text x="107.39999999999999" y="109.11111111111113" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">AMC Javelin</text>
+<text x="123.6" y="117.55555555555554" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Camaro Z28</text>
+<text x="123.80000000000001" y="91.33333333333334" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Pontiac Firebird</text>
+<text x="47.4" y="55.333333333333336" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Fiat X1-9</text>
+<text x="55.60000000000001" y="61.11111111111111" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Porsche 914-2</text>
+<text x="30.519999999999996" y="41.55555555555556" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Lotus Europa</text>
+<text x="96.8" y="106.44444444444444" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Ford Pantera L</text>
+<text x="80.8" y="89.11111111111111" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Ferrari Dino</text>
+<text x="112.8" y="110.0" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Maserati Bora</text>
+<text x="81.2" y="81.55555555555556" fill="black" fill-opacity="1" font-size="5px" text-anchor="middle" dominant-baseline="baseline" dx="0" dy="-3" font-family="Helvetica, Arial, sans-serif" font-weight="normal">Volvo 142E</text>
 </g>
 </svg>
