@@ -6,7 +6,9 @@ defmodule GGityScaleShapeTest do
   alias GGity.Scale.Shape
 
   setup do
-    %{scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "scallops", "shrimp"])}
+    %{
+      scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "scallops", "shrimp"])
+    }
   end
 
   describe "new/2" do
