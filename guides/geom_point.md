@@ -42,12 +42,3 @@ Examples.mtcars()
 
 ```
 ![](assets/geom_point_5.svg)
-```
-# Varying alpha is useful for large datasets
-Examples.diamonds()
-|> Plot.new(%{x: "carat", y: "price"})
-|> Plot.geom_point(alpha: 1/50)
-|> Plot.plot()
-
-```
-![](assets/geom_point_6.svg)

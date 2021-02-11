@@ -33,12 +33,6 @@ defmodule GGity.Docs.Geom.Point do
       Examples.mtcars()
       |> Plot.new(%{x: :wt, y: :mpg})
       |> Plot.geom_point(color: "red", size: 5)
-      """,
-      """
-      # Varying alpha is useful for large datasets
-      Examples.diamonds()
-      |> Plot.new(%{x: "carat", y: "price"})
-      |> Plot.geom_point(alpha: 1/50)
       """
     ]
   end
