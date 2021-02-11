@@ -2,7 +2,7 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## v0.4.0 - 2021-02-10
 ### Added
 - Added `:custom_attributes` to the `Bar`, `Boxplot`, `Point`, `Rect`,
 `Segment` and `Text` geoms. This option can contain a function that takes
