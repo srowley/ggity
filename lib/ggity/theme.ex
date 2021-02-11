@@ -131,7 +131,7 @@ defmodule GGity.Theme do
             panel_grid_major: element_line(size: 1),
             panel_grid_minor: element_line(size: 0.5),
             plot_background: element_rect(fill: "#FFFFFF"),
-            plot_title: element_text(size: 8)
+            plot_title: element_text(size: 10)
 
   @doc false
   @spec to_stylesheet(Theme.t() | nil, binary()) :: iolist()
