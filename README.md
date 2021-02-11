@@ -68,7 +68,7 @@ end)
 # Generate SVG chart as an IO list for use in a Phoenix template or string
 |> Plot.plot()
 ```
-![](assets/geom_point_custom.svg)
+![](guides/assets/geom_point_custom.svg)
 
 GGity supports scatterplots, bar charts, line charts, area/ribbon charts and boxplots. The GGity documentation includes
 guides for each geom and other key concepts with several examples of code and output. The plot background, axes, legends
