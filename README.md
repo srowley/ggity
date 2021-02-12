@@ -15,15 +15,15 @@ GGity brings a subset of the functionality of ggplot2 to creating data visualiza
 As such constructing a plot in GGity is based on the same priniciples - a plot is composed of one or more layers,
 where each layer includes:
 
-* Data - in GGity, data is represented as a list of maps, is an observation/row, and the keys of the
+* Data - in GGity, data is represented as a list of maps. Each map is an observation/row, and the keys of the
 map are the associated variable name (i.e. the column name, if the maps were ordered and the data structured as table).
 Note that GGity does not check for missing values or otherwise validate the data passed to it.
 
 * Geom - a visible shape/object (such a point, a bar or a line), the characteristics of which will be determined based on
 the values of the data (e.g., the x-coordinate mapped to one variable, the y-coordinate to another, the color of a point
-to a third variable)
+to a third variable).
 
-* Mapping - a map that indicates which characteristics (aesthetics, in ggplot2 parlance) will be tied to which variables
+* Mapping - a map that indicates which characteristics (aesthetics, in ggplot2 parlance) will be tied to which variables.
 
 * Position adjustment - a method for adjusting the position of overlapping geoms. For example, a stacked bar chart maps
 x-coordinates and colors based on variables, but the y-coordinates for each part of the stack need to be adjusted in order
@@ -56,7 +56,7 @@ end)
 # Add a scatterplot layer; point color by city, with 40% opacity
 |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
 
-# Use built-in format for the x-axis labels
+# Use built-in label formatter for the x-axis labels
 |> Plot.scale_x_continuous(labels: :commas)
 
 # Custom format y-axis labels
@@ -81,7 +81,11 @@ Earlier versions of GGity could be used with LiveView for all sorts of neat thin
 LiveView was really limited to updating the plot in response to events external to the graphic (a form submission, for example).
 The [demo website](http://www.pocketbookvote.com) includes several such examples.
 
-Version 0.4 introduces the concept of custom attributes, whereby each layer includes a function to which each row of data is passed (along with the plot itself). This function must return a keyword list of values that will be added to the SVG element drawn for that data point. Custom attributes let the developer embed LiveView event handlers, Alpine.js directives, or even plain Javascript to each shape drawn on the plot, tied to the data represented by that shape. 
+Version 0.4 introduces the concept of custom attributes, whereby each layer includes a function to which the row of data
+used to draw an individual geom is passed (along with the plot itself). This function must return a keyword list of values
+that will be added to the SVG element drawn for that data point. Custom attributes let the developer embed LiveView event
+handlers, Alpine.js directives, or even plain Javascript to each shape drawn on the plot, tied to the data represented by
+that shape. 
 
 For example:
 
@@ -108,7 +112,7 @@ extent GGity supports features that extend or differ from the ggplot2 API, those
 
 ## Non-Goals
 * Meet a real-world need - I code as a hobby, so this is not the product of a real-world use case. I would love for people to try the
-library and provide feedback to help overcome this. That said, Version 0.4 includes several improvements with respect to validations and edge cases that can be hard to find without day-to-day use. 
+library and provide feedback to help overcome this. That said, version 0.4 includes several improvements with respect to validations and edge cases that can be hard to find without day-to-day use. 
 
 * Optimize for performance pre-emptively - Because I am not using this in a real world application, performance is not as critical or (more importantly) apparent to me, so my focus tends to be on new features. That said, after the items planned for version 0.5 are
 implemented, I envision taking a break from adding things to focus on refactoring and measuring/optimizing performance.
@@ -117,7 +121,7 @@ implemented, I envision taking a break from adding things to focus on refactorin
 
 [Contex](https://github.com/mindok/contex) - GGity is getting close to feature parity with Contex. At present, Contex's Gantt charts
 and horizontal bar charts are the primary missing pieces. Contex is, however, more widely used, so some of the kinks are worked out.
-Also and maybe more importantly, Contex is simpler those who just want to draw a simple bar chart and are not familiar with grammar of graphics concepts will likely find Contex easier to use. 
+Also and maybe more importantly, Contex is simpler. Those who just want to draw a simple bar chart and are not familiar with grammar of graphics concepts will likely find Contex easier to use. 
 
 [Plotex](https://github.com/elcritch/plotex) - focused on time series; it is possible that for some time series-related needs Plotex
 may be better optimized or easier to learn. 
