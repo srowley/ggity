@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-867" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-867 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-867 .gg-axis-text-x {} #gg-867 .gg-axis-ticks {stroke: #000000;} #gg-867 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-867 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-867 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-867 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-867 .gg-panel-background {fill: #EEEEEE;} #gg-867 .gg-panel-border {} #gg-867 .gg-panel-grid {stroke: #FFFFFF;} #gg-867 .gg-panel-grid-major {stroke-width: 1;} #gg-867 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-867 .gg-plot-background {fill: #FFFFFF;} #gg-867 .gg-plot-title {font-size: 10px;} #gg-867 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-546" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-546 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-546 .gg-axis-text-x {} #gg-546 .gg-axis-ticks {stroke: #000000;} #gg-546 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-546 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-546 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-546 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-546 .gg-panel-background {fill: #EEEEEE;} #gg-546 .gg-panel-border {} #gg-546 .gg-panel-grid {stroke: #FFFFFF;} #gg-546 .gg-panel-grid-major {stroke-width: 1;} #gg-546 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-546 .gg-plot-background {fill: #FFFFFF;} #gg-546 .gg-plot-title {font-size: 10px;} #gg-546 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -157,9 +157,9 @@
 <line x1="51.857142857142854" x2="64.14285714285714" y1="80.0" y2="80.0" stroke="#208F8C"></line>
 <line x1="58.0" x2="58.0" y1="76.66666666666667" y2="60.000000000000014" stroke="#208F8C" stroke-width="0.5"></line>
 <line x1="58.0" x2="58.0" y1="88.33333333333334" y2="100.0" stroke="#208F8C" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="55.17905208226122" y="50.51238541559455" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="55.5" y="50.833333333333336" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#208F8C"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="55.17905208226122" y="27.17905208226122" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="55.5" y="27.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#208F8C"></circle>
 </svg><rect x="39.57142857142857" y="86.66666666666669" width="12.285714285714286" height="6.666666666666667" fill="white" fill-opacity="1" stroke="#440154" stroke-width="0.5"></rect>
 <line x1="39.57142857142857" x2="51.857142857142854" y1="93.33333333333334" y2="93.33333333333334" stroke="#440154"></line>
@@ -177,19 +177,19 @@
 <line x1="98.71428571428572" x2="123.28571428571429" y1="100.0" y2="100.0" stroke="#208F8C"></line>
 <line x1="111.00000000000001" x2="111.00000000000001" y1="96.66666666666669" y2="96.66666666666669" stroke="#208F8C" stroke-width="0.5"></line>
 <line x1="111.00000000000001" x2="111.00000000000001" y1="103.33333333333334" y2="106.66666666666667" stroke="#208F8C" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="108.17905208226124" y="117.17905208226122" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="108.50000000000001" y="117.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#208F8C"></circle>
 </svg><rect x="128.28571428571428" y="116.66666666666667" width="24.571428571428573" height="6.666666666666667" fill="white" fill-opacity="1" stroke="#440154" stroke-width="0.5"></rect>
 <line x1="128.28571428571428" x2="152.85714285714286" y1="120.00000000000001" y2="120.00000000000001" stroke="#440154"></line>
 <line x1="140.57142857142856" x2="140.57142857142856" y1="116.66666666666667" y2="110.0" stroke="#440154" stroke-width="0.5"></line>
 <line x1="140.57142857142856" x2="140.57142857142856" y1="123.33333333333334" y2="126.66666666666667" stroke="#440154" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="137.75048065368978" y="133.8457187489279" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="138.07142857142856" y="134.16666666666669" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="137.75048065368978" y="133.8457187489279" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="138.07142857142856" y="134.16666666666669" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="137.75048065368978" y="133.8457187489279" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="138.07142857142856" y="134.16666666666669" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="137.75048065368978" y="100.51238541559455" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="138.07142857142856" y="100.83333333333333" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
 </svg><rect x="174.23809523809524" y="93.33333333333334" width="8.190476190476192" height="10.0" fill="white" fill-opacity="1" stroke="#FAE622" stroke-width="0.5"></rect>
 <line x1="174.23809523809524" x2="182.42857142857144" y1="100.0" y2="100.0" stroke="#FAE622"></line>
@@ -199,7 +199,7 @@
 <line x1="166.04761904761907" x2="174.23809523809527" y1="80.0" y2="80.0" stroke="#208F8C"></line>
 <line x1="170.14285714285717" x2="170.14285714285717" y1="67.50000000000001" y2="40.000000000000014" stroke="#208F8C" stroke-width="0.5"></line>
 <line x1="170.14285714285717" x2="170.14285714285717" y1="85.83333333333334" y2="96.66666666666669" stroke="#208F8C" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="167.3219092251184" y="27.17905208226122" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="167.64285714285717" y="27.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#208F8C"></circle>
 </svg><rect x="157.85714285714286" y="90.0" width="8.190476190476192" height="0.0" fill="white" fill-opacity="1" stroke="#440154" stroke-width="0.5"></rect>
 <line x1="157.85714285714286" x2="166.04761904761907" y1="90.0" y2="90.0" stroke="#440154"></line>
@@ -209,31 +209,31 @@
 <line x1="199.71428571428572" x2="212.0" y1="120.00000000000001" y2="120.00000000000001" stroke="#FAE622"></line>
 <line x1="205.85714285714286" x2="205.85714285714286" y1="116.66666666666667" y2="116.66666666666667" stroke="#FAE622" stroke-width="0.5"></line>
 <line x1="205.85714285714286" x2="205.85714285714286" y1="120.00000000000001" y2="123.33333333333334" stroke="#FAE622" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="203.03619493940408" y="123.8457187489279" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="203.35714285714286" y="124.16666666666667" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#FAE622"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="203.03619493940408" y="107.17905208226122" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="203.35714285714286" y="107.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#FAE622"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="203.03619493940408" y="107.17905208226122" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="203.35714285714286" y="107.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#FAE622"></circle>
 </svg><rect x="187.42857142857144" y="113.33333333333334" width="12.285714285714286" height="6.666666666666667" fill="white" fill-opacity="1" stroke="#440154" stroke-width="0.5"></rect>
 <line x1="187.42857142857144" x2="199.71428571428572" y1="116.66666666666667" y2="116.66666666666667" stroke="#440154"></line>
 <line x1="193.57142857142858" x2="193.57142857142858" y1="113.33333333333334" y2="103.33333333333334" stroke="#440154" stroke-width="0.5"></line>
 <line x1="193.57142857142858" x2="193.57142857142858" y1="120.00000000000001" y2="130.0" stroke="#440154" stroke-width="0.5"></line>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="133.8457187489279" height="5.641895835477563" width="5.641895835477563">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="134.16666666666669" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="133.8457187489279" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="134.16666666666669" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="97.17905208226122" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="97.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="93.8457187489279" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="94.16666666666667" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="90.51238541559455" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="90.83333333333333" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="90.51238541559455" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="90.83333333333333" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="87.17905208226122" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="87.5" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="190.7504806536898" y="83.8457187489279" height="5.641895835477563" width="5.641895835477563">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="191.07142857142858" y="84.16666666666667" height="5.0" width="5.0">
 <circle cx="5" cy="5" r="4" fill="#440154"></circle>
 </svg></g>
 <g transform="translate(275, 64.16666666666667)">

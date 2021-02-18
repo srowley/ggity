@@ -42,12 +42,32 @@ defmodule GGity.Scale.Linetype.Discrete do
     |> Enum.take(length(levels))
   end
 
-  @spec draw_legend(Linetype.Discrete.t(), binary(), atom(), number()) :: iolist()
-  def draw_legend(%Linetype.Discrete{guide: :none}, _label, _key_glyph, _key_height), do: []
+  @spec draw_legend(Linetype.Discrete.t(), binary(), atom(), number(), keyword()) :: iolist()
+  def draw_legend(
+        %Linetype.Discrete{guide: :none},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aesthetics
+      ),
+      do: []
 
-  def draw_legend(%Linetype.Discrete{levels: [_]}, _label, _key_glyph, _key_height), do: []
+  def draw_legend(
+        %Linetype.Discrete{levels: [_]},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aesthetics
+      ),
+      do: []
 
-  def draw_legend(%Linetype.Discrete{levels: levels} = scale, label, key_glyph, key_height) do
+  def draw_legend(
+        %Linetype.Discrete{levels: levels} = scale,
+        label,
+        key_glyph,
+        key_height,
+        fixed_aesthetics
+      ) do
     [
       Draw.text(
         "#{label}",
@@ -58,12 +78,12 @@ defmodule GGity.Scale.Linetype.Discrete do
       ),
       Stream.with_index(levels)
       |> Enum.map(fn {level, index} ->
-        draw_legend_item(scale, {level, index}, key_glyph, key_height)
+        draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics)
       end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_glyph, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics) do
     [
       Draw.rect(
         x: "0",
@@ -72,7 +92,7 @@ defmodule GGity.Scale.Linetype.Discrete do
         width: key_height,
         class: "gg-legend-key"
       ),
-      draw_key_glyph(scale, level, index, key_glyph, key_height),
+      draw_key_glyph(scale, level, index, key_glyph, key_height, fixed_aesthetics),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "#{key_height + 5}",
@@ -83,19 +103,19 @@ defmodule GGity.Scale.Linetype.Discrete do
     ]
   end
 
-  defp draw_key_glyph(scale, level, index, :path, key_height) do
+  defp draw_key_glyph(scale, level, index, :path, key_height, fixed_aesthetics) do
     Draw.line(
       x1: 1,
       y1: key_height / 2 + key_height * index,
       x2: key_height - 1,
       y2: key_height / 2 + key_height * index,
-      stroke: "black",
+      stroke: fixed_aesthetics[:color],
       stroke_dasharray: "#{scale.transform.(level)}",
-      stroke_opacity: "1"
+      stroke_opacity: fixed_aesthetics[:alpha]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :timeseries, key_height) do
+  defp draw_key_glyph(scale, level, index, :timeseries, key_height, fixed_aesthetics) do
     offset = key_height * index
 
     Draw.polyline(
@@ -105,9 +125,9 @@ defmodule GGity.Scale.Linetype.Discrete do
         {key_height / 5 * 3, key_height / 5 * 3 + offset},
         {key_height - 1, 1 + offset}
       ],
-      "black",
-      1,
-      1,
+      fixed_aesthetics[:color],
+      fixed_aesthetics[:size],
+      fixed_aesthetics[:linetype],
       scale.transform.(level)
     )
   end

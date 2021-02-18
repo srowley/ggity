@@ -115,7 +115,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     Examples.economics_long()
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to color")
-    |> Plot.geom_line(%{color: "variable"})
+    |> Plot.geom_line(%{color: "variable"}, linetype: :dotted)
     |> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
     |> Plot.plot()
   end
@@ -124,7 +124,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
     Examples.economics_long()
     |> Plot.new(%{x: "date", y: "value01"})
     |> Plot.labs(title: "Mapped to linetype, custom glyph")
-    |> Plot.geom_line(%{linetype: "variable"}, key_glyph: :path)
+    |> Plot.geom_line(%{linetype: "variable"}, key_glyph: :path, color: "purple")
     |> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
     |> Plot.plot()
   end

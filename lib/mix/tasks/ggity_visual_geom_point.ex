@@ -21,7 +21,6 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
           add_shape_fixed(),
           add_shape_manual(),
           add_discrete_alpha(),
-          add_discrete_size(),
           add_size_aesthetic(),
           fixed_aesthetics(),
           diamonds_alpha_tenth(),
@@ -82,7 +81,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
   defp add_shape_fixed do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{shape: :cyl}, size: 5)
+    |> Plot.geom_point(%{shape: :cyl}, size: 5, color: "blue")
     |> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
     |> Plot.plot()
   end
@@ -99,27 +98,19 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
   defp add_discrete_alpha do
     Examples.mtcars()
     |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{alpha: :cyl})
+    |> Plot.geom_point(%{alpha: :cyl}, color: "blue")
     |> Plot.labs(title: "Discrete Alpha")
     |> Plot.scale_alpha_discrete()
-    |> Plot.plot()
-  end
-
-  defp add_discrete_size do
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
-    |> Plot.geom_point(%{size: :cyl})
-    |> Plot.labs(title: "Discrete Size")
-    |> Plot.scale_size_discrete()
     |> Plot.plot()
   end
 
   defp add_size_aesthetic do
     Examples.mtcars()
     |> Plot.new(%{x: :qsec, y: :mpg})
-    |> Plot.geom_point(%{size: :wt}, alpha: 0.3, color: "green")
-    |> Plot.labs(title: "Size Continuous")
-    |> Plot.scale_size_continuous(range: {100, 1000})
+    |> Plot.geom_point(%{size: :cyl}, alpha: 0.3, color: "blue", shape: :circle)
+    |> Plot.geom_point(%{size: :wt}, color: "red", shape: :triangle)
+    |> Plot.labs(title: "Size")
+    |> Plot.scale_size(range: {1, 10})
     |> Plot.plot()
   end
 

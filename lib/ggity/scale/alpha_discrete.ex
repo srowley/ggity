@@ -31,12 +31,32 @@ defmodule GGity.Scale.Alpha.Discrete do
     for index <- 1..number_of_levels, do: min + (index - 1) * interval
   end
 
-  @spec draw_legend(Alpha.Discrete.t(), binary(), atom(), number()) :: iolist()
-  def draw_legend(%Alpha.Discrete{guide: :none}, _label, _key_glyph, _key_height), do: []
+  @spec draw_legend(Alpha.Discrete.t(), binary(), atom(), number(), keyword()) :: iolist()
+  def draw_legend(
+        %Alpha.Discrete{guide: :none},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aesthetics
+      ),
+      do: []
 
-  def draw_legend(%Alpha.Discrete{levels: [_]}, _label, _key_glyph, _key_height), do: []
+  def draw_legend(
+        %Alpha.Discrete{levels: [_]},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aethetics
+      ),
+      do: []
 
-  def draw_legend(%Alpha.Discrete{levels: levels} = scale, label, key_glyph, key_height) do
+  def draw_legend(
+        %Alpha.Discrete{levels: levels} = scale,
+        label,
+        key_glyph,
+        key_height,
+        fixed_aethetics
+      ) do
     [
       Draw.text(
         "#{label}",
@@ -47,12 +67,12 @@ defmodule GGity.Scale.Alpha.Discrete do
       ),
       Stream.with_index(levels)
       |> Enum.map(fn {level, index} ->
-        draw_legend_item(scale, {level, index}, key_glyph, key_height)
+        draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aethetics)
       end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_glyph, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics) do
     [
       Draw.rect(
         x: "0",
@@ -61,7 +81,7 @@ defmodule GGity.Scale.Alpha.Discrete do
         width: key_height,
         class: "gg-legend-key"
       ),
-      draw_key_glyph(scale, level, index, key_glyph, key_height),
+      draw_key_glyph(scale, level, index, key_glyph, key_height, fixed_aesthetics),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "#{key_height + 5}",
@@ -72,17 +92,18 @@ defmodule GGity.Scale.Alpha.Discrete do
     ]
   end
 
-  defp draw_key_glyph(scale, level, index, :rect, key_height) do
+  defp draw_key_glyph(scale, level, index, :rect, key_height, fixed_aesthetics) do
     Draw.rect(
       x: "0",
       y: "#{key_height * index}",
       height: key_height,
       width: key_height,
-      fill_opacity: "#{scale.transform.(level)}"
+      fill_opacity: "#{scale.transform.(level)}",
+      fill: fixed_aesthetics[:fill]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :a, key_height) do
+  defp draw_key_glyph(scale, level, index, :a, key_height, fixed_aesthetics) do
     Draw.text(
       "a",
       x: key_height / 2,
@@ -91,17 +112,18 @@ defmodule GGity.Scale.Alpha.Discrete do
       dominant_baseline: "middle",
       font_size: 10,
       font_weight: "bold",
-      fill: "black",
+      fill: fixed_aesthetics[:color],
       fill_opacity: "#{scale.transform.(level)}"
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :point, key_height) do
+  defp draw_key_glyph(scale, level, index, :point, key_height, fixed_aesthetics) do
     GGity.Shapes.draw(
       :circle,
       {key_height / 2, key_height / 2 + key_height * index},
       :math.pow(1 + key_height / 3, 2),
-      color: "black",
+      color: fixed_aesthetics[:color],
+      fill: fixed_aesthetics[:fill],
       fill_opacity: "#{scale.transform.(level)}"
     )
   end

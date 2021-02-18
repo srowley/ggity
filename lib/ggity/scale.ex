@@ -20,7 +20,6 @@ defimpl GGity.Scale,
     GGity.Scale.Linetype.Discrete,
     GGity.Scale.Shape.Manual,
     GGity.Scale.Shape,
-    GGity.Scale.Size.Discrete,
     GGity.Scale.X.Discrete
   ] do
   def train(%scale_type{} = scale, levels) do
@@ -31,7 +30,7 @@ end
 defimpl GGity.Scale,
   for: [
     GGity.Scale.Alpha.Continuous,
-    GGity.Scale.Size.Continuous,
+    GGity.Scale.Size,
     GGity.Scale.X.Continuous,
     GGity.Scale.X.Date,
     GGity.Scale.X.DateTime,

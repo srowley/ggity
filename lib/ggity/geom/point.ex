@@ -38,8 +38,12 @@ defmodule GGity.Geom.Point do
     transforms =
       geom_point
       |> Map.take([:alpha, :color, :shape, :size])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
+      |> Enum.reduce(%{}, fn
+        {:size, fixed_value}, fixed ->
+          Map.put(fixed, :size, fn _value -> :math.pow(fixed_value, 2) end)
+
+        {aesthetic, fixed_value}, fixed ->
+          Map.put(fixed, aesthetic, fn _value -> fixed_value end)
       end)
       |> Map.merge(scale_transforms)
 
@@ -66,7 +70,7 @@ defmodule GGity.Geom.Point do
       labelled_values[:shape],
       {labelled_values[:x] + plot.area_padding,
        (plot.width - labelled_values[:y]) / plot.aspect_ratio + plot.area_padding},
-      :math.pow(labelled_values[:size], 2),
+      labelled_values[:size],
       Keyword.take(labelled_values, [:color, :fill_opacity]) ++ custom_attributes
     )
   end

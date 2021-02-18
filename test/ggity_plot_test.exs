@@ -1,6 +1,7 @@
 defmodule GGityPlotTest do
   use ExUnit.Case
 
+  import SweetXml
   alias GGity.{Element, Examples, Geom, Labels, Plot, Scale}
 
   setup do
@@ -414,8 +415,8 @@ defmodule GGityPlotTest do
     end
   end
 
-  describe "scale_size_continuous/2" do
-    test "sets the size scale on the plot geom to continuous", %{
+  describe "scale_size/2" do
+    test "sets the size scale on the plot", %{
       data: data,
       mapping: mapping
     } do
@@ -424,26 +425,9 @@ defmodule GGityPlotTest do
       plot =
         Plot.new(data, mapping)
         |> Plot.geom_point()
-        |> Plot.scale_size_continuous()
+        |> Plot.scale_size()
 
-      assert %Scale.Size.Continuous{} = plot.scales.size()
-    end
-  end
-
-  describe "scale_size_discrete/2" do
-    setup %{data: data, mapping: mapping} do
-      mapping = Map.put(mapping, :size, :c)
-
-      plot =
-        Plot.new(data, mapping)
-        |> Plot.geom_point()
-
-      %{plot: plot}
-    end
-
-    test "sets the size scale on the plot geom to an discrete scale", %{plot: plot} do
-      plot = Plot.scale_size_discrete(plot)
-      assert %Scale.Size.Discrete{} = plot.scales.size()
+      assert %Scale.Size{} = plot.scales.size()
     end
   end
 
@@ -686,19 +670,27 @@ defmodule GGityPlotTest do
       mapping: mapping
     } do
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point(%{color: :c, size: :c})
-        |> Plot.scale_size_discrete()
 
-      assert plot.scales.size.guide == :legend
+      # Unfortunately need to test output, because scales for
+      # different layers are not consolidated until the plot is rendered
+      legend_count = fn plot ->
+        plot
+        |> Plot.plot()
+        |> to_string()
+        |> xpath(~x"//*[@class='gg-text gg-legend-title']"l)
+        |> length()
+      end
+
+      assert legend_count.(plot) == 2
 
       neither_legend = Plot.guides(plot, color: :none, size: :none)
-      assert neither_legend.scales.color.guide == :none
-      assert neither_legend.scales.size.guide == :none
+      assert legend_count.(neither_legend) == 0
 
-      color_only = Plot.guides(neither_legend, color: :legend)
-      assert color_only.scales.color.guide == :legend
-      assert color_only.scales.size.guide == :none
+      size_only = Plot.guides(plot, color: :none)
+      assert legend_count.(size_only) == 1
     end
   end
 end

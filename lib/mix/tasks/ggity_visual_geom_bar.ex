@@ -100,7 +100,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
       %{salesperson: "Jane", week: "Week 3", units: 9}
     ]
     |> Plot.new(%{x: :week, y: :units, fill: :salesperson})
-    |> Plot.geom_col(position: :dodge)
+    |> Plot.geom_col(position: :dodge, alpha: 0.7)
     |> Plot.scale_fill_viridis(option: :cividis)
     |> Plot.plot()
   end

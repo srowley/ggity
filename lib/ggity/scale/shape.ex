@@ -28,12 +28,12 @@ defmodule GGity.Scale.Shape do
     |> Enum.take(length(levels))
   end
 
-  @spec draw_legend(Shape.t(), binary(), number()) :: iolist()
-  def draw_legend(%Shape{guide: :none}, _label, _key_height), do: []
+  @spec draw_legend(Shape.t(), binary(), number(), keyword()) :: iolist()
+  def draw_legend(%Shape{guide: :none}, _label, _key_height, _fixed_aesthetics), do: []
 
-  def draw_legend(%Shape{levels: [_]}, _label, _key_height), do: []
+  def draw_legend(%Shape{levels: [_]}, _label, _key_height, _fixed_aesthetics), do: []
 
-  def draw_legend(%Shape{levels: levels} = scale, label, key_height) do
+  def draw_legend(%Shape{levels: levels} = scale, label, key_height, fixed_aesthetics) do
     [
       Draw.text(
         "#{label}",
@@ -43,11 +43,13 @@ defmodule GGity.Scale.Shape do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_height) end)
+      |> Enum.map(fn {level, index} ->
+        draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics)
+      end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics) do
     [
       Draw.rect(
         x: "0",
@@ -60,9 +62,9 @@ defmodule GGity.Scale.Shape do
         scale.transform.(level),
         {key_height / 2, key_height / 2 + key_height * index},
         :math.pow(1 + key_height / 3, 2),
-        fill: "black",
-        color: "black",
-        fill_opacity: "1"
+        fill: fixed_aesthetics[:fill],
+        color: fixed_aesthetics[:color],
+        fill_opacity: fixed_aesthetics[:alpha]
       ),
       Draw.text(
         "#{Labels.format(scale, level)}",

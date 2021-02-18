@@ -36,6 +36,13 @@ defmodule GGity.Shapes do
   @spec draw(binary() | atom() | non_neg_integer(), {number(), number()}, number(), keyword()) ::
           iolist()
   def draw(character, {x, y}, size, options) when is_binary(character) do
+    options =
+      if Keyword.has_key?(options, :color) do
+        options
+        |> Keyword.put(:fill, options[:color])
+        |> Keyword.delete(:color)
+      end
+
     Draw.text(character, [
       {:x, x},
       {:y, y},
@@ -296,7 +303,7 @@ defmodule GGity.Shapes do
 
   defp square(attributes) do
     attributes
-    |> Keyword.merge(height: "8", width: "8")
+    |> Keyword.merge(height: "10", width: "10")
     |> Draw.rect()
   end
 
@@ -305,7 +312,7 @@ defmodule GGity.Shapes do
   end
 
   defp triangle(attributes) do
-    Draw.polygon("4.5,0 9,9 0,9", attributes)
+    Draw.polygon("5,0 10,10 0,10", attributes)
   end
 
   defp plus(attributes) do
@@ -351,7 +358,7 @@ defmodule GGity.Shapes do
   defp wrap_svg(shapes, {x, y}, size) do
     Draw.svg(
       shapes,
-      viewBox: "-1 -1 11 11",
+      viewBox: "0 0 10 10",
       x: x - size / 2,
       y: y - size / 2,
       height: to_string(size),
@@ -359,15 +366,19 @@ defmodule GGity.Shapes do
     )
   end
 
-  defp size_for(:square, area) do
+  defp size_for(_shape, area) do
     :math.sqrt(area)
   end
 
-  defp size_for(:triangle, area) do
-    :math.sqrt(area)
-  end
+  # defp size_for(:square, area) do
+  #   :math.sqrt(area)
+  # end
 
-  defp size_for(:circle, area) do
-    2 * :math.sqrt(area / :math.pi())
-  end
+  # defp size_for(:triangle, area) do
+  #   :math.sqrt(area)
+  # end
+
+  # defp size_for(:circle, area) do
+  #   2 * :math.sqrt(area / :math.pi())
+  # end
 end

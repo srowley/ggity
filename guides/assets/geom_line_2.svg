@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-419" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-419 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-419 .gg-axis-text-x {} #gg-419 .gg-axis-ticks {stroke: #000000;} #gg-419 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-419 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-419 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-419 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-419 .gg-panel-background {fill: #EEEEEE;} #gg-419 .gg-panel-border {} #gg-419 .gg-panel-grid {stroke: #FFFFFF;} #gg-419 .gg-panel-grid-major {stroke-width: 1;} #gg-419 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-419 .gg-plot-background {fill: #FFFFFF;} #gg-419 .gg-plot-title {font-size: 10px;} #gg-419 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-98" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-98 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-98 .gg-axis-text-x {} #gg-98 .gg-axis-ticks {stroke: #000000;} #gg-98 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-98 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-98 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-98 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-98 .gg-panel-background {fill: #EEEEEE;} #gg-98 .gg-panel-border {} #gg-98 .gg-panel-grid {stroke: #FFFFFF;} #gg-98 .gg-panel-grid-major {stroke-width: 1;} #gg-98 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-98 .gg-plot-background {fill: #FFFFFF;} #gg-98 .gg-plot-title {font-size: 10px;} #gg-98 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -141,19 +141,19 @@
 <g transform="translate(0, 0)">
 <text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left"></text>
 <rect x="0" y="0" height="15" width="15" class="gg-legend-key"></rect>
-<line x1="1" y1="7.5" x2="14" y2="7.5" stroke="#440154" stroke-opacity="1"></line>
+<line x1="1" y1="7.5" x2="14" y2="7.5" stroke="#440154" color="black" stroke-opacity="1"></line>
 <text x="20" y="10" class="gg-text gg-legend-text" text-anchor="left">pce</text>
 <rect x="0" y="15" height="15" width="15" class="gg-legend-key"></rect>
-<line x1="1" y1="22.5" x2="14" y2="22.5" stroke="#3B518A" stroke-opacity="1"></line>
+<line x1="1" y1="22.5" x2="14" y2="22.5" stroke="#3B518A" color="black" stroke-opacity="1"></line>
 <text x="20" y="25" class="gg-text gg-legend-text" text-anchor="left">pop</text>
 <rect x="0" y="30" height="15" width="15" class="gg-legend-key"></rect>
-<line x1="1" y1="37.5" x2="14" y2="37.5" stroke="#218E8C" stroke-opacity="1"></line>
+<line x1="1" y1="37.5" x2="14" y2="37.5" stroke="#218E8C" color="black" stroke-opacity="1"></line>
 <text x="20" y="40" class="gg-text gg-legend-text" text-anchor="left">psavert</text>
 <rect x="0" y="45" height="15" width="15" class="gg-legend-key"></rect>
-<line x1="1" y1="52.5" x2="14" y2="52.5" stroke="#57C665" stroke-opacity="1"></line>
+<line x1="1" y1="52.5" x2="14" y2="52.5" stroke="#57C665" color="black" stroke-opacity="1"></line>
 <text x="20" y="55" class="gg-text gg-legend-text" text-anchor="left">uempmed</text>
 <rect x="0" y="60" height="15" width="15" class="gg-legend-key"></rect>
-<line x1="1" y1="67.5" x2="14" y2="67.5" stroke="#F6E61F" stroke-opacity="1"></line>
+<line x1="1" y1="67.5" x2="14" y2="67.5" stroke="#F6E61F" color="black" stroke-opacity="1"></line>
 <text x="20" y="70" class="gg-text gg-legend-text" text-anchor="left">unemploy</text>
 </g>
 </g>

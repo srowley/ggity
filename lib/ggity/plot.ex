@@ -62,7 +62,7 @@ defmodule GGity.Plot do
 
   @continuous_scales [
     Scale.Alpha.Continuous,
-    Scale.Size.Continuous,
+    Scale.Size,
     Scale.X.Continuous,
     Scale.X.Date,
     Scale.X.DateTime,
@@ -152,10 +152,8 @@ defmodule GGity.Plot do
   defp assign_scale(:shape, _value), do: Scale.Shape.new()
 
   defp assign_scale(:size, value) when is_number(value) do
-    Scale.Size.Continuous.new()
+    Scale.Size.new()
   end
-
-  defp assign_scale(:size, _value), do: Scale.Size.Discrete.new()
 
   defp assign_scale(:x, %Date{}), do: Scale.X.Date.new()
 
@@ -442,13 +440,26 @@ defmodule GGity.Plot do
     |> Draw.g(transform: "translate(#{left_shift}, 0)")
   end
 
+  defp fixed_aesthetics(plot) do
+    all_mappings = Enum.map(plot.combined_layers, fn layer -> Map.keys(layer.mapping) end)
+
+    fixed_aesthetic_keys =
+      [:color, :fill, :linetype, :shape, :size, :alpha]
+      |> Enum.reject(fn key -> key in all_mappings end)
+
+    plot.combined_layers
+    |> Enum.map(fn layer -> Map.take(layer, fixed_aesthetic_keys) end)
+    |> Enum.flat_map(fn aesthetics -> Map.to_list(aesthetics) end)
+    |> Enum.uniq()
+  end
+
   defp draw_legend_group(plot) do
     {legend_group, legend_group_height} =
       Enum.reduce(
         [:color, :fill, :linetype, :shape, :size, :alpha],
         {[], 0},
         fn aesthetic, {legends, offset_acc} ->
-          {[draw_legend(plot, aesthetic, offset_acc) | legends],
+          {[draw_legend(plot, aesthetic, offset_acc, fixed_aesthetics(plot)) | legends],
            offset_acc + legend_height(plot, Map.get(plot.scales, aesthetic))}
         end
       )
@@ -468,7 +479,12 @@ defmodule GGity.Plot do
     end
   end
 
-  defp draw_legend(%Plot{theme: %{legend_key: %{height: height}}} = plot, aesthetic, offset)
+  defp draw_legend(
+         %Plot{theme: %{legend_key: %{height: height}}} = plot,
+         aesthetic,
+         offset,
+         fixed_aesthetics
+       )
        when is_number(height) do
     scale = Map.get(plot.scales, aesthetic)
 
@@ -477,7 +493,7 @@ defmodule GGity.Plot do
       key_glyph = key_glyph(plot, aesthetic)
 
       scale
-      |> Legend.draw_legend(label, key_glyph, plot.theme.legend_key.height)
+      |> Legend.draw_legend(label, key_glyph, plot.theme.legend_key.height, fixed_aesthetics)
       |> Draw.g(transform: "translate(0, #{offset})")
     else
       []
@@ -486,7 +502,8 @@ defmodule GGity.Plot do
 
   defp display_legend?(plot, scale), do: legend_height(plot, scale) > 0
 
-  defp legend_height(_plot, %scale_type{}) when scale_type in @continuous_scales do
+  defp legend_height(_plot, %scale_type{})
+       when scale_type in @continuous_scales and scale_type != Scale.Size do
     0
   end
 
@@ -494,8 +511,23 @@ defmodule GGity.Plot do
   defp legend_height(_plot, %{levels: []}), do: 0
   defp legend_height(_plot, %{levels: [_]}), do: 0
 
-  defp legend_height(plot, %{} = scale) do
-    20 + plot.theme.legend_key.height * length(scale.levels)
+  defp legend_height(plot, %scale_type{} = scale) when scale_type == Scale.Size do
+    theme_height = plot.theme.legend_key.height
+
+    scale.tick_values
+    |> Enum.map(fn value ->
+      shape_height = 2 * :math.sqrt(scale.transform.(value) / :math.pi())
+      max(shape_height, theme_height)
+    end)
+    |> Enum.sum()
+  end
+
+  defp legend_height(plot, %{breaks: breaks}) do
+    20 + plot.theme.legend_key.height * breaks
+  end
+
+  defp legend_height(plot, %{levels: levels}) do
+    20 + plot.theme.legend_key.height * length(levels)
   end
 
   defp legend_height(_plot, _nil_or_other), do: 0
@@ -1399,32 +1431,9 @@ defmodule GGity.Plot do
   - `:range` - a tuple with minimum (default - `9`) and maximum (default - `100`)
   values to be bound to the data
   """
-  @spec scale_size_continuous(Plot.t(), keyword()) :: Plot.t()
-  def scale_size_continuous(%Plot{} = plot, options \\ []) do
-    struct(plot, scales: Map.put(plot.scales, :size, Scale.Size.Continuous.new(options)))
-  end
-
-  @doc """
-  Sets geom point size for categorical data.
-
-  For categorical data for which a linear mapping of values to marker size is not
-  appropriate, this scale generates a palette of evenly spaced area values
-  between `9` and `100` that are mapped to each unique value of the data. The
-  palette is generated such that the difference between each size value is
-  maximized. The set of unique data values are sorted for the purpose of assigning
-  them to a size and ordering the legend.
-
-  This function also takes the following options:
-
-  - `:labels` - specifies how legend item names (levels of the scale) should be
-  formatted. See `GGity.Labels` for valid values for this option.
-
-  - `:range` - a tuple with minimum (default - `9`) and maximum (default - `100`)
-  values to be bound to the data
-  """
-  @spec scale_size_discrete(Plot.t(), keyword()) :: Plot.t()
-  def scale_size_discrete(%Plot{} = plot, options \\ []) do
-    struct(plot, scales: Map.put(plot.scales, :size, Scale.Size.Discrete.new(options)))
+  @spec scale_size(Plot.t(), keyword()) :: Plot.t()
+  def scale_size(%Plot{} = plot, options \\ []) do
+    struct(plot, scales: Map.put(plot.scales, :size, Scale.Size.new(options)))
   end
 
   @doc """

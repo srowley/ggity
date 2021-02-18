@@ -30,12 +30,12 @@ defmodule GGityScaleLineTypeDiscreteTest do
       assert [] ==
                Linetype.Discrete.new()
                |> Linetype.Discrete.train(["fish"])
-               |> Linetype.Discrete.draw_legend("Nothing Here", :path, 15)
+               |> Linetype.Discrete.draw_legend("Nothing Here", :path, 15, [])
     end
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Linetype.Discrete.draw_legend(scale, "Fine Meats", :path, 15)
+        Linetype.Discrete.draw_legend(scale, "Fine Meats", :path, 15, [])
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

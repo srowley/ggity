@@ -25,12 +25,26 @@ defmodule GGity.Scale.Fill.Viridis do
     struct(Fill.Viridis, Map.from_struct(color_struct))
   end
 
-  @spec draw_legend(Fill.Viridis.t(), binary(), atom(), number()) :: iolist()
-  def draw_legend(%Fill.Viridis{guide: :none}, _label, _key_glyph, _key_height), do: []
+  @spec draw_legend(Fill.Viridis.t(), binary(), atom(), number(), keyword()) :: iolist()
+  def draw_legend(
+        %Fill.Viridis{guide: :none},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aesthetics
+      ),
+      do: []
 
-  def draw_legend(%Fill.Viridis{levels: [_]}, _label, _key_glyp, _key_heighth), do: []
+  def draw_legend(%Fill.Viridis{levels: [_]}, _label, _key_glyp, _key_heighth, _fixed_aesthetics),
+    do: []
 
-  def draw_legend(%Fill.Viridis{levels: levels} = scale, label, key_glyph, key_height) do
+  def draw_legend(
+        %Fill.Viridis{levels: levels} = scale,
+        label,
+        key_glyph,
+        key_height,
+        fixed_aesthetics
+      ) do
     [
       Draw.text(
         "#{label}",
@@ -41,14 +55,14 @@ defmodule GGity.Scale.Fill.Viridis do
       ),
       Stream.with_index(levels)
       |> Enum.map(fn {level, index} ->
-        draw_legend_item(scale, {level, index}, key_glyph, key_height)
+        draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics)
       end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_glyph, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics) do
     [
-      draw_key_glyph(scale, level, index, key_glyph, key_height),
+      draw_key_glyph(scale, level, index, key_glyph, key_height, fixed_aesthetics),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "#{5 + key_height}",
@@ -59,13 +73,13 @@ defmodule GGity.Scale.Fill.Viridis do
     ]
   end
 
-  defp draw_key_glyph(scale, level, index, :rect, key_height) do
+  defp draw_key_glyph(scale, level, index, :rect, key_height, fixed_aesthetics) do
     Draw.rect(
       x: "0",
       y: "#{key_height * index}",
       height: key_height,
       width: key_height,
-      style: "fill:#{scale.transform.(level)}",
+      style: "fill:#{scale.transform.(level)}; fill-opacity:#{fixed_aesthetics[:alpha]};",
       class: "gg-legend-key"
     )
   end

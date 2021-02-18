@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-227" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-227 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-227 .gg-axis-text-x {} #gg-227 .gg-axis-ticks {stroke: #000000;} #gg-227 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-227 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-227 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-227 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-227 .gg-panel-background {fill: #EEEEEE;} #gg-227 .gg-panel-border {} #gg-227 .gg-panel-grid {stroke: #FFFFFF;} #gg-227 .gg-panel-grid-major {stroke-width: 1;} #gg-227 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-227 .gg-plot-background {fill: #FFFFFF;} #gg-227 .gg-plot-title {font-size: 10px;} #gg-227 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-583" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-583 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-583 .gg-axis-text-x {} #gg-583 .gg-axis-ticks {stroke: #000000;} #gg-583 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-583 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-583 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-583 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-583 .gg-panel-background {fill: #EEEEEE;} #gg-583 .gg-panel-border {} #gg-583 .gg-panel-grid {stroke: #FFFFFF;} #gg-583 .gg-panel-grid-major {stroke-width: 1;} #gg-583 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-583 .gg-plot-background {fill: #FFFFFF;} #gg-583 .gg-plot-title {font-size: 10px;} #gg-583 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -143,69 +143,90 @@
 </g>
 </g>
 <text x="-73.33333333333333" y="-40" class="gg-text gg-axis-title" text-anchor="middle" transform="rotate(-90)">mpg</text>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="71.69781224096768" y="80.23114557430101" height="6.204375518064633" width="6.204375518064633">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="72.99664664213212" y="81.52997997546545" height="3.6067067157357466" width="3.6067067157357466">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="81.60078702219593" y="79.93412035552926" height="6.798425955608137" width="6.798425955608137">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="83.08677845855043" y="81.42011179188376" height="3.8264430828991385" width="3.8264430828991385">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="58.67234489595031" y="71.20567822928365" height="8.255310208099365" width="8.255310208099365">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="60.60459760711921" y="73.13793094045255" height="4.390804785761565" width="4.390804785761565">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="94.13909504122127" y="77.09465059677683" height="8.921809917557457" width="8.921809917557457">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="96.27083706022957" y="79.22639261578513" height="4.658325879540847" width="4.658325879540847">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="104.20078702219593" y="90.15634257775149" height="6.798425955608137" width="6.798425955608137">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.68677845855042" y="91.64233401410598" height="3.8264430828991385" width="3.8264430828991385">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="103.64717014932054" y="91.46939237154277" height="9.505659701358908" width="9.505659701358908">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.95178636553099" y="93.7740085877532" height="4.896427268938036" width="4.896427268938036">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="110.06401983009948" y="110.37513094121059" height="5.471960339801016" width="5.471960339801016">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="111.12667994693184" y="111.43779105804295" height="3.3466401061363023" width="3.3466401061363023">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="92.92766086125607" y="63.549883083478306" height="9.34467827748785" width="9.34467827748785">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="95.18477054230175" y="65.80699276452398" height="4.83045891539648" width="4.83045891539648">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="90.35810416452244" y="69.69143749785576" height="11.283791670955125" width="11.283791670955125">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="93.18079502932711" y="72.51412836266044" height="5.638409941345757" width="5.638409941345757">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="103.6039336896284" y="87.33726702296175" height="7.992132620743186" width="7.992132620743186">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.45669647506472" y="89.19002980839807" height="4.286607049870562" width="4.286607049870562">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="103.35293510561924" y="93.30849066117479" height="8.494129788761523" width="8.494129788761523">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.3569551943842" y="95.31251074993975" height="4.48608961123159" width="4.48608961123159">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="129.2132152885077" y="100.19099306628549" height="7.173569422984591" width="7.173569422984591">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="130.81568651670156" y="101.79346429447935" height="3.9686269665968856" width="3.9686269665968856">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="115.51832972868839" y="96.09610750646615" height="7.363340542623236" width="7.363340542623236">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="117.17927405783631" y="97.75705183561408" height="4.041451884327381" width="4.041451884327381">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="117.3355415868728" y="105.24665269798393" height="7.728916826254379" width="7.728916826254379">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="119.1083499336648" y="107.01946104477594" height="4.183300132670378" width="4.183300132670378">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="176.14447517388578" y="126.58891961833024" height="7.711049652228425" width="7.711049652228425">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="177.91183892703015" y="128.3562833714746" height="4.176322145939734" width="4.176322145939734">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="183.1767032169375" y="126.66114766138195" height="7.566593566125017" width="7.566593566125017">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="184.89996359255474" y="128.3844080369992" height="4.120072814890533" width="4.120072814890533">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="180.20361407679857" y="107.7369474101319" height="7.1927718464028505" width="7.1927718464028505">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="181.81201525827453" y="109.34534859160784" height="3.9759694834509656" width="3.9759694834509656">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="53.52751481117418" y="28.194181477840846" height="8.944970377651652" width="8.944970377651652">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="55.66614589144909" y="30.332812558115755" height="4.667708217101835" width="4.667708217101835">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="30.51011191852904" y="37.4656674740846" height="8.179776162941918" width="8.179776162941918">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="32.41959483887359" y="39.37515039442915" height="4.360810322252811" width="4.360810322252811">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="38.764709575721724" y="21.364709575721726" height="9.27058084855655" width="9.27058084855655">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="40.99991319601422" y="23.59991319601422" height="4.800173607971556" width="4.800173607971556">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="63.923972134552486" y="76.4350832456636" height="9.352055730895014" width="9.352055730895014">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="66.1832614953206" y="78.69437260643171" height="4.833477009358791" width="4.833477009358791">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="107.47774243872891" y="104.45552021650668" height="6.644515122542185" width="6.644515122542185">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="108.91557922250186" y="105.89335700027964" height="3.768841554996266" width="3.768841554996266">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="103.86161211049968" y="105.57272322161081" height="7.076775779000614" width="7.076775779000614">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="105.43414564798574" y="107.14525675909688" height="3.931708704028483" width="3.931708704028483">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="121.14994001360184" y="115.10549556915738" height="4.900119972796307" width="4.900119972796307">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="122.02314923555419" y="115.97870479110973" height="3.153701528891619" width="3.153701528891619">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="120.38560406785018" y="87.91893740118351" height="6.828791864299669" width="6.828791864299669">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="121.88107017672176" y="89.4144035100551" height="3.837859646556485" width="3.837859646556485">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="43.152935105619235" y="51.08626843895257" height="8.494129788761523" width="8.494129788761523">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="45.1569551943842" y="53.09028852771754" height="4.48608961123159" width="4.48608961123159">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="52.36717235282056" y="57.87828346393166" height="6.465655294358892" width="6.465655294358892">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="53.74876167570642" y="59.25987278681752" height="3.7024766485871767" width="3.7024766485871767">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="27.182209410937723" y="38.217764966493284" height="6.675581178124545" width="6.675581178124545">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="28.62978396296437" y="39.66533951851993" height="3.780432074071251" width="3.780432074071251">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="95.10743124935672" y="104.75187569380117" height="3.385137501286538" width="3.385137501286538">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="95.4498456878317" y="105.09429013227614" height="2.7003086243366083" width="2.7003086243366083">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="78.28740252408419" y="86.5985136351953" height="5.025194951831627" width="5.025194951831627">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="79.20247587394326" y="87.51358698505437" height="3.195048252113469" width="3.195048252113469">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="111.00845745635596" y="108.20845745635596" height="3.583085087288079" width="3.583085087288079">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="111.42310736317847" y="108.62310736317848" height="2.753785273643051" width="2.753785273643051">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 11 11" x="77.07652414982407" y="77.43207970537962" height="8.246951700351874" width="8.246951700351874">
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="79.00625890315197" y="79.36181445870753" height="4.387482193696062" width="4.387482193696062">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
 </svg></g>
+<g transform="translate(275, 66.66666666666667)">
+<g transform="translate(0, 0)">
+<text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left">qsec</text>
+<rect x="0" y="0" height="15" width="15" class="gg-legend-key"></rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="5.792174872340067" y="5.792174872340067" height="3.415650255319866" width="3.415650255319866">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><text x="20" y="7.5" class="gg-text gg-legend-text" text-anchor="left" dominant-baseline="middle">16.0</text>
+<rect x="0" y="15" height="15" width="15" class="gg-legend-key"></rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="5.08477054230176" y="20.08477054230176" height="4.83045891539648" width="4.83045891539648">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><text x="20" y="22.5" class="gg-text gg-legend-text" text-anchor="left" dominant-baseline="middle">20.0</text>
+<rect x="0" y="30" height="15" width="15" class="gg-legend-key"></rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="4.541960108450192" y="34.54196010845019" height="5.916079783099616" width="5.916079783099616">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><text x="20" y="37.5" class="gg-text gg-legend-text" text-anchor="left" dominant-baseline="middle">24.0</text>
+<rect x="0" y="45" height="15" width="15" class="gg-legend-key"></rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="4.084349744680134" y="49.08434974468013" height="6.831300510639732" width="6.831300510639732">
+<circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
+</svg><text x="20" y="52.5" class="gg-text gg-legend-text" text-anchor="left" dominant-baseline="middle">28.0</text>
+</g>
+</g>
 </svg>

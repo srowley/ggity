@@ -1384,12 +1384,32 @@ defmodule GGity.Scale.Color.Viridis do
     struct(scale, levels: levels, transform: fn value -> color_map[to_string(value)] end)
   end
 
-  @spec draw_legend(Color.Viridis.t(), binary(), atom(), number()) :: iolist()
-  def draw_legend(%Color.Viridis{guide: :none}, _label, _key_glyph, _key_height), do: []
+  @spec draw_legend(Color.Viridis.t(), binary(), atom(), number(), keyword()) :: iolist()
+  def draw_legend(
+        %Color.Viridis{guide: :none},
+        _label,
+        _key_glyph,
+        _key_height,
+        _fixed_aesthetics
+      ),
+      do: []
 
-  def draw_legend(%Color.Viridis{levels: [_]}, _label, _key_glyph, _key_height), do: []
+  def draw_legend(
+        %Color.Viridis{levels: [_]},
+        _label,
+        _key_glyph,
+        _key_heigh,
+        _fixed_aestheticst
+      ),
+      do: []
 
-  def draw_legend(%Color.Viridis{levels: levels} = scale, label, key_glyph, key_height) do
+  def draw_legend(
+        %Color.Viridis{levels: levels} = scale,
+        label,
+        key_glyph,
+        key_height,
+        fixed_aesthetics
+      ) do
     [
       Draw.text(
         "#{label}",
@@ -1400,12 +1420,12 @@ defmodule GGity.Scale.Color.Viridis do
       ),
       Stream.with_index(levels)
       |> Enum.map(fn {level, index} ->
-        draw_legend_item(scale, {level, index}, key_glyph, key_height)
+        draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics)
       end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_glyph, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics) do
     [
       Draw.rect(
         x: "0",
@@ -1414,7 +1434,7 @@ defmodule GGity.Scale.Color.Viridis do
         width: key_height,
         class: "gg-legend-key"
       ),
-      draw_key_glyph(scale, level, index, key_glyph, key_height),
+      draw_key_glyph(scale, level, index, key_glyph, key_height, fixed_aesthetics),
       Draw.text(
         "#{Labels.format(scale, level)}",
         x: "#{key_height + 5}",
@@ -1425,28 +1445,29 @@ defmodule GGity.Scale.Color.Viridis do
     ]
   end
 
-  defp draw_key_glyph(scale, level, index, :path, key_height) do
+  defp draw_key_glyph(scale, level, index, :path, key_height, fixed_aesthetics) do
     Draw.line(
       x1: 1,
       y1: key_height / 2 + key_height * index,
       x2: key_height - 1,
       y2: key_height / 2 + key_height * index,
       stroke: "#{scale.transform.(level)}",
-      stroke_opacity: "1"
+      color: fixed_aesthetics[:color],
+      stroke_opacity: fixed_aesthetics[:alpha]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :point, key_height) do
+  defp draw_key_glyph(scale, level, index, :point, key_height, fixed_aesthetics) do
     GGity.Shapes.draw(
       :circle,
       {key_height / 2, key_height / 2 + key_height * index},
       :math.pow(1 + key_height / 3, 2),
       color: "#{scale.transform.(level)}",
-      fill_opacity: "1"
+      fill_opacity: fixed_aesthetics[:alpha]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :a, key_height) do
+  defp draw_key_glyph(scale, level, index, :a, key_height, fixed_aesthetics) do
     Draw.text(
       "a",
       x: key_height / 2,
@@ -1456,11 +1477,11 @@ defmodule GGity.Scale.Color.Viridis do
       font_size: 10,
       font_weight: "bold",
       fill: "#{scale.transform.(level)}",
-      fill_opacity: "1"
+      fill_opacity: fixed_aesthetics[:alpha]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :timeseries, key_height) do
+  defp draw_key_glyph(scale, level, index, :timeseries, key_height, fixed_aesthetics) do
     offset = key_height * index
 
     Draw.polyline(
@@ -1471,13 +1492,13 @@ defmodule GGity.Scale.Color.Viridis do
         {key_height - 1, 1 + offset}
       ],
       scale.transform.(level),
-      1,
-      1,
-      ""
+      fixed_aesthetics[:color],
+      fixed_aesthetics[:size],
+      fixed_aesthetics[:linetype]
     )
   end
 
-  defp draw_key_glyph(scale, level, index, :boxplot, key_height) do
+  defp draw_key_glyph(scale, level, index, :boxplot, key_height, fixed_aesthetics) do
     offset = key_height * index
 
     [
@@ -1501,7 +1522,7 @@ defmodule GGity.Scale.Color.Viridis do
         width: key_height - 4,
         height: key_height - 8,
         stroke: scale.transform.(level),
-        fill: "white"
+        fill: fixed_aesthetics[:fill]
       ),
       Draw.line(
         x1: 2,

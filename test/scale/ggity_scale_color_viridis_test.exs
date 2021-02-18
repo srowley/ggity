@@ -31,12 +31,12 @@ defmodule GGityScaleColorViridisTest do
       assert [] ==
                Color.Viridis.new()
                |> Color.Viridis.train(["fish"])
-               |> Color.Viridis.draw_legend("Nothing Here", :point, 15)
+               |> Color.Viridis.draw_legend("Nothing Here", :point, 15, [])
     end
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Color.Viridis.draw_legend(scale, "Fine Meats", :point, 15)
+        Color.Viridis.draw_legend(scale, "Fine Meats", :point, 15, [])
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

@@ -51,14 +51,14 @@ defmodule GGity.Scale.Shape.Manual do
     struct(scale, levels: levels, transform: fn value -> values_map[to_string(value)] end)
   end
 
-  @spec draw_legend(Shape.Manual.t(), binary(), number()) :: iolist()
-  def draw_legend(%Shape.Manual{guide: :none}, _label, _key_height), do: []
+  @spec draw_legend(Shape.Manual.t(), binary(), number(), keyword()) :: iolist()
+  def draw_legend(%Shape.Manual{guide: :none}, _label, _key_height, _fixed_aesthetics), do: []
 
-  def draw_legend(%Shape.Manual{levels: []}, _labe, _key_heightl), do: []
+  def draw_legend(%Shape.Manual{levels: []}, _label, _key_height, _fixed_aesthetics), do: []
 
-  def draw_legend(%Shape.Manual{levels: [_]}, _label, _key_height), do: []
+  def draw_legend(%Shape.Manual{levels: [_]}, _label, _key_height, _fixed_aesthetics), do: []
 
-  def draw_legend(%Shape.Manual{levels: levels} = scale, label, key_height) do
+  def draw_legend(%Shape.Manual{levels: levels} = scale, label, key_height, fixed_aesthetics) do
     [
       Draw.text(
         "#{label}",
@@ -68,11 +68,13 @@ defmodule GGity.Scale.Shape.Manual do
         text_anchor: "left"
       ),
       Stream.with_index(levels)
-      |> Enum.map(fn {level, index} -> draw_legend_item(scale, {level, index}, key_height) end)
+      |> Enum.map(fn {level, index} ->
+        draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics)
+      end)
     ]
   end
 
-  defp draw_legend_item(scale, {level, index}, key_height) do
+  defp draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics) do
     marker = scale.transform.(level)
 
     size =
@@ -93,9 +95,9 @@ defmodule GGity.Scale.Shape.Manual do
         marker,
         {key_height / 2, key_height / 2 + key_height * index},
         :math.pow(1 + size, 2),
-        fill: "black",
-        color: "black",
-        fill_opacity: "1"
+        fill: fixed_aesthetics[:fill],
+        color: fixed_aesthetics[:color],
+        fill_opacity: fixed_aesthetics[:alpha]
       ),
       Draw.text(
         "#{Labels.format(scale, level)}",

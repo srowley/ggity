@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-1379" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-1379 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-1379 .gg-axis-text-x {} #gg-1379 .gg-axis-ticks {stroke: #000000;} #gg-1379 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-1379 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-1379 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-1379 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-1379 .gg-panel-background {fill: #EEEEEE;} #gg-1379 .gg-panel-border {} #gg-1379 .gg-panel-grid {stroke: #FFFFFF;} #gg-1379 .gg-panel-grid-major {stroke-width: 1;} #gg-1379 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-1379 .gg-plot-background {fill: #FFFFFF;} #gg-1379 .gg-plot-title {font-size: 10px;} #gg-1379 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-1058" viewBox="0 0 360 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-1058 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-1058 .gg-axis-text-x {} #gg-1058 .gg-axis-ticks {stroke: #000000;} #gg-1058 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-1058 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-1058 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-1058 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-1058 .gg-panel-background {fill: #EEEEEE;} #gg-1058 .gg-panel-border {} #gg-1058 .gg-panel-grid {stroke: #FFFFFF;} #gg-1058 .gg-panel-grid-major {stroke-width: 1;} #gg-1058 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-1058 .gg-plot-background {fill: #FFFFFF;} #gg-1058 .gg-plot-title {font-size: 10px;} #gg-1058 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -106,9 +106,9 @@
 <g transform="translate(275, 71.66666666666667)">
 <g transform="translate(0, 0)">
 <text x="0" y="-5" class="gg-text gg-legend-title" text-anchor="left">grp</text>
-<rect x="0" y="0" height="15" width="15" style="fill:#440154" class="gg-legend-key"></rect>
+<rect x="0" y="0" height="15" width="15" style="fill:#440154; fill-opacity:1;" class="gg-legend-key"></rect>
 <text x="20" y="10" class="gg-text gg-legend-text" text-anchor="left">a</text>
-<rect x="0" y="15" height="15" width="15" style="fill:#FDE724" class="gg-legend-key"></rect>
+<rect x="0" y="15" height="15" width="15" style="fill:#FDE724; fill-opacity:1;" class="gg-legend-key"></rect>
 <text x="20" y="25" class="gg-text gg-legend-text" text-anchor="left">b</text>
 </g>
 </g>
