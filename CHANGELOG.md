@@ -2,6 +2,14 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased 
+### Changed
+- Replaced `scale_size_discrete` and `scale_size_continuous` with `scale_size`.
+This conforms to the ggplot2 API; previously they were split because
+GGity could not draw a legend for a continous size scale (`scale_size` is
+continuous).
+- Legends now apply fixed aesthetic values to key glyphs.
+
 ## v0.4.0 - 2021-02-10
 ### Added
 - Added `:custom_attributes` to the `Bar`, `Boxplot`, `Point`, `Rect`,
