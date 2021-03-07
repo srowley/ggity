@@ -1479,7 +1479,7 @@ defmodule GGity.Plot do
 
   - `:labels` - specifies how break names (tick labels calculated by the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
-  -`:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
+  - `:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
   the value of the `:labels` option will be overridden.
 
   `:date_labels` can be either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
@@ -1529,7 +1529,7 @@ defmodule GGity.Plot do
 
   - `:labels` - specifies how break names (tick labels calculated by the scale) should be
   formatted. See `GGity.Labels` for valid values for this option.
-  -`:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
+  - `:date_labels` - special formatting patterns for dates. If `:date_labels` is specified,
   the value of the `:labels` option will be overridden.
 
   `:date_labels` can be either a format string pattern that is accepted by [`NimbleStrftime`](https://hexdocs.pm/nimble_strftime/NimbleStrftime.html):
