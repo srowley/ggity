@@ -30,7 +30,9 @@ defmodule GGityDrawTest do
   describe "rect/1" do
     test "draws rect with coordinates, height, width and options" do
       rect =
-        IO.chardata_to_string(Draw.rect(x: "0", y: "0", height: "10", width: "10", fill: "grey"))
+        [x: "0", y: "0", height: "10", width: "10", fill: "grey"]
+        |> Draw.rect()
+        |> IO.chardata_to_string()
 
       assert rect == ~s|<rect x="0" y="0" height="10" width="10" fill="grey"></rect>\n|
     end
@@ -38,14 +40,22 @@ defmodule GGityDrawTest do
 
   describe "line/1" do
     test "draws line with provided coordinates" do
-      line = IO.chardata_to_string(Draw.line(x1: "1", y1: "2", x2: "3", y2: "4"))
+      line =
+        [x1: "1", y1: "2", x2: "3", y2: "4"]
+        |> Draw.line()
+        |> IO.chardata_to_string()
+
       assert line == ~s|<line x1="1" y1="2" x2="3" y2="4"></line>\n|
     end
   end
 
   describe "text/2" do
     test "draws text element with given value and attributes" do
-      text = IO.chardata_to_string(Draw.text("foo", text_anchor: "middle"))
+      text =
+        "foo"
+        |> Draw.text(text_anchor: "middle")
+        |> IO.chardata_to_string()
+
       assert text == ~s|<text text-anchor="middle">foo</text>\n|
     end
   end

@@ -152,7 +152,8 @@ defmodule GGity.Theme do
   end
 
   defp generate_attribute_style(theme, {attribute, element}, id) when is_struct(element) do
-    ["#", id, " ", Element.to_css(Map.get(theme, attribute), gg_class(attribute)), " "]
+    thing = Map.get(theme, attribute)
+    ["#", id, " ", Element.to_css(thing, gg_class(attribute)), " "]
   end
 
   defp generate_attribute_style(_theme_, _attribute, _id), do: []
