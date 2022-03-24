@@ -197,9 +197,7 @@ defmodule GGity.Labels do
   def percent(value, options \\ [precision: 0])
 
   def percent(value, precision: precision) when is_float(value) do
-    percent_value =
-      (value * 100)
-      |> Float.round(precision)
+    percent_value = Float.round(value * 100, precision)
 
     rounded_value =
       case precision do

@@ -6,7 +6,7 @@ defmodule GGityScaleColorViridisTest do
   alias GGity.Scale.Color
 
   setup do
-    %{scale: Color.Viridis.new() |> Color.Viridis.train(["0", "1", "2"])}
+    %{scale: Color.Viridis.train(Color.Viridis.new(), ["0", "1", "2"])}
   end
 
   defp to_hex(rgb) do

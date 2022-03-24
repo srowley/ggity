@@ -132,7 +132,8 @@ defmodule GGity.Draw do
 
   defp option_to_attribute({name, value}) do
     name =
-      Atom.to_string(name)
+      name
+      |> Atom.to_string()
       |> String.replace("_", "-")
 
     [

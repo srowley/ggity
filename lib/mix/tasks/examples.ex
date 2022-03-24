@@ -84,7 +84,7 @@ defmodule GGity.Examples do
   def mtcars do
     headers = [:model, :mpg, :cyl, :disp, :hp, :drat, :wt, :qsec, :vs, :am, :gear, :carb]
 
-    [
+    data = [
       ["Mazda RX4", 21, 6, 160, 110, 3.9, 2.62, 16.46, 0, 1, 4, 4],
       ["Mazda RX4 Wag", 21, 6, 160, 110, 3.9, 2.875, 17.02, 0, 1, 4, 4],
       ["Datsun 710", 22.8, 4, 108, 93, 3.85, 2.32, 18.61, 1, 1, 4, 1],
@@ -118,14 +118,20 @@ defmodule GGity.Examples do
       ["Maserati Bora", 15, 8, 301, 335, 3.54, 3.57, 14.6, 0, 1, 5, 8],
       ["Volvo 142E", 21.4, 4, 121, 109, 4.11, 2.78, 18.6, 1, 1, 4, 2]
     ]
-    |> Enum.map(fn row -> Enum.zip([headers, row]) |> Enum.into(%{}) end)
+
+    Enum.map(data, fn row ->
+      [headers, row]
+      |> Enum.zip()
+      |> Enum.into(%{})
+    end)
   end
 
   def mpg do
     file_name = Path.join([:code.priv_dir(:ggity), "mpg.csv"])
 
     headers =
-      File.stream!(file_name)
+      file_name
+      |> File.stream!()
       |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
       |> Enum.take(1)
       |> hd()

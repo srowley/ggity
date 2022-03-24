@@ -42,7 +42,8 @@ defmodule GGity.Scale.Shape do
         class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
-      Stream.with_index(levels)
+      levels
+      |> Enum.with_index()
       |> Enum.map(fn {level, index} ->
         draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics)
       end)
@@ -50,6 +51,8 @@ defmodule GGity.Scale.Shape do
   end
 
   defp draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics) do
+    transformed_value = scale.transform.(level)
+
     [
       Draw.rect(
         x: "0",
@@ -59,7 +62,7 @@ defmodule GGity.Scale.Shape do
         class: "gg-legend-key"
       ),
       GGity.Shapes.draw(
-        scale.transform.(level),
+        transformed_value,
         {key_height / 2, key_height / 2 + key_height * index},
         :math.pow(1 + key_height / 3, 2),
         fill: fixed_aesthetics[:fill],

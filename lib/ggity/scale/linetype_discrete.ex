@@ -76,7 +76,8 @@ defmodule GGity.Scale.Linetype.Discrete do
         class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
-      Stream.with_index(levels)
+      levels
+      |> Enum.with_index()
       |> Enum.map(fn {level, index} ->
         draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics)
       end)

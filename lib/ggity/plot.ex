@@ -317,8 +317,7 @@ defmodule GGity.Plot do
 
   defp layer_value_set(aesthetic, layer) do
     layer.data
-    |> Enum.map(fn row -> row[layer.mapping[aesthetic]] end)
-    |> Enum.map(&Kernel.to_string/1)
+    |> Enum.map(fn row -> to_string(row[layer.mapping[aesthetic]]) end)
     |> MapSet.new()
   end
 
@@ -373,14 +372,14 @@ defmodule GGity.Plot do
 
     id = "gg-#{System.unique_integer([:positive])}"
 
-    [
-      Theme.to_stylesheet(plot.theme, id),
-      draw_plot_background(),
-      draw_panel(plot),
-      draw_title(plot),
-      legend
-    ]
-    |> Draw.svg(
+    Draw.svg(
+      [
+        Theme.to_stylesheet(plot.theme, id),
+        draw_plot_background(),
+        draw_panel(plot),
+        draw_title(plot),
+        legend
+      ],
       id: id,
       viewBox: "0 0 #{viewbox_width} #{viewbox_height}"
       # viewBox: "0 0 #{viewbox_width} #{viewbox_width / plot.aspect_ratio}"
@@ -444,8 +443,10 @@ defmodule GGity.Plot do
     all_mappings = Enum.map(plot.combined_layers, fn layer -> Map.keys(layer.mapping) end)
 
     fixed_aesthetic_keys =
-      [:color, :fill, :linetype, :shape, :size, :alpha]
-      |> Enum.reject(fn key -> key in all_mappings end)
+      Enum.reject(
+        [:color, :fill, :linetype, :shape, :size, :alpha],
+        fn key -> key in all_mappings end
+      )
 
     plot.combined_layers
     |> Enum.map(fn layer -> Map.take(layer, fixed_aesthetic_keys) end)
@@ -1641,10 +1642,7 @@ defmodule GGity.Plot do
   """
   @spec xlab(Plot.t(), binary()) :: Plot.t()
   def xlab(%Plot{} = plot, label) do
-    labels =
-      plot.labels
-      |> Map.merge(%{x: label})
-
+    labels = Map.merge(plot.labels, %{x: label})
     struct(plot, labels: labels)
   end
 
@@ -1653,10 +1651,7 @@ defmodule GGity.Plot do
   """
   @spec ylab(Plot.t(), binary()) :: Plot.t()
   def ylab(plot, label) do
-    labels =
-      plot.labels
-      |> Map.merge(%{y: label})
-
+    labels = Map.merge(plot.labels, %{y: label})
     struct(plot, labels: labels)
   end
 

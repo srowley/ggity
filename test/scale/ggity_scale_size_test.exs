@@ -9,9 +9,7 @@ defmodule GGityScaleSizeTest do
 
   describe "new/2" do
     test "returns a correct scale given default options", %{min_max: min_max} do
-      scale =
-        Size.new()
-        |> Size.train(min_max)
+      scale = Size.train(Size.new(), min_max)
 
       assert_in_delta scale.transform.(0), 0, 0.0000001
       assert_in_delta scale.transform.(1), 11.666666, 0.000001
@@ -21,7 +19,8 @@ defmodule GGityScaleSizeTest do
 
     test "returns a correct scale given custom range", %{min_max: min_max} do
       scale =
-        Size.new(range: {2, 5})
+        [range: {2, 5}]
+        |> Size.new()
         |> Size.train(min_max)
 
       assert_in_delta scale.transform.(0), 0, 0.0000001

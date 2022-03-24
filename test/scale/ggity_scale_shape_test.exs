@@ -7,7 +7,7 @@ defmodule GGityScaleShapeTest do
 
   setup do
     %{
-      scale: Shape.new() |> Shape.train(["beef", "chicken", "fish", "lamb", "scallops", "shrimp"])
+      scale: Shape.train(Shape.new(), ["beef", "chicken", "fish", "lamb", "scallops", "shrimp"])
     }
   end
 
@@ -32,7 +32,8 @@ defmodule GGityScaleShapeTest do
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Shape.draw_legend(scale, "Fine Meats", 15, [])
+        scale
+        |> Shape.draw_legend("Fine Meats", 15, [])
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")
@@ -47,9 +48,9 @@ defmodule GGityScaleShapeTest do
                "shrimp"
              ]
 
-      assert xpath(legend, ~x"//circle"l) |> length() == 2
-      assert xpath(legend, ~x"//polygon"l) |> length() == 1
-      assert xpath(legend, ~x"//rect"l) |> length() == 8
+      assert length(xpath(legend, ~x"//circle"l)) == 2
+      assert length(xpath(legend, ~x"//polygon"l)) == 1
+      assert length(xpath(legend, ~x"//rect"l)) == 8
     end
   end
 end

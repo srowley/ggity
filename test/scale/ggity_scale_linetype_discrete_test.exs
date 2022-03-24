@@ -8,8 +8,15 @@ defmodule GGityScaleLineTypeDiscreteTest do
   setup do
     %{
       scale:
-        Linetype.Discrete.new()
-        |> Linetype.Discrete.train(["beef", "chicken", "deer", "fish", "gator", "lamb", "shrimp"])
+        Linetype.Discrete.train(Linetype.Discrete.new(), [
+          "beef",
+          "chicken",
+          "deer",
+          "fish",
+          "gator",
+          "lamb",
+          "shrimp"
+        ])
     }
   end
 
@@ -35,7 +42,8 @@ defmodule GGityScaleLineTypeDiscreteTest do
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Linetype.Discrete.draw_legend(scale, "Fine Meats", :path, 15, [])
+        scale
+        |> Linetype.Discrete.draw_legend("Fine Meats", :path, 15, [])
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")
@@ -51,7 +59,7 @@ defmodule GGityScaleLineTypeDiscreteTest do
                "shrimp"
              ]
 
-      assert xpath(legend, ~x"//line"l) |> length() == 7
+      assert length(xpath(legend, ~x"//line"l)) == 7
     end
   end
 end

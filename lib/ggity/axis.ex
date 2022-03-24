@@ -12,7 +12,8 @@ defmodule GGity.Axis do
     length = plot.width + plot.area_padding * 2
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding * 2
 
-    Draw.line(x2: "#{length}", class: "gg-axis-line gg-axis-line-x")
+    [x2: "#{length}", class: "gg-axis-line gg-axis-line-x"]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(0, #{top_shift})")
   end
 
@@ -56,7 +57,8 @@ defmodule GGity.Axis do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding * 2
 
     [first, second] =
-      Enum.slice(scales.x.tick_values, 0..1)
+      scales.x.tick_values
+      |> Enum.slice(0..1)
       |> Enum.map(scales.x.inverse)
 
     interval = (second - first) / 2
@@ -112,7 +114,8 @@ defmodule GGity.Axis do
     tick_length = plot.theme.axis_ticks_length_x || plot.theme.axis_ticks_length
     coord = plot.scales.x.inverse.(value)
 
-    Draw.line(y2: "#{tick_length}", class: "gg-axis-ticks gg-axis-ticks-x")
+    [y2: "#{tick_length}", class: "gg-axis-ticks gg-axis-ticks-x"]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(#{coord},0)")
   end
 
@@ -120,7 +123,8 @@ defmodule GGity.Axis do
     gridline_length = plot.width / plot.aspect_ratio + plot.area_padding * 2
     coord = plot.scales.x.inverse.(value)
 
-    Draw.line(y2: "-#{gridline_length}", class: "gg-panel-grid gg-panel-grid-major")
+    [y2: "-#{gridline_length}", class: "gg-panel-grid gg-panel-grid-major"]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(#{coord},0)")
   end
 
@@ -167,7 +171,8 @@ defmodule GGity.Axis do
   defp y_axis_line(%Plot{} = plot) do
     length = plot.width / plot.aspect_ratio + plot.area_padding * 2
 
-    Draw.line(y2: "#{length}", class: "gg-axis-line gg-axis-line-y")
+    [y2: "#{length}", class: "gg-axis-line gg-axis-line-y"]
+    |> Draw.line()
     |> Draw.g(transform: "translate(0, 0)")
   end
 
@@ -184,7 +189,8 @@ defmodule GGity.Axis do
 
   defp y_gridlines(%Plot{scales: scales} = plot) do
     transformed_tick_values =
-      Enum.slice(scales.y.tick_values, 0..1)
+      scales.y.tick_values
+      |> Enum.slice(0..1)
       |> Enum.map(scales.y.inverse)
 
     interval =
@@ -229,7 +235,8 @@ defmodule GGity.Axis do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding
     coord = plot.scales.y.inverse.(value) / plot.aspect_ratio
 
-    Draw.line(x2: "-#{tick_length}", class: "gg-axis-ticks gg-axis-ticks-y")
+    [x2: "-#{tick_length}", class: "gg-axis-ticks gg-axis-ticks-y"]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
 
@@ -238,7 +245,8 @@ defmodule GGity.Axis do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding
     coord = plot.scales.y.inverse.(value) / plot.aspect_ratio
 
-    Draw.line(x2: "#{gridline_length}", class: "gg-panel-grid gg-panel-grid-major")
+    [x2: "#{gridline_length}", class: "gg-panel-grid gg-panel-grid-major"]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
 
@@ -247,11 +255,12 @@ defmodule GGity.Axis do
     top_shift = plot.width / plot.aspect_ratio + plot.area_padding
     coord = plot.scales.y.inverse.(value) / plot.aspect_ratio
 
-    Draw.line(
+    [
       x2: "#{gridline_length}",
       class: "gg-panel-grid gg-panel-grid-minor",
       transform: "translate(0, -#{interval})"
-    )
+    ]
+    |> Draw.line()
     |> Draw.g(opacity: "1", transform: "translate(0,#{top_shift - coord})")
   end
 

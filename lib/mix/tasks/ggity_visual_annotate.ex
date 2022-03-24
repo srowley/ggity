@@ -97,7 +97,6 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
   end
 
   defp p do
-    Examples.mtcars()
-    |> Plot.new(%{x: :wt, y: :mpg})
+    Plot.new(Examples.mtcars(), %{x: :wt, y: :mpg})
   end
 end

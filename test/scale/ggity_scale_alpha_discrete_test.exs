@@ -6,7 +6,7 @@ defmodule GGityScaleAlphaDiscreteTest do
   alias GGity.Scale.Alpha
 
   setup do
-    %{scale: Alpha.Discrete.new() |> Alpha.Discrete.train(["beef", "chicken", "fish", "lamb"])}
+    %{scale: Alpha.Discrete.train(Alpha.Discrete.new(), ["beef", "chicken", "fish", "lamb"])}
   end
 
   describe "new/2, train/2" do
@@ -28,7 +28,8 @@ defmodule GGityScaleAlphaDiscreteTest do
 
     test "returns a legend if scale has two or more levels", %{scale: scale} do
       legend =
-        Alpha.Discrete.draw_legend(scale, "Fine Meats", :point, 15, [])
+        scale
+        |> Alpha.Discrete.draw_legend("Fine Meats", :point, 15, [])
         |> IO.chardata_to_string()
         |> String.replace_prefix("", "<svg>")
         |> String.replace_suffix("", "</svg>")

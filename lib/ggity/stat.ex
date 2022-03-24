@@ -13,13 +13,13 @@ defmodule GGity.Stat do
     permutations = permutations(discrete_aesthetics, data, mapping)
 
     stat =
-      Enum.reduce(permutations, [], fn permutation, stat ->
+      permutations
+      |> Enum.reduce([], fn permutation, stat ->
         [
-          Map.new(
-            Enum.map(discrete_aesthetics, fn aesthetic ->
-              {mapping[aesthetic], permutation[aesthetic]}
-            end)
-          )
+          discrete_aesthetics
+          |> Map.new(fn aesthetic ->
+            {mapping[aesthetic], permutation[aesthetic]}
+          end)
           |> Map.put(
             :count,
             Enum.count(data, fn row ->
@@ -42,13 +42,13 @@ defmodule GGity.Stat do
     permutations = permutations(discrete_aesthetics, data, mapping)
 
     stat =
-      Enum.reduce(permutations, [], fn permutation, stat ->
+      permutations
+      |> Enum.reduce([], fn permutation, stat ->
         [
-          Map.new(
-            Enum.map(discrete_aesthetics, fn aesthetic ->
-              {mapping[aesthetic], permutation[aesthetic]}
-            end)
-          )
+          discrete_aesthetics
+          |> Map.new(fn aesthetic ->
+            {mapping[aesthetic], permutation[aesthetic]}
+          end)
           |> Map.merge(boxplot_stats_map(data, mapping, permutation))
           | stat
         ]
@@ -86,12 +86,16 @@ defmodule GGity.Stat do
 
     %{
       ymin:
-        Enum.filter(permutation_data, fn record -> record >= ymin_threshold end) |> Enum.min(),
+        permutation_data
+        |> Enum.filter(fn record -> record >= ymin_threshold end)
+        |> Enum.min(),
       lower: quantiles[0.25],
       middle: quantiles[0.5],
       upper: quantiles[0.75],
       ymax:
-        Enum.filter(permutation_data, fn record -> record <= ymax_threshold end) |> Enum.max(),
+        permutation_data
+        |> Enum.filter(fn record -> record <= ymax_threshold end)
+        |> Enum.max(),
       outliers: outliers
     }
   end

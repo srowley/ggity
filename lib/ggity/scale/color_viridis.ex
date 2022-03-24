@@ -1376,10 +1376,14 @@ defmodule GGity.Scale.Color.Viridis do
       end
 
     colors =
-      Stream.take_every(palette, interval_size)
+      palette
+      |> Stream.take_every(interval_size)
       |> Enum.map(&to_hex/1)
 
-    color_map = Enum.zip(levels, colors) |> Enum.into(%{})
+    color_map =
+      levels
+      |> Enum.zip(colors)
+      |> Enum.into(%{})
 
     struct(scale, levels: levels, transform: fn value -> color_map[to_string(value)] end)
   end
@@ -1418,7 +1422,8 @@ defmodule GGity.Scale.Color.Viridis do
         class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
-      Stream.with_index(levels)
+      levels
+      |> Enum.with_index()
       |> Enum.map(fn {level, index} ->
         draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aesthetics)
       end)

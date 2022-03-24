@@ -13,7 +13,8 @@ defmodule GGityThemeTest do
     mapping = %{x: :a, y: :b}
 
     plot =
-      Plot.new(data, mapping)
+      data
+      |> Plot.new(mapping)
       |> Plot.geom_point()
 
     %{plot: plot}
@@ -21,7 +22,11 @@ defmodule GGityThemeTest do
 
   describe "to_stylesheet/2" do
     test "generates stylesheet from theme", %{plot: plot} do
-      stylesheet = Theme.to_stylesheet(plot.theme, "gg-1") |> IO.chardata_to_string()
+      stylesheet =
+        plot.theme
+        |> Theme.to_stylesheet("gg-1")
+        |> IO.chardata_to_string()
+
       assert String.contains?(stylesheet, "<style")
       assert String.contains?(stylesheet, "#gg-1")
       assert String.contains?(stylesheet, ".gg-text {font-family: Helvetica")
@@ -31,7 +36,12 @@ defmodule GGityThemeTest do
 
     test "removes invalid data for line elements", %{plot: plot} do
       plot = Plot.theme(plot, axis_line: element_line(size: "'22'<script>hackety-hack</script>"))
-      stylesheet = Theme.to_stylesheet(plot.theme, "gg-1") |> IO.chardata_to_string()
+
+      stylesheet =
+        plot.theme
+        |> Theme.to_stylesheet("gg-1")
+        |> IO.chardata_to_string()
+
       refute String.contains?(stylesheet, "22")
       refute String.contains?(stylesheet, "script")
       refute String.contains?(stylesheet, "hack")
@@ -41,7 +51,11 @@ defmodule GGityThemeTest do
       plot =
         Plot.theme(plot, panel_background: element_rect(fill: "'22'<script>hackety-hack</script>"))
 
-      stylesheet = Theme.to_stylesheet(plot.theme, "gg-1") |> IO.chardata_to_string()
+      stylesheet =
+        plot.theme
+        |> Theme.to_stylesheet("gg-1")
+        |> IO.chardata_to_string()
+
       refute String.contains?(stylesheet, "22")
       refute String.contains?(stylesheet, "script")
       refute String.contains?(stylesheet, "hack")
@@ -49,7 +63,12 @@ defmodule GGityThemeTest do
 
     test "ignores invalid data for text elements", %{plot: plot} do
       plot = Plot.theme(plot, text: element_text(face: "'22'<script>hackety-hack</script>"))
-      stylesheet = Theme.to_stylesheet(plot.theme, "gg-1") |> IO.chardata_to_string()
+
+      stylesheet =
+        plot.theme
+        |> Theme.to_stylesheet("gg-1")
+        |> IO.chardata_to_string()
+
       refute String.contains?(stylesheet, "22")
       refute String.contains?(stylesheet, "script")
       refute String.contains?(stylesheet, "hack")

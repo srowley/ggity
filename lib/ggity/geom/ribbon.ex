@@ -36,19 +36,13 @@ defmodule GGity.Geom.Ribbon do
       |> Enum.sort_by(fn {value, _group} -> value end, :desc)
       |> Enum.map(fn {_value, group} -> ribbon(geom_ribbon, group, plot) end)
 
-    stacked_coords =
-      ribbons
-      |> Enum.map(fn group -> group.coords end)
-      |> stack_coordinates(plot_height)
-      |> Enum.reverse()
-
-    :lists.zipwith(
-      fn ribbon, stacked_coords -> Map.put(ribbon, :coords, stacked_coords) end,
-      ribbons,
-      stacked_coords
-    )
-    |> Enum.map(fn ribbon -> draw_ribbon(ribbon, plot) end)
-    |> Enum.reverse()
+    ribbons
+    |> Enum.map(fn group -> group.coords end)
+    |> stack_coordinates(plot_height)
+    |> Enum.zip_with(ribbons, fn stacked_coords, ribbon ->
+      Map.put(ribbon, :coords, stacked_coords)
+    end)
+    |> Enum.map(fn ribbon -> draw_ribbon(ribbon, plot.area_padding) end)
   end
 
   defp ribbons(%Geom.Ribbon{} = geom_ribbon, plot) do
@@ -57,7 +51,7 @@ defmodule GGity.Geom.Ribbon do
     |> Enum.map(fn {_value, group} ->
       geom_ribbon
       |> ribbon(group, plot)
-      |> draw_ribbon(plot)
+      |> draw_ribbon(plot.area_padding)
     end)
   end
 
@@ -110,8 +104,9 @@ defmodule GGity.Geom.Ribbon do
   end
 
   defp group_by_aesthetics(geom, plot) do
-    (geom.data || plot.data)
-    |> Enum.group_by(fn row ->
+    data = geom.data || plot.data
+
+    Enum.group_by(data, fn row ->
       {
         row[geom.mapping[:alpha]],
         row[geom.mapping[:fill]]
@@ -119,10 +114,10 @@ defmodule GGity.Geom.Ribbon do
     end)
   end
 
-  defp draw_ribbon(ribbon, plot) do
+  defp draw_ribbon(ribbon, area_padding) do
     ribbon.coords
     |> Enum.map_join(" ", fn row ->
-      "#{row.x + plot.area_padding},#{row.y_max + plot.area_padding}"
+      "#{row.x + area_padding},#{row.y_max + area_padding}"
     end)
     |> Draw.polygon(
       stroke: ribbon.color,
@@ -134,27 +129,17 @@ defmodule GGity.Geom.Ribbon do
 
   defp format_coordinates(y_aesthetic, geom, data, plot) do
     data
-    |> sort_by_x(geom)
-    |> Stream.map(fn row ->
-      [
-        plot.scales.x.transform.(row[geom.mapping[:x]]),
-        plot.scales.y.transform.(row[geom.mapping[y_aesthetic]])
-      ]
-    end)
-    |> Stream.map(fn row -> Map.new(Enum.zip([:x, :y_max], row)) end)
     |> Enum.map(fn row ->
-      Map.put(row, :y_max, (plot.width - row.y_max) / plot.aspect_ratio)
+      %{
+        x: plot.scales.x.transform.(row[geom.mapping[:x]]),
+        y_max: transform_and_pad_y(row[geom.mapping[y_aesthetic]], plot)
+      }
     end)
+    |> Enum.sort_by(fn row -> row.x end)
   end
 
-  defp sort_by_x(data, %Geom.Ribbon{} = geom_ribbon) do
-    case hd(data)[geom_ribbon.mapping.x] do
-      %Date{} ->
-        Enum.sort_by(data, fn row -> row[geom_ribbon.mapping.x] end, Date)
-
-      _number ->
-        Enum.sort_by(data, fn row -> row[geom_ribbon.mapping.x] end)
-    end
+  defp transform_and_pad_y(y_value, plot) do
+    (plot.width - plot.scales.y.transform.(y_value)) / plot.aspect_ratio
   end
 
   defp stack_coordinates([only_group | []], _plot_height), do: only_group
@@ -187,12 +172,8 @@ defmodule GGity.Geom.Ribbon do
   end
 
   defp sum_ymax_coordinates(first_list, second_list, plot_height) do
-    :lists.zipwith(
-      fn first_row, second_row ->
-        %{x: first_row.x, y_max: first_row.y_max + second_row.y_max - plot_height}
-      end,
-      first_list,
-      second_list
-    )
+    Enum.zip_with(first_list, second_list, fn first_row, second_row ->
+      %{x: first_row.x, y_max: first_row.y_max + second_row.y_max - plot_height}
+    end)
   end
 end

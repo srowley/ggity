@@ -12,7 +12,7 @@ defmodule GGityScaleXDateTimeTest do
       ]
 
       [date1, date2, date3] = values
-      scale = X.DateTime.new() |> X.DateTime.train({date1, date3})
+      scale = X.DateTime.train(X.DateTime.new(), {date1, date3})
       assert scale.transform.(date1) == 0
       assert scale.transform.(date2) == 100
       assert scale.transform.(date3) == 200
@@ -26,7 +26,7 @@ defmodule GGityScaleXDateTimeTest do
       ]
 
       [date1, date2, date3] = values
-      scale = X.DateTime.new() |> X.DateTime.train({date1, date3})
+      scale = X.DateTime.train(X.DateTime.new(), {date1, date3})
       assert scale.transform.(date1) == 0
       assert scale.transform.(date2) == 100
       assert scale.transform.(date3) == 200
@@ -34,7 +34,7 @@ defmodule GGityScaleXDateTimeTest do
 
     test "raises with non-date time values" do
       min_max = {1, 4}
-      assert_raise FunctionClauseError, fn -> X.DateTime.new() |> X.DateTime.train(min_max) end
+      assert_raise FunctionClauseError, fn -> X.DateTime.train(X.DateTime.new(), min_max) end
     end
   end
 end

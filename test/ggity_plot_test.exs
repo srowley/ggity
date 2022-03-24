@@ -14,7 +14,8 @@ defmodule GGityPlotTest do
     mapping = %{x: :a, y: :b}
 
     plot =
-      Plot.new(data, mapping)
+      data
+      |> Plot.new(mapping)
       |> Plot.geom_point()
 
     %{plot: plot, data: data, mapping: mapping, zero_domain_data: zero_domain_data}
@@ -182,7 +183,8 @@ defmodule GGityPlotTest do
       mapping: mapping
     } do
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point(%{y: :c}, color: "red")
 
       geom = hd(plot.layers)
@@ -224,7 +226,8 @@ defmodule GGityPlotTest do
       mapping: mapping
     } do
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_line(%{y: :c}, color: "red")
 
       geom = hd(plot.layers)
@@ -268,7 +271,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :alpha, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_alpha_continuous()
 
@@ -281,7 +285,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :alpha, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
 
       %{plot: plot}
@@ -311,7 +316,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :alpha, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_alpha_identity()
 
@@ -327,7 +333,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :color, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_color_identity()
 
@@ -343,7 +350,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :color, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_color_viridis()
 
@@ -366,7 +374,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :linetype, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_line()
 
       %{plot: plot}
@@ -393,7 +402,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :shape, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
 
       %{plot: plot}
@@ -423,7 +433,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :size, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_size()
 
@@ -439,7 +450,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :alpha, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_size_identity()
 
@@ -452,7 +464,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :x, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_x_continuous()
 
@@ -483,7 +496,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :x, :date)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_line()
         |> Plot.scale_x_date(date_labels: "%b %d %Y")
 
@@ -502,22 +516,25 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :x, :date)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_line()
         |> Plot.scale_x_date(
           date_labels:
             {"%A",
              day_of_week_names: fn day_of_week ->
-               {
-                 "Monday",
-                 "Tuesday",
-                 "Hump Day",
-                 "Thursday",
-                 "Friday",
-                 "Saturday",
-                 "Sunday"
-               }
-               |> elem(day_of_week - 1)
+               elem(
+                 {
+                   "Monday",
+                   "Tuesday",
+                   "Hump Day",
+                   "Thursday",
+                   "Friday",
+                   "Saturday",
+                   "Sunday"
+                 },
+                 day_of_week - 1
+               )
              end}
         )
 
@@ -538,7 +555,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :x, :datetime)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_x_datetime(date_labels: "%b %d H%H")
 
@@ -556,7 +574,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :x, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_x_discrete()
 
@@ -587,7 +606,8 @@ defmodule GGityPlotTest do
       mapping = Map.put(mapping, :y, :c)
 
       plot =
-        Plot.new(data, mapping)
+        data
+        |> Plot.new(mapping)
         |> Plot.geom_point()
         |> Plot.scale_y_continuous()
 
