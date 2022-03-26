@@ -28,21 +28,20 @@ defmodule GGity.Geom.Ribbon do
   end
 
   defp ribbons(%Geom.Ribbon{position: :stack} = geom_ribbon, plot) do
-    plot_height = plot.width / plot.aspect_ratio
-
     ribbons =
       geom_ribbon
       |> group_by_aesthetics(plot)
       |> Enum.sort_by(fn {value, _group} -> value end, :desc)
       |> Enum.map(fn {_value, group} -> ribbon(geom_ribbon, group, plot) end)
 
+    plot_height = plot.width / plot.aspect_ratio
+
     ribbons
     |> Enum.map(fn group -> group.coords end)
     |> stack_coordinates(plot_height)
     |> Enum.zip_with(ribbons, fn stacked_coords, ribbon ->
-      Map.put(ribbon, :coords, stacked_coords)
+      draw_ribbon(Map.put(ribbon, :coords, stacked_coords), plot.area_padding)
     end)
-    |> Enum.map(fn ribbon -> draw_ribbon(ribbon, plot.area_padding) end)
   end
 
   defp ribbons(%Geom.Ribbon{} = geom_ribbon, plot) do
@@ -56,41 +55,29 @@ defmodule GGity.Geom.Ribbon do
   end
 
   defp ribbon(%Geom.Ribbon{} = geom_ribbon, data, plot) do
-    plot_height = plot.width / plot.aspect_ratio
-
-    scale_transforms =
-      geom_ribbon.mapping
-      |> Map.keys()
-      |> List.insert_at(0, :y)
-      |> List.delete(:y_max)
-      |> Enum.reduce(%{}, fn aesthetic, mapped ->
-        Map.put(mapped, aesthetic, Map.get(plot.scales[aesthetic], :transform))
-      end)
-
-    transforms =
-      geom_ribbon
-      |> Map.take([:alpha, :color, :fill, :size])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
-      end)
-      |> Map.merge(scale_transforms)
+    scale_transforms = fetch_scale_transforms(geom_ribbon.mapping, plot.scales)
+    fixed_aesthetics = fetch_fixed_aesthetics(geom_ribbon)
+    transforms = Map.merge(fixed_aesthetics, scale_transforms)
 
     row = hd(data)
+    mapping = geom_ribbon.mapping
 
     [alpha, color, fill, size] = [
-      transforms.alpha.(row[geom_ribbon.mapping[:alpha]]),
-      transforms.color.(row[geom_ribbon.mapping[:color]]),
-      transforms.fill.(row[geom_ribbon.mapping[:fill]]),
-      transforms.size.(row[geom_ribbon.mapping[:size]])
+      transforms.alpha.(row[mapping[:alpha]]),
+      transforms.color.(row[mapping[:color]]),
+      transforms.fill.(row[mapping[:fill]]),
+      transforms.size.(row[mapping[:size]])
     ]
 
-    y_max_coords = format_coordinates(:y_max, geom_ribbon, data, plot)
+    plot_height = plot.width / plot.aspect_ratio
+    sorted_data = Enum.sort_by(data, fn row -> plot.scales.x.transform.(row[mapping[:x]]) end)
+    y_max_coords = format_coordinates(:y_max, mapping, sorted_data, plot)
 
     all_coords =
       if geom_ribbon.mapping[:y_min] do
         y_min_coords =
           :y_min
-          |> format_coordinates(geom_ribbon, data, plot)
+          |> format_coordinates(mapping, sorted_data, plot)
           |> Enum.reverse()
 
         [y_max_coords, y_min_coords]
@@ -101,6 +88,20 @@ defmodule GGity.Geom.Ribbon do
       end
 
     %{fill: fill, alpha: alpha, color: color, size: size, coords: List.flatten(all_coords)}
+  end
+
+  defp fetch_scale_transforms(mapping, scales) do
+    for aes <- [:y | Map.keys(mapping)], aes != :y_max, reduce: %{} do
+      scale_transforms -> Map.put(scale_transforms, aes, scales[aes].transform)
+    end
+  end
+
+  defp fetch_fixed_aesthetics(geom_ribbon) do
+    geom_ribbon
+    |> Map.take([:alpha, :color, :fill, :size])
+    |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
+      Map.put(fixed, aesthetic, fn _value -> fixed_value end)
+    end)
   end
 
   defp group_by_aesthetics(geom, plot) do
@@ -127,15 +128,13 @@ defmodule GGity.Geom.Ribbon do
     )
   end
 
-  defp format_coordinates(y_aesthetic, geom, data, plot) do
-    data
-    |> Enum.map(fn row ->
+  defp format_coordinates(y_aesthetic, mapping, data, plot) do
+    Enum.map(data, fn row ->
       %{
-        x: plot.scales.x.transform.(row[geom.mapping[:x]]),
-        y_max: transform_and_pad_y(row[geom.mapping[y_aesthetic]], plot)
+        x: plot.scales.x.transform.(row[mapping[:x]]),
+        y_max: transform_and_pad_y(row[mapping[y_aesthetic]], plot)
       }
     end)
-    |> Enum.sort_by(fn row -> row.x end)
   end
 
   defp transform_and_pad_y(y_value, plot) do
