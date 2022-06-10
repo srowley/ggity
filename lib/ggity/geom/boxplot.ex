@@ -27,7 +27,7 @@ defmodule GGity.Geom.Boxplot do
     struct(Geom.Boxplot, [{:mapping, mapping} | options])
   end
 
-  @spec draw(Geom.Boxplot.t(), list(map()), Plot.t()) :: iolist()
+  @spec draw(Geom.Boxplot.t(), list(map()), Plot.t()) :: iolist
   def draw(%Geom.Boxplot{} = geom_boxplot, data, plot) do
     number_of_levels = length(plot.scales.x.levels)
     group_width = (plot.width - number_of_levels * (plot.scales.x.padding - 1)) / number_of_levels
@@ -39,34 +39,23 @@ defmodule GGity.Geom.Boxplot do
     data
     |> Enum.group_by(fn row -> row[geom_boxplot.mapping[:x]] end)
     |> Enum.with_index()
-    |> Enum.map(fn {{_x_value, group}, group_index} ->
-      boxplot_group(geom_boxplot, group, group_index, plot)
+    |> Enum.map(fn {{_x_value, group_values}, group_index} ->
+      boxplot_group(geom_boxplot, group_values, group_index, plot)
     end)
   end
 
   defp boxplot_group(geom_boxplot, group_values, group_index, %Plot{scales: scales} = plot) do
-    scale_transforms =
-      geom_boxplot.mapping
-      |> Map.keys()
-      |> Enum.reduce(%{}, fn aesthetic, mapped ->
-        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
-      end)
-
-    transforms =
-      geom_boxplot
-      |> Map.take([:alpha, :color, :fill])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
-      end)
-      |> Map.merge(scale_transforms)
+    mapping = geom_boxplot.mapping
+    scale_transforms = fetch_scale_transforms(mapping, scales)
+    fixed_aesthetics = fetch_fixed_aesthetics(geom_boxplot)
+    transforms = Map.merge(fixed_aesthetics, scale_transforms)
 
     count_rows = length(group_values)
 
     group_values
     |> Enum.sort_by(
       fn row ->
-        {row[geom_boxplot.mapping[:fill]], row[geom_boxplot.mapping[:color]],
-         row[geom_boxplot.mapping[:alpha]]}
+        {row[mapping[:fill]], row[mapping[:color]], row[mapping[:alpha]]}
       end,
       :asc
     )
@@ -88,47 +77,15 @@ defmodule GGity.Geom.Boxplot do
               width: box_width,
               height:
                 (transforms.y.(row[:upper]) - transforms.y.(row[:lower])) / plot.aspect_ratio,
-              fill: transforms.fill.(row[geom_boxplot.mapping[:fill]]),
-              fill_opacity: transforms.alpha.(row[geom_boxplot.mapping[:alpha]]),
-              stroke: transforms.color.(row[geom_boxplot.mapping[:color]]),
+              fill: transforms.fill.(row[mapping[:fill]]),
+              fill_opacity: transforms.alpha.(row[mapping[:alpha]]),
+              stroke: transforms.color.(row[mapping[:color]]),
               stroke_width: 0.5
             ] ++ GGity.Layer.custom_attributes(geom_boxplot, plot, row)
           ),
-          Draw.line(
-            x1: box_left,
-            x2: box_right,
-            y1:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:middle]) / plot.aspect_ratio,
-            y2:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:middle]) / plot.aspect_ratio,
-            stroke: transforms.color.(row[geom_boxplot.mapping[:color]])
-          ),
-          Draw.line(
-            x1: box_middle,
-            x2: box_middle,
-            y1:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:upper]) / plot.aspect_ratio,
-            y2:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:ymax]) / plot.aspect_ratio,
-            stroke: transforms.color.(row[geom_boxplot.mapping[:color]]),
-            stroke_width: 0.5
-          ),
-          Draw.line(
-            x1: box_middle,
-            x2: box_middle,
-            y1:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:lower]) / plot.aspect_ratio,
-            y2:
-              plot.area_padding + plot.width / plot.aspect_ratio -
-                plot.scales.y.transform.(row[:ymin]) / plot.aspect_ratio,
-            stroke: transforms.color.(row[geom_boxplot.mapping[:color]]),
-            stroke_width: 0.5
-          ),
+          draw_median(box_left, box_right, row, transforms, mapping, plot),
+          draw_top_whisker(box_middle, row, transforms, mapping, plot),
+          draw_bottom_whisker(box_middle, row, transforms, mapping, plot),
           for outlier <- row.outliers do
             draw_outlier(outlier, box_middle, row, geom_boxplot, transforms, plot)
           end
@@ -137,6 +94,57 @@ defmodule GGity.Geom.Boxplot do
       }
     end)
     |> elem(1)
+  end
+
+  defp fetch_scale_transforms(mapping, scales) do
+    for aes <- Map.keys(mapping), reduce: %{} do
+      scale_transforms -> Map.put(scale_transforms, aes, scales[aes].transform)
+    end
+  end
+
+  defp fetch_fixed_aesthetics(geom_boxplot) do
+    geom_boxplot
+    |> Map.take([:alpha, :color, :fill])
+    |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
+      Map.put(fixed, aesthetic, fn _value -> fixed_value end)
+    end)
+  end
+
+  defp draw_median(box_left, box_right, row, transforms, mapping, plot) do
+    Draw.line(
+      x1: box_left,
+      x2: box_right,
+      y1: transform_and_adjust_y(row, :middle, plot),
+      y2: transform_and_adjust_y(row, :middle, plot),
+      stroke: transforms.color.(row[mapping[:color]])
+    )
+  end
+
+  defp draw_top_whisker(box_middle, row, transforms, mapping, plot) do
+    Draw.line(
+      x1: box_middle,
+      x2: box_middle,
+      y1: transform_and_adjust_y(row, :upper, plot),
+      y2: transform_and_adjust_y(row, :ymax, plot),
+      stroke: transforms.color.(row[mapping[:color]]),
+      stroke_width: 0.5
+    )
+  end
+
+  defp draw_bottom_whisker(box_middle, row, transforms, mapping, plot) do
+    Draw.line(
+      x1: box_middle,
+      x2: box_middle,
+      y1: transform_and_adjust_y(row, :lower, plot),
+      y2: transform_and_adjust_y(row, :ymin, plot),
+      stroke: transforms.color.(row[mapping[:color]]),
+      stroke_width: 0.5
+    )
+  end
+
+  defp transform_and_adjust_y(row, aes, plot) do
+    plot.area_padding + plot.width / plot.aspect_ratio -
+      plot.scales.y.transform.(row[aes]) / plot.aspect_ratio
   end
 
   defp draw_outlier(value, box_middle, row, geom_boxplot, transforms, plot) do
