@@ -24,4 +24,25 @@ defmodule Mix.Tasks.Ggity.Visual do
       fn module -> apply(module, :run, [argv]) end
     )
   end
+
+  @doc false
+  @spec display(String.t(), String.t()) :: :ok | {:error, :file.posix()}
+  def display(plots, browser) do
+    test_file = "test/visual/visual_test.html"
+
+    browser =
+      case browser do
+        "--wsl" -> "sensible-browser"
+        browser -> browser
+      end
+
+    File.write!(test_file, "<html><body #{grid_style()}>\n#{plots}\n</body></html>")
+    System.cmd(browser, [test_file])
+    Process.sleep(1000)
+    File.rm(test_file)
+  end
+
+  defp grid_style do
+    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
+  end
 end

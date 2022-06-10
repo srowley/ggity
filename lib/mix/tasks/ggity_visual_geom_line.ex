@@ -12,7 +12,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
   @spec run(list(any)) :: any
   def run([]), do: run([@default_browser])
 
-  def run(argv) do
+  def run([browser]) do
     plots =
       Enum.join(
         [
@@ -26,26 +26,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
         "\n"
       )
 
-    test_file = "test/visual/visual_test.html"
-
-    browser =
-      case argv do
-        ["--wsl"] -> "sensible-browser"
-        [browser] -> browser
-      end
-
-    File.write!(test_file, "<html><body #{grid_style()}>\n#{plots}\n</body></html>")
-    open_html_file(browser, test_file)
-    Process.sleep(1000)
-    File.rm(test_file)
-  end
-
-  defp open_html_file(browser, file) do
-    System.cmd(browser, [file])
-  end
-
-  defp grid_style do
-    "style='display: grid;grid-template-columns: repeat(3, 1fr)'"
+    Mix.Tasks.Ggity.Visual.display(plots, browser)
   end
 
   defp basic do
