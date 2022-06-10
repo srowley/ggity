@@ -189,8 +189,7 @@ def deps do
 end
 ```
 
-GGity requires Elixir 1.10, and will likely require Elixir 1.11 soon in order to take advantage of the nice improvements
-associated with handling dates and datetimes.
+GGity requires Elixir 1.12.
 
 ## License
 

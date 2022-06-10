@@ -9,7 +9,7 @@ defmodule GGity.MixProject do
       app: :ggity,
       version: @version,
       aliases: aliases(),
-      elixir: "~> 1.10",
+      elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
