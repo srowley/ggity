@@ -166,7 +166,7 @@ mix ggity.visual.geom.point --wsl
 
 ## Build Process
 
-The library includes an alias (```mix checks```) that runs Credo, Dialyzer, the visual tests and formatter in sequence. I prefer to have all of those things in order before committing a change.
+The library includes an alias (```mix checks```) that runs Credo, the formatter and all the visual tests in sequence. I prefer to have all of those things in order before committing a change.
 
 GGity also includes guides that serve as a sort of visual doctest - the guides include several code examples, and those code examples are used to generate the graphics in the documents (so as a user you know that the code in the example will definitely generate the graphic in the documentation). Before pushing a new feature, the docs are rebuilt using ```mix build_docs```. I am still working out how best to do
 this without making the commit history somewhat messy.

@@ -29,10 +29,9 @@ defmodule GGity.MixProject do
   defp deps do
     [
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:sweet_xml, "~> 0.6.6", only: :test},
-      {:nimble_csv, "~> 0.7"},
+      {:ex_doc, "~> 0.28", only: :dev, runtime: false},
+      {:sweet_xml, "~> 0.7", only: :test},
+      {:nimble_csv, "~> 1.2"},
       {:nimble_strftime, "~> 0.1"}
     ]
   end
@@ -42,7 +41,6 @@ defmodule GGity.MixProject do
       checks: [
         "compile",
         "credo",
-        "dialyzer",
         "format",
         "ggity.visual"
       ],
