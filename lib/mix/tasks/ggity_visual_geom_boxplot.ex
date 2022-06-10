@@ -29,11 +29,8 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Boxplot do
 
     browser =
       case argv do
-        ["--wsl"] ->
-          "/mnt/c/Program Files/Mozilla Firefox/firefox.exe"
-
-        [browser] ->
-          browser
+        ["--wsl"] -> "sensible-browser"
+        [browser] -> browser
       end
 
     File.write!(test_file, "<html><body #{grid_style()}>\n#{plots}\n</body></html>")
