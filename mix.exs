@@ -9,7 +9,7 @@ defmodule GGity.MixProject do
       app: :ggity,
       version: @version,
       aliases: aliases(),
-      elixir: "~> 1.12",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
@@ -31,6 +31,7 @@ defmodule GGity.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.28", only: :dev, runtime: false},
       {:sweet_xml, "~> 0.7", only: :test},
+      {:explorer, "~>0.1.1"},
       {:nimble_csv, "~> 1.2"},
       {:nimble_strftime, "~> 0.1"}
     ]
