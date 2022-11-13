@@ -623,7 +623,7 @@ defmodule GGity.Plot do
   Accepts an alternative dataset to be used; if one is not provided defaults to
   the plot dataset.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` mapping.
 
@@ -719,7 +719,7 @@ defmodule GGity.Plot do
   Accepts an alternative dataset to be used; if one is not provided defaults to
   the plot dataset.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` mapping, for example.
 
@@ -814,7 +814,7 @@ defmodule GGity.Plot do
   Accepts an alternative dataset to be used; if one is not provided defaults to
   the plot dataset.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` or `:y` mappings.
 
@@ -898,7 +898,7 @@ defmodule GGity.Plot do
   Accepts an alternative dataset to be used; if one is not provided defaults to
   the plot dataset.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` or `:y` mappings.
 
@@ -979,7 +979,7 @@ defmodule GGity.Plot do
   Accepts an alternative dataset to be used; if one is not provided defaults to
   the plot dataset.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` mapping.
 
@@ -1014,7 +1014,7 @@ defmodule GGity.Plot do
       Defaults to `:identity`.
 
   Note that stacked ribbon charts are not yet supported - mappings to the
-  `:y_min` aesthetic will be ignored is `:positon` is set to `:stack`.
+  `:y_min` aesthetic will be ignored is `:position` is set to `:stack`.
   """
   @spec geom_ribbon(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_ribbon(plot, mapping \\ [], options \\ [])
@@ -1061,10 +1061,10 @@ defmodule GGity.Plot do
   the plot dataset.
 
   A common use for text geoms is labelling of bar or point geoms. For bar chart
-  labels in particular, it is important to specify the same stat and postion
+  labels in particular, it is important to specify the same stat and position
   adjustment for the text geom as that specified for the bar chart.
 
-  Accepts a mapping and/or additonal options to be used. The provided mapping
+  Accepts a mapping and/or additional options to be used. The provided mapping
   is merged with the plot mapping for purposes of the geom - there is no need
   to re-specify the `:x` or `:y` mappings.
 

@@ -1402,7 +1402,7 @@ defmodule GGity.Scale.Color.Viridis do
         %Color.Viridis{levels: [_]},
         _label,
         _key_glyph,
-        _key_heigh,
+        _key_height,
         _fixed_aestheticst
       ),
       do: []

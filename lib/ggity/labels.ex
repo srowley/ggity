@@ -27,7 +27,7 @@ defmodule GGity.Labels do
   data
   |> Plot.new(%{x: "x", y: "y"})
   |> Plot.geom_point()
-  |> Plot.scale_x_continuous() # This is equivalant to Plot.scale_x_continuous(labels: :waivers)
+  |> Plot.scale_x_continuous() # This is equivalent to Plot.scale_x_continuous(labels: :waivers)
   # value 1000 (integer) is printed as "1000"
   # value 1000.0 (float) is printed as "1.0e3"
 

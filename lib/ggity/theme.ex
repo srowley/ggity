@@ -39,7 +39,7 @@ defmodule GGity.Theme do
 
   The following attributes are supported:
 
-  * `:text` style for all non-data text; overriden by other text attributes (`Element.Text`)
+  * `:text` style for all non-data text; overridden by other text attributes (`Element.Text`)
   * `:axis_line` x- and y axes lines (`Element.Line`)
   * `:axis_line_x` x axis; overrides `:axis_line` (`Element.Line`)
   * `:axis_line_y` y axis; overrides `:axis_line` (`Element.Line`)

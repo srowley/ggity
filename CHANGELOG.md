@@ -2,11 +2,11 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased 
+## Unreleased
 ### Changed
 - Replaced `scale_size_discrete` and `scale_size_continuous` with `scale_size`.
 This conforms to the ggplot2 API; previously they were split because
-GGity could not draw a legend for a continous size scale (`scale_size` is
+GGity could not draw a legend for a continuous size scale (`scale_size` is
 continuous).
 - Legends now apply fixed aesthetic values to key glyphs.
 
@@ -48,19 +48,19 @@ elements.
 - Values for attributes in the inline stylesheet generated from a theme
 are validated. Numerical attributes are confirmed to be numbers, values
 for colors are confirmed to be hex values or valid CSS color names, and
-the value for `:face` is checked against a list of allowed values. 
+the value for `:face` is checked against a list of allowed values.
 Invalid property-value pairs are not included in the rendered stylesheet.
 
     The only attribute not validated is `:family`. This value is HTML-escaped,
 but still poses a security risk if it is set with untrusted data.
-- Changed the order of shapes in the shape scale palette to conform to ggplot2 API. 
+- Changed the order of shapes in the shape scale palette to conform to ggplot2 API.
 - Replaced interpolated strings with IO Lists in various parts of the stylesheet
 generation function chain.
 - Changed some default theme values to improve quality of sample charts.
 - Added top and right default margins to improve quality of sample charts.
 
 ### Fixed
-- Size scale is based on accurate (rather than approximate) calcluations
+- Size scale is based on accurate (rather than approximate) calculations
 of point area for each shape
 - Y-coordinate scale and axis functions properly handle dataset
 with no range (same min and max value, or only one value).
@@ -86,14 +86,14 @@ layer-specific data set can be provided by passing the `data` option with a
 dataset to `Plot.geom_*`. Run `mix ggity.visual.layers` for examples.
 - Added `Geom.Text`; helpful for labelling bar plots
 - Added theme support. Each plot has a Theme struct that stores the attributes
-of non-data elements of the plot (titles, borders, backgrouns and more). A
-plot's theme can be updated using `Plot.theme/2`. Attributes that are also 
+of non-data elements of the plot (titles, borders, backgrounds and more). A
+plot's theme can be updated using `Plot.theme/2`. Attributes that are also
 CSS presentation attributes are implemented via custom classes that can also be
 styled with an external stylesheet.
 - Added ribbon geoms. These are primarily useful for drawing area/stacked area
 charts, but are also good for drawing a confidence interval around a line.
 - Added support for rotating x-axis tick labels.
-- Discrete alpha and size scales accept a tuple with min/max values for 
+- Discrete alpha and size scales accept a tuple with min/max values for
 creating a palette.
 
 ### Changed
@@ -102,7 +102,7 @@ accommodate layers
 - No longer set an SVG width/height (remove Plot `:plot_width` attribute). This
 is unnecessary and messes up scaling
 - No longer document Plot `:width` attribute (setting the panel width); this
-number should not be changed from its default value 
+number should not be changed from its default value
 - Date/DateTime tick intervals are now nice time multiples thanks to Contex
 - Discrete size scale now draws a legend
 - Size scales map to area, not radius
@@ -154,7 +154,7 @@ accepted by NimbleStrftime, or a tuple with a pattern and a keyword list of opti
 - Various minor documentation improvements.
 - `Geom.Blank` returns an empty list instead of a list with an unnecessary empty string
 
-### Removed 
+### Removed
 
 - An extra list traversal in `Scale.Color.Viridis`
 - Rogue comment in `Scale.Alpha.Continuous`
