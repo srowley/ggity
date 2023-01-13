@@ -32,7 +32,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Boxplot do
     Examples.mpg()
     |> Plot.new(%{x: "class", y: "hwy"})
     |> Plot.geom_boxplot(
-      custom_attributes: fn _plot, row -> [onclick: "alert('Median: #{row.middle}')"] end
+      custom_attributes: fn _plot, row -> [onclick: "alert('Median: #{row["middle"]}')"] end
     )
     |> Plot.scale_y_continuous(labels: &floor/1)
     |> Plot.plot()

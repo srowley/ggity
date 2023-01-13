@@ -48,7 +48,7 @@ defmodule Mix.Tasks.Ggity.Visual.Annotate do
       ymax: 21,
       alpha: 0.2,
       custom_attributes: fn _plot, row ->
-        [onclick: "alert('I am #{row.xmax - row.xmin} wide.')"]
+        [onclick: "alert('I am #{row["xmax"] - row["xmin"]} wide.')"]
       end
     )
     |> Plot.geom_point()

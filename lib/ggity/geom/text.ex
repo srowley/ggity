@@ -39,18 +39,22 @@ defmodule GGity.Geom.Text do
   def draw(%Geom.Text{} = geom_text, data, %Plot{scales: %{x: %Scale.X.Discrete{}}} = plot) do
     number_of_levels = length(plot.scales.x.levels)
     group_width = (plot.width - number_of_levels * (plot.scales.x.padding - 1)) / number_of_levels
-    geom_text = struct(geom_text, group_width: group_width)
+    mapping = Map.new(geom_text.mapping, fn {k, v} -> {k, to_string(v)} end)
+    geom_text = struct(geom_text, mapping: mapping, group_width: group_width)
     words(geom_text, data, plot)
   end
 
-  def draw(%Geom.Text{} = geom_text, data, plot), do: words(geom_text, data, plot)
+  def draw(%Geom.Text{} = geom_text, data, plot) do
+    mapping = Map.new(geom_text.mapping, fn {k, v} -> {k, to_string(v)} end)
+    geom_text = struct(geom_text, mapping: mapping)
+    words(geom_text, data, plot)
+  end
 
   defp words(%Geom.Text{} = geom_text, data, %Plot{scales: %{x: %Scale.X.Discrete{}}} = plot) do
     data
     |> Enum.reject(fn row -> row[geom_text.mapping[:y]] == 0 end)
     |> Enum.group_by(fn row -> row[geom_text.mapping[:x]] end)
-    |> Enum.with_index()
-    |> Enum.map(fn {{_x_value, group}, group_index} ->
+    |> Enum.with_index(fn {_x_value, group}, group_index ->
       group(geom_text, group, group_index, plot)
     end)
   end
@@ -58,36 +62,46 @@ defmodule GGity.Geom.Text do
   defp words(%Geom.Text{} = geom_text, data, %Plot{scales: scales} = plot) do
     transforms = transforms(geom_text, scales)
 
-    data
-    |> Stream.map(fn row ->
+    Enum.map(data, fn row ->
+      row
+      |> apply_scale_transform(transforms, geom_text.mapping)
+      |> map_to_svg_attributes()
+      |> draw_word(geom_text, plot)
+    end)
+  end
+
+  defp apply_scale_transform(row, transforms, mapping) do
+    [
+      transforms.x.(row[mapping.x]),
+      transforms.y.(row[mapping.y]),
+      transforms.label.(row[mapping[:label]]),
+      transforms.alpha.(row[mapping[:alpha]]),
+      transforms.color.(row[mapping[:color]]),
+      transforms.size.(row[mapping[:size]])
+    ]
+  end
+
+  defp map_to_svg_attributes(row) do
+    Enum.zip([:x, :y, :label, :fill_opacity, :fill, :size], row)
+  end
+
+  defp draw_word(row, geom_text, plot) do
+    Draw.text(
+      to_string(row[:label]),
       [
-        transforms.x.(row[geom_text.mapping.x]),
-        transforms.y.(row[geom_text.mapping.y]),
-        transforms.label.(row[geom_text.mapping[:label]]),
-        transforms.alpha.(row[geom_text.mapping[:alpha]]),
-        transforms.color.(row[geom_text.mapping[:color]]),
-        transforms.size.(row[geom_text.mapping[:size]])
-      ]
-    end)
-    |> Stream.map(fn row -> Enum.zip([:x, :y, :label, :fill_opacity, :fill, :size], row) end)
-    |> Enum.map(fn row ->
-      Draw.text(
-        to_string(row[:label]),
-        [
-          x: row[:x] + plot.area_padding,
-          y: (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding,
-          fill: row[:fill],
-          fill_opacity: row[:fill_opacity],
-          font_size: "#{row[:size]}px",
-          text_anchor: @hjust_anchor_map[geom_text.hjust],
-          dominant_baseline: @vjust_anchor_map[geom_text.vjust],
-          dx: geom_text.nudge_x,
-          dy: -1 * geom_text.nudge_y,
-          font_family: geom_text.family,
-          font_weight: geom_text.fontface
-        ] ++ Layer.custom_attributes(geom_text, plot, row)
-      )
-    end)
+        x: row[:x] + plot.area_padding,
+        y: (plot.width - row[:y]) / plot.aspect_ratio + plot.area_padding,
+        fill: row[:fill],
+        fill_opacity: row[:fill_opacity],
+        font_size: "#{row[:size]}px",
+        text_anchor: @hjust_anchor_map[geom_text.hjust],
+        dominant_baseline: @vjust_anchor_map[geom_text.vjust],
+        dx: geom_text.nudge_x,
+        dy: -1 * geom_text.nudge_y,
+        font_family: geom_text.family,
+        font_weight: geom_text.fontface
+      ] ++ Layer.custom_attributes(geom_text, plot, row)
+    )
   end
 
   defp group(geom_text, group_values, group_index, %Plot{scales: scales} = plot) do

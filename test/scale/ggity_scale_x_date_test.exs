@@ -1,5 +1,5 @@
 defmodule GGityScaleXDateTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias GGity.Scale.X
 

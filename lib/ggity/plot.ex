@@ -52,6 +52,7 @@ defmodule GGity.Plot do
 
   alias __MODULE__
   alias GGity.{Axis, Draw, Geom, Layer, Legend, Scale, Stat, Theme}
+  alias Explorer.{DataFrame, Series}
 
   @type t() :: %__MODULE__{}
   @type column() :: list()
@@ -120,56 +121,78 @@ defmodule GGity.Plot do
 
   * `:y_label_padding` - vertical distance between the y axis and its label. Defaults to `20`.
   """
-  @spec new(list(record()), mapping(), keyword()) :: Plot.t()
-  def new([first_row | _rest] = data, mapping \\ %{}, options \\ []) do
-    scales = assign_scales(mapping, first_row)
+  @spec new(list(record()) | Explorer.DataFrame.t(), mapping(), keyword()) :: Plot.t()
+  def new(data, mapping \\ %{}, options \\ [])
+
+  def new(data, mapping, options) when is_list(data) do
+    data
+    |> DataFrame.new()
+    |> new(mapping, options)
+  end
+
+  def new(%DataFrame{} = df, mapping, options) do
+    scales = assign_scales(df, mapping)
 
     Plot
     |> struct(options)
-    |> struct(data: data, mapping: mapping, scales: scales)
+    |> struct(data: df, mapping: mapping, scales: scales)
   end
 
-  defp assign_scales(mapping, record) do
+  defp assign_scales(df, mapping) do
     mapping
     |> Map.keys()
     |> Enum.reduce(%{}, fn aesthetic, scale_map ->
-      Map.put(scale_map, aesthetic, assign_scale(aesthetic, record[mapping[aesthetic]]))
+      name = to_string(mapping[aesthetic])
+      series = DataFrame.pull(df, name)
+      Map.put(scale_map, aesthetic, assign_scale(aesthetic, series.dtype))
     end)
   end
 
-  defp assign_scale(:alpha, value) when is_number(value) do
+  defp assign_scale(:alpha, dtype) when dtype in [:float, :integer] do
     Scale.Alpha.Continuous.new()
   end
 
-  defp assign_scale(:alpha, _value), do: Scale.Alpha.Discrete.new()
+  defp assign_scale(:alpha, _dtype) do
+    Scale.Alpha.Continuous.new()
+  end
 
-  defp assign_scale(:color, _value), do: Scale.Color.Viridis.new()
+  defp assign_scale(:color, _dtype), do: Scale.Color.Viridis.new()
 
-  defp assign_scale(:fill, _value), do: Scale.Fill.Viridis.new()
+  defp assign_scale(:fill, _dtype), do: Scale.Fill.Viridis.new()
 
-  defp assign_scale(:linetype, _value), do: Scale.Linetype.Discrete.new()
+  defp assign_scale(:linetype, _dtype), do: Scale.Linetype.Discrete.new()
 
-  defp assign_scale(:shape, _value), do: Scale.Shape.new()
+  defp assign_scale(:shape, _dtype), do: Scale.Shape.new()
 
   defp assign_scale(:size, value) when is_number(value) do
     Scale.Size.new()
   end
 
-  defp assign_scale(:x, %Date{}), do: Scale.X.Date.new()
+  defp assign_scale(:size, dtype) when dtype in [:float, :integer] do
+    Scale.Size.new()
+  end
 
-  defp assign_scale(:x, %DateTime{}), do: Scale.X.DateTime.new()
+  defp assign_scale(:x, dtype) when dtype == :date do
+    Scale.X.Date.new()
+  end
 
-  defp assign_scale(:x, value) when is_number(value) do
+  defp assign_scale(:x, dtype) when dtype == :datetime do
+    Scale.X.DateTime.new()
+  end
+
+  defp assign_scale(:x, dtype) when dtype in [:float, :integer] do
     Scale.X.Continuous.new()
   end
 
-  defp assign_scale(:x, _value), do: Scale.X.Discrete.new()
+  defp assign_scale(:x, _series), do: Scale.X.Discrete.new()
 
-  defp assign_scale(:y, _value), do: Scale.Y.Continuous.new()
+  defp assign_scale(:y, _series), do: Scale.Y.Continuous.new()
 
-  defp assign_scale(:y_max, _value), do: Scale.Y.Continuous.new()
+  defp assign_scale(:y_max, _series), do: Scale.Y.Continuous.new()
 
-  defp assign_scale(other, _value), do: Scale.Identity.new(other)
+  defp assign_scale(:y_min, _series), do: Scale.Y.Continuous.new()
+
+  defp assign_scale(other, _series), do: Scale.Identity.new(other)
 
   @doc """
   Generates an iolist of SVG markup representing a `Plot`.
@@ -254,14 +277,7 @@ defmodule GGity.Plot do
   end
 
   defp train_scale(:y_max, plot) do
-    sample_layer =
-      plot.combined_layers
-      |> Enum.filter(fn layer -> layer.mapping[:y_max] end)
-      |> hd()
-
-    sample_value = hd(sample_layer.data)[sample_layer.mapping[:y_max]]
-
-    scale = plot.scales[:y_max] || assign_scale(:y_max, sample_value)
+    scale = plot.scales[:y_max] || assign_scale(:y_max, infer_dtype(:y_max, plot))
     y_max_global_min_max = global_min_max(:y_max, plot, scale)
 
     global_min_max =
@@ -276,48 +292,59 @@ defmodule GGity.Plot do
   end
 
   defp train_scale(aesthetic, plot) do
+    scale = plot.scales[aesthetic] || assign_scale(aesthetic, infer_dtype(aesthetic, plot))
+    global_min_max = global_min_max(aesthetic, plot, scale)
+    Scale.train(scale, global_min_max)
+  end
+
+  defp infer_dtype(aesthetic, plot) do
     sample_layer =
       plot.combined_layers
       |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
       |> hd()
 
-    sample_value = hd(sample_layer.data)[sample_layer.mapping[aesthetic]]
-
-    scale = plot.scales[aesthetic] || assign_scale(aesthetic, sample_value)
-    global_min_max = global_min_max(aesthetic, plot, scale)
-    Scale.train(scale, global_min_max)
+    sample_layer.data
+    |> Explorer.DataFrame.pull(sample_layer.mapping[aesthetic])
+    |> Map.get(:dtype)
   end
 
   defp global_min_max(aesthetic, plot, %scale_type{}) when scale_type in @continuous_scales do
     {fixed_min, fixed_max} = plot.limits[aesthetic] || {nil, nil}
 
-    plot.combined_layers
-    |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
-    |> Enum.map(fn layer -> layer_min_max(aesthetic, layer) end)
-    |> Enum.reduce({fixed_min, fixed_max}, fn {layer_min, layer_max}, {global_min, global_max} ->
-      {safe_min(fixed_min || layer_min, global_min || layer_min),
-       safe_max(fixed_max || layer_max, global_max || layer_max)}
-    end)
+    for layer <- plot.combined_layers, layer.mapping[aesthetic], reduce: {fixed_min, fixed_max} do
+      {global_min, global_max} ->
+        {layer_min, layer_max} = layer_min_max(aesthetic, layer)
+
+        {safe_min(fixed_min || layer_min, global_min || layer_min),
+         safe_max(fixed_max || layer_max, global_max || layer_max)}
+    end
   end
 
   defp global_min_max(aesthetic, plot, _sample_value) do
-    plot.combined_layers
-    |> Enum.filter(fn layer -> layer.mapping[aesthetic] end)
-    |> Enum.reduce(MapSet.new(), fn layer, levels ->
-      MapSet.union(levels, layer_value_set(aesthetic, layer))
-    end)
-    |> Enum.sort()
+    Enum.sort(
+      for layer <- plot.combined_layers, layer.mapping[aesthetic], reduce: MapSet.new() do
+        levels -> MapSet.union(levels, layer_value_set(aesthetic, layer))
+      end
+    )
   end
 
   defp layer_min_max(aesthetic, layer) do
-    layer.data
-    |> Enum.map(fn row -> row[layer.mapping[aesthetic]] end)
-    |> min_max()
+    name = to_string(layer.mapping[aesthetic])
+
+    if name in DataFrame.names(layer.data) do
+      series = DataFrame.pull(layer.data, name)
+      {Series.min(series), Series.max(series)}
+    else
+      {nil, nil}
+    end
   end
 
   defp layer_value_set(aesthetic, layer) do
     layer.data
-    |> Enum.map(fn row -> to_string(row[layer.mapping[aesthetic]]) end)
+    |> Explorer.DataFrame.pull(layer.mapping[aesthetic])
+    |> Explorer.Series.distinct()
+    |> Explorer.Series.cast(:string)
+    |> Explorer.Series.to_list()
     |> MapSet.new()
   end
 
@@ -339,14 +366,9 @@ defmodule GGity.Plot do
 
   defp safe_max(first, second), do: max(first, second)
 
-  defp min_max([]), do: raise(Enum.EmptyError)
-
-  defp min_max([single_value]), do: {single_value, single_value}
-
   defp min_max([%date_type{} | _rest] = dates)
        when date_type in [Date, DateTime, NaiveDateTime] do
-    {Enum.min_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end),
-     Enum.max_by(dates, & &1, date_type, fn -> raise(Enum.EmptyError) end)}
+    Enum.min_max_by(dates, & &1, date_type)
   end
 
   defp min_max(list), do: Enum.min_max(list)
@@ -690,7 +712,14 @@ defmodule GGity.Plot do
     updated_plot = add_geom(plot, Geom.Bar, mapping_or_options)
     bar_geom = hd(updated_plot.layers)
 
-    {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, updated_plot.mapping])
+    merged_mapping =
+      if is_map(mapping_or_options) do
+        Map.merge(updated_plot.mapping, mapping_or_options)
+      else
+        updated_plot.mapping
+      end
+
+    {data, mapping} = apply(Stat, bar_geom.stat, [updated_plot.data, merged_mapping])
 
     fixed_max = stacked_y_axis_max(data, mapping, :y)
 
@@ -870,25 +899,38 @@ defmodule GGity.Plot do
   defp line_key_glyph(%Plot{} = plot, mapping) when is_map(mapping) do
     mapping = Map.merge(plot.mapping, mapping)
 
-    case hd(plot.data)[mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
+    name = to_string(mapping[:x])
+    type = Series.dtype(plot.data[name])
+
+    if type in [:date, :datetime] do
+      :timeseries
+    else
+      :path
     end
   end
 
   defp line_key_glyph(%Plot{} = plot, options) when is_list(options) do
-    case hd(options[:data] || plot.data)[plot.mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
+    data = options[:data] || plot.data
+    name = to_string(plot.mapping[:x])
+    type = Series.dtype(data[name])
+
+    if type in [:date, :datetime] do
+      :timeseries
+    else
+      :path
     end
   end
 
   defp line_key_glyph(%Plot{} = plot, mapping, options) do
     mapping = Map.merge(plot.mapping, mapping)
+    data = options[:data] || plot.data
+    name = to_string(mapping[:x])
+    type = Series.dtype(data[name])
 
-    case hd(options[:data] || plot.data)[mapping[:x]] do
-      %type{} when type in [Date, DateTime] -> :timeseries
-      _type -> :path
+    if type in [:date, :datetime] do
+      :timeseries
+    else
+      :path
     end
   end
 
@@ -1149,7 +1191,14 @@ defmodule GGity.Plot do
     updated_plot = add_geom(plot, Geom.Text, mapping_or_options)
     geom = hd(updated_plot.layers)
 
-    {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, updated_plot.mapping])
+    merged_mapping =
+      if is_map(mapping_or_options) do
+        Map.merge(updated_plot.mapping, mapping_or_options)
+      else
+        updated_plot.mapping
+      end
+
+    {data, mapping} = apply(Stat, geom.stat, [updated_plot.data, merged_mapping])
 
     scale_adjustment =
       case geom.position do
@@ -1209,12 +1258,14 @@ defmodule GGity.Plot do
   end
 
   defp stacked_y_axis_max(data, mapping, y_aesthetic) do
-    data
-    |> Enum.group_by(
-      fn item -> item[mapping[:x]] end,
-      fn values -> values[mapping[y_aesthetic]] end
-    )
-    |> Enum.reduce(0, fn {_category, counts}, max_count -> max(Enum.sum(counts), max_count) end)
+    label = mapping[y_aesthetic]
+
+    maxes =
+      data
+      |> Explorer.DataFrame.group_by(to_string(mapping[:x]))
+      |> Explorer.DataFrame.summarise_with(&[{label, Explorer.Series.sum(&1[label])}])
+
+    Explorer.Series.max(maxes[label])
   end
 
   defp position_adjusted_scale_min_max(geom, plot, fixed_max) do

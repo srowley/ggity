@@ -1,7 +1,7 @@
 defmodule GGity.Stat do
   @moduledoc false
 
-  @type dataset :: list(map())
+  @type dataset :: Explorer.DataFrame.t()
 
   @doc false
   @spec identity(dataset(), map()) :: {dataset(), map()}
@@ -9,30 +9,15 @@ defmodule GGity.Stat do
 
   @spec count(dataset(), map()) :: {dataset(), map()}
   def count(data, mapping) do
-    discrete_aesthetics = discrete_aesthetics(data, mapping)
-    permutations = permutations(discrete_aesthetics, data, mapping)
+    discrete_variables = discrete_variables(data, mapping)
 
     stat =
-      permutations
-      |> Enum.reduce([], fn permutation, stat ->
-        [
-          discrete_aesthetics
-          |> Map.new(fn aesthetic ->
-            {mapping[aesthetic], permutation[aesthetic]}
-          end)
-          |> Map.put(
-            :count,
-            Enum.count(data, fn row ->
-              Enum.map(permutation, fn {k, _v} -> row[mapping[k]] end) ==
-                Enum.map(permutation, fn {_k, v} -> v end)
-            end)
-          )
-          | stat
-        ]
-      end)
-      |> Enum.sort_by(fn row -> row[mapping[:x]] end)
+      data
+      |> Explorer.DataFrame.group_by(discrete_variables)
+      |> Explorer.DataFrame.summarise_with(&[count: Explorer.Series.count(&1[mapping[:x]])])
+      |> Explorer.DataFrame.arrange_with(& &1[mapping[:x]])
 
-    mapping = Map.put(mapping, :y, :count)
+    mapping = Map.put(mapping, :y, "count")
     {stat, mapping}
   end
 
@@ -40,6 +25,7 @@ defmodule GGity.Stat do
   def boxplot(data, mapping) do
     discrete_aesthetics = discrete_aesthetics(data, mapping)
     permutations = permutations(discrete_aesthetics, data, mapping)
+    data = Explorer.DataFrame.to_rows(data)
 
     stat =
       permutations
@@ -54,6 +40,7 @@ defmodule GGity.Stat do
         ]
       end)
       |> Enum.sort_by(fn row -> row[mapping[:x]] end)
+      |> Explorer.DataFrame.new(dtypes: [{"outliers", :binary}])
 
     {stat, mapping}
   end
@@ -66,13 +53,12 @@ defmodule GGity.Stat do
           Enum.map(permutation, fn {_k, v} -> v end)
       end)
       |> Enum.map(fn row -> row[mapping[:y]] end)
-      |> Enum.sort()
 
-    sample_size = length(permutation_data)
+    permutation_series = Explorer.Series.from_list(permutation_data)
 
     quantiles =
       for quantile <- [0.25, 0.5, 0.75],
-          do: {quantile, percentile(permutation_data, sample_size, quantile)},
+          do: {quantile, Explorer.Series.quantile(permutation_series, quantile)},
           into: %{}
 
     interquartile_range = quantiles[0.75] - quantiles[0.25]
@@ -85,44 +71,36 @@ defmodule GGity.Stat do
           do: record
 
     %{
-      ymin:
-        permutation_data
-        |> Enum.filter(fn record -> record >= ymin_threshold end)
-        |> Enum.min(),
-      lower: quantiles[0.25],
-      middle: quantiles[0.5],
-      upper: quantiles[0.75],
-      ymax:
-        permutation_data
-        |> Enum.filter(fn record -> record <= ymax_threshold end)
-        |> Enum.max(),
-      outliers: outliers
+      "ymin" =>
+        permutation_series
+        |> Explorer.Series.mask(Explorer.Series.greater_equal(permutation_series, ymin_threshold))
+        |> Explorer.Series.min(),
+      "lower" => quantiles[0.25],
+      "middle" => quantiles[0.5],
+      "upper" => quantiles[0.75],
+      "ymax" =>
+        permutation_series
+        |> Explorer.Series.mask(Explorer.Series.less_equal(permutation_series, ymax_threshold))
+        |> Explorer.Series.max(),
+      "outliers" => :erlang.term_to_binary(outliers)
     }
   end
 
-  defp percentile([single_value], 1, _percentile), do: single_value
-
-  defp percentile(data, sample_size, percentile) when percentile >= 0 and percentile <= 1 do
-    p = percentile * (sample_size - 1) + 1
-    k = trunc(p)
-    d = p - k
-    {_first_half, [lower, upper | _rest_of_second_half]} = Enum.split(data, k - 1)
-    lower + d * (upper - lower)
+  defp discrete_variables(data, mapping) do
+    for {name, series} <- Explorer.DataFrame.to_series(data),
+        Explorer.Series.dtype(series) == :string or name == mapping[:x],
+        name in Map.values(mapping),
+        do: name
   end
 
   defp discrete_aesthetics(data, mapping) do
-    discrete_variables =
-      data
-      |> hd()
-      |> Enum.filter(fn {_k, v} -> is_binary(v) end)
-      |> Enum.map(fn {k, _v} -> k end)
-
-    mapping
-    |> Enum.filter(fn {_k, v} -> v in discrete_variables end)
-    |> Keyword.keys()
+    discrete_variables = discrete_variables(data, mapping)
+    for {aesthetic, variable} <- mapping, variable in discrete_variables, do: aesthetic
   end
 
   defp permutations(discrete_aesthetics, data, mapping) do
+    data = Explorer.DataFrame.to_rows(data)
+
     for row <- data,
         uniq: true,
         do:

@@ -65,9 +65,7 @@ defmodule GGity.Scale.Alpha.Discrete do
         class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
-      levels
-      |> Enum.with_index()
-      |> Enum.map(fn {level, index} ->
+      Enum.with_index(levels, fn level, index ->
         draw_legend_item(scale, {level, index}, key_glyph, key_height, fixed_aethetics)
       end)
     ]

@@ -188,7 +188,7 @@ def deps do
 end
 ```
 
-GGity requires Elixir 1.12.
+GGity requires Elixir 1.13.
 
 ## License
 

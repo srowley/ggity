@@ -1,5 +1,5 @@
 defmodule GGityThemeTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   import GGity.Element.{Line, Rect, Text}
   alias GGity.{Plot, Theme}

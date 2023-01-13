@@ -36,7 +36,17 @@ defmodule GGity.Geom.Point do
   end
 
   defp point(row, transforms, geom_point, plot) do
-    mapping = geom_point.mapping
+    mapping =
+      Map.new(
+        geom_point.mapping,
+        fn {k, v} ->
+          if is_atom(v) do
+            {k, to_string(v)}
+          else
+            {k, v}
+          end
+        end
+      )
 
     [x, y, alpha, color, shape, size] = [
       transforms.x.(row[mapping.x]),

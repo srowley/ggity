@@ -9,7 +9,7 @@ defmodule GGity.MixProject do
       app: :ggity,
       version: @version,
       aliases: aliases(),
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
@@ -19,7 +19,6 @@ defmodule GGity.MixProject do
         GGity brings the familiar interface of R's ggplot2 library to SVG
         charting in Elixir.
       """,
-      homepage_url: "http://www.pocketbookvote.com",
       docs: docs()
     ]
   end
@@ -29,8 +28,9 @@ defmodule GGity.MixProject do
   defp deps do
     [
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.28", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:sweet_xml, "~> 0.7", only: :test},
+      {:explorer, "~> 0.5.0"},
       {:nimble_csv, "~> 1.2"},
       {:nimble_strftime, "~> 0.1"}
     ]

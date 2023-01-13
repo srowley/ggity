@@ -30,22 +30,14 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
   end
 
   defp default do
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
+    sales_for_city_subset_plot()
     |> Plot.labs(title: "Default - Viridis")
     |> Plot.geom_point(%{color: "city"})
     |> Plot.plot()
   end
 
   defp plasma do
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
+    sales_for_city_subset_plot()
     |> Plot.labs(title: "Plasma")
     |> Plot.geom_point(%{color: "city"})
     |> Plot.scale_color_viridis(option: :plasma)
@@ -53,11 +45,7 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
   end
 
   defp inferno do
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
+    sales_for_city_subset_plot()
     |> Plot.labs(title: "Inferno")
     |> Plot.geom_point(%{color: "city"})
     |> Plot.scale_color_viridis(option: :inferno)
@@ -65,11 +53,7 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
   end
 
   defp magma do
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
+    sales_for_city_subset_plot()
     |> Plot.labs(title: "Custom labels, fixed alpha")
     |> Plot.geom_point(%{color: "city"}, alpha: 0.4)
     |> Plot.scale_x_continuous(labels: :commas)
@@ -79,11 +63,7 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
   end
 
   defp cividis do
-    Examples.tx_housing()
-    |> Enum.filter(fn record ->
-      record["city"] in ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
-    end)
-    |> Plot.new(%{x: "sales", y: "median"})
+    sales_for_city_subset_plot()
     |> Plot.labs(title: "Cividis, size: 2")
     |> Plot.geom_point(%{color: "city"}, size: 2)
     |> Plot.scale_color_viridis(option: :cividis)
@@ -96,5 +76,14 @@ defmodule Mix.Tasks.Ggity.Visual.Scale.Color.Viridis do
       panel_grid_major: element_line(size: 0.5)
     )
     |> Plot.plot()
+  end
+
+  defp sales_for_city_subset_plot do
+    cities =
+      Explorer.Series.from_list(["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"])
+
+    Examples.tx_housing()
+    |> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
+    |> Plot.new(%{x: "sales", y: "median"})
   end
 end
