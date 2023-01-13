@@ -38,9 +38,9 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Point do
     |> Plot.new(%{x: :wt, y: :mpg})
     |> Plot.labs(title: "Basic Plot")
     |> Plot.geom_point(
-      custom_attributes: fn plot, row ->
-        [onclick: "alert('#{plot.labels.y}: #{row.mpg}')"]
-      end
+      #   custom_attributes: fn plot, row ->
+      #     [onclick: "alert('#{plot.labels.y}: #{row.mpg}')"]
+      #   end
     )
     |> Plot.xlab("Weight (lbs)")
     |> Plot.ylab("Miles Per Gallon")

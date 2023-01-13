@@ -42,11 +42,10 @@ defmodule GGity.Scale.Shape.Manual do
 
     values_map =
       levels
-      |> Stream.with_index()
-      |> Stream.map(fn {level, index} ->
+      |> Enum.with_index(fn level, index ->
         {level, elem(palette, index)}
       end)
-      |> Enum.into(%{})
+      |> Map.new()
 
     struct(scale, levels: levels, transform: fn value -> values_map[to_string(value)] end)
   end
@@ -67,9 +66,7 @@ defmodule GGity.Scale.Shape.Manual do
         class: "gg-text gg-legend-title",
         text_anchor: "left"
       ),
-      levels
-      |> Enum.with_index()
-      |> Enum.map(fn {level, index} ->
+      Enum.with_index(levels, fn level, index ->
         draw_legend_item(scale, {level, index}, key_height, fixed_aesthetics)
       end)
     ]

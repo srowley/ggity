@@ -28,14 +28,11 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
   end
 
   defp basic do
-    Examples.mpg()
-    |> Enum.filter(fn record ->
-      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
-    end)
+    manufacturer_subset()
     |> Plot.new(%{x: "manufacturer"})
     |> Plot.geom_bar(
       custom_attributes: fn plot, row ->
-        [onclick: "alert('#{plot.labels.y}: #{row.count}')"]
+        [onclick: "alert('#{plot.labels.y}: #{row["count"]}')"]
       end
     )
     |> Plot.scale_y_continuous(labels: &floor/1)
@@ -43,15 +40,12 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
   end
 
   defp stack do
-    Examples.mpg()
-    |> Enum.filter(fn record ->
-      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
-    end)
+    manufacturer_subset()
     |> Plot.new(%{x: "manufacturer"})
     |> Plot.geom_bar(
       %{fill: "class"},
       custom_attributes: fn plot, row ->
-        [onclick: "alert('#{plot.labels.y}: #{row.count}')"]
+        [onclick: "alert('#{plot.labels.y}: #{row["count"]}')"]
       end
     )
     |> Plot.scale_fill_viridis(option: :inferno)
@@ -59,10 +53,7 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
   end
 
   defp dodge do
-    Examples.mpg()
-    |> Enum.filter(fn record ->
-      record["manufacturer"] in ["chevrolet", "audi", "ford", "nissan", "subaru"]
-    end)
+    manufacturer_subset()
     |> Plot.new(%{x: "manufacturer"})
     |> Plot.geom_bar(%{fill: "class"}, position: :dodge)
     |> Plot.plot()
@@ -70,16 +61,23 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Bar do
 
   defp geom_col do
     [
-      %{salesperson: "Joe", week: "Week 1", units: 10},
-      %{salesperson: "Jane", week: "Week 1", units: 15},
-      %{salesperson: "Joe", week: "Week 2", units: 4},
-      %{salesperson: "Jane", week: "Week 2", units: 10},
-      %{salesperson: "Joe", week: "Week 3", units: 14},
-      %{salesperson: "Jane", week: "Week 3", units: 9}
+      %{"salesperson" => "Joe", "week" => "Week 1", "units" => 10},
+      %{"salesperson" => "Jane", "week" => "Week 1", "units" => 15},
+      %{"salesperson" => "Joe", "week" => "Week 2", "units" => 4},
+      %{"salesperson" => "Jane", "week" => "Week 2", "units" => 10},
+      %{"salesperson" => "Joe", "week" => "Week 3", "units" => 14},
+      %{"salesperson" => "Jane", "week" => "Week 3", "units" => 9}
     ]
-    |> Plot.new(%{x: :week, y: :units, fill: :salesperson})
+    |> Explorer.DataFrame.new()
+    |> Plot.new(%{x: "week", y: "units", fill: "salesperson"})
     |> Plot.geom_col(position: :dodge, alpha: 0.7)
     |> Plot.scale_fill_viridis(option: :cividis)
     |> Plot.plot()
+  end
+
+  defp manufacturer_subset do
+    manufacturers =
+      Explorer.Series.from_list(["chevrolet", "audi", "ford", "nissan", "subaru"])
+    Explorer.DataFrame.filter_with(Examples.mpg(), &Explorer.Series.in(&1["manufacturer"], manufacturers))
   end
 end

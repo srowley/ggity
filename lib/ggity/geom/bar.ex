@@ -34,28 +34,13 @@ defmodule GGity.Geom.Bar do
     data
     |> Enum.reject(fn row -> row[geom_bar.mapping[:y]] == 0 end)
     |> Enum.group_by(fn row -> row[geom_bar.mapping[:x]] end)
-    |> Enum.with_index()
-    |> Enum.map(fn {{_x_value, group}, group_index} ->
+    |> Enum.with_index(fn {_x_value, group}, group_index ->
       bar_group(geom_bar, group, group_index, plot)
     end)
   end
 
   defp bar_group(geom_bar, group_values, group_index, %Plot{scales: scales} = plot) do
-    scale_transforms =
-      geom_bar.mapping
-      |> Map.keys()
-      |> Enum.reduce(%{}, fn aesthetic, mapped ->
-        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
-      end)
-
-    transforms =
-      geom_bar
-      |> Map.take([:alpha, :fill])
-      |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
-        Map.put(fixed, aesthetic, fn _value -> fixed_value end)
-      end)
-      |> Map.merge(scale_transforms)
-
+    transforms = transforms(geom_bar, scales)
     count_rows = length(group_values)
 
     sort_order =
@@ -96,6 +81,22 @@ defmodule GGity.Geom.Bar do
       }
     end)
     |> elem(2)
+  end
+
+  defp transforms(geom_bar, scales) do
+    scale_transforms =
+      geom_bar.mapping
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn aesthetic, mapped ->
+        Map.put(mapped, aesthetic, Map.get(scales[aesthetic], :transform))
+      end)
+
+    geom_bar
+    |> Map.take([:alpha, :fill])
+    |> Enum.reduce(%{}, fn {aesthetic, fixed_value}, fixed ->
+      Map.put(fixed, aesthetic, fn _value -> fixed_value end)
+    end)
+    |> Map.merge(scale_transforms)
   end
 
   defp position_adjust_x(

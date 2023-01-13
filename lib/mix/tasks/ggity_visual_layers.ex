@@ -48,19 +48,21 @@ defmodule Mix.Tasks.Ggity.Visual.Layers do
   end
 
   defp two_datasets do
-    german =
-      Enum.filter(Examples.mpg(), fn record ->
-        record["manufacturer"] in ["audi", "volkswagen"]
-      end)
-
-    japanese =
-      Enum.filter(Examples.mpg(), fn record -> record["manufacturer"] in ["honda", "toyota"] end)
-
-    german
+    german_cars()
     |> Plot.new(%{x: "manufacturer", y: "cty"})
     |> Plot.labs(title: "Different Datasets")
     |> Plot.geom_point(color: "gold", shape: :triangle)
-    |> Plot.geom_point(data: japanese, color: "red", shape: :circle)
+    |> Plot.geom_point(data: japanese_cars(), color: "red", shape: :circle)
     |> Plot.plot()
+  end
+
+  defp german_cars do
+    germans = Explorer.Series.from_list(["audi", "volkswagen"])
+    Explorer.DataFrame.filter_with(Examples.mpg(), &Explorer.Series.in(&1["manufacturer"], germans))
+  end
+
+  defp japanese_cars do
+    japanese = Explorer.Series.from_list(["honda", "toyota"])
+    Explorer.DataFrame.filter_with(Examples.mpg(), &Explorer.Series.in(&1["manufacturer"], japanese))
   end
 end

@@ -94,10 +94,12 @@ defmodule GGity.Geom.Line do
   end
 
   defp transform_and_pad_x(row, x_transform, x_mapping, area_padding) do
+    x_mapping = to_string(x_mapping)
     x_transform.(row[x_mapping]) + area_padding
   end
 
   defp transform_and_pad_y(row, y_transform, y_mapping, area_padding, aspect_ratio, width) do
+    y_mapping = to_string(y_mapping)
     (width - y_transform.(row[y_mapping])) / aspect_ratio + area_padding
   end
 

@@ -30,8 +30,12 @@ defmodule Mix.Tasks.Ggity.Visual.Geom.Line do
   end
 
   defp basic do
-    Examples.economics()
-    |> Enum.filter(fn record -> Date.compare(record["date"], ~D[1970-12-31]) == :lt end)
+    data = Examples.economics()
+
+    data
+    |> Explorer.DataFrame.filter_with(fn df ->
+      Explorer.Series.less(df["date"], ~D[1970-12-31])
+    end)
     |> Plot.new(%{x: "date", y: "unemploy"})
     |> Plot.geom_line(size: 1)
     |> Plot.labs(title: "Date data")

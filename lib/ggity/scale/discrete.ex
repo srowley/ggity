@@ -7,8 +7,7 @@ defmodule GGity.Scale.Discrete do
     levels_map =
       palette
       |> Enum.zip(levels)
-      |> Enum.map(fn {aesthetic, value} -> {value, aesthetic} end)
-      |> Map.new()
+      |> Map.new(fn {aesthetic, value} -> {value, aesthetic} end)
 
     fn value -> levels_map[to_string(value)] end
   end

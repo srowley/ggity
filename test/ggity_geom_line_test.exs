@@ -1,5 +1,5 @@
 defmodule GGityGeomLineTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias GGity.Geom
 

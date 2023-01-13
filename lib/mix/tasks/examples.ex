@@ -2,85 +2,6 @@
 defmodule GGity.Examples do
   @moduledoc false
 
-  def diamonds do
-    file_name = Path.join([:code.priv_dir(:ggity), "diamonds.csv"])
-
-    headers =
-      File.stream!(file_name)
-      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
-      |> Enum.take(1)
-      |> hd()
-      |> Enum.drop(1)
-
-    File.stream!(file_name)
-    |> NimbleCSV.RFC4180.parse_stream()
-    |> Stream.map(fn line -> Enum.drop(line, 1) end)
-    |> Stream.map(fn [carat, clarity, color, cut, depth, price, table, x, y, z] ->
-      [
-        elem(Float.parse(carat), 0),
-        clarity,
-        color,
-        cut,
-        elem(Float.parse(depth), 0),
-        elem(Float.parse(price), 0),
-        elem(Float.parse(table), 0),
-        elem(Float.parse(x), 0),
-        elem(Float.parse(y), 0),
-        elem(Float.parse(z), 0)
-      ]
-    end)
-    |> Stream.map(fn line -> Enum.zip(headers, line) end)
-    |> Enum.map(fn list -> Enum.into(list, %{}) end)
-  end
-
-  def economics do
-    file_name = Path.join([:code.priv_dir(:ggity), "economics.csv"])
-
-    headers =
-      File.stream!(file_name)
-      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
-      |> Enum.take(1)
-      |> hd()
-
-    File.stream!(file_name)
-    |> NimbleCSV.RFC4180.parse_stream()
-    |> Stream.map(fn [date, pce, pop, psavert, unempmed, unemploy] ->
-      [
-        Date.from_iso8601!(date),
-        elem(Float.parse(pce), 0),
-        elem(Integer.parse(pop), 0),
-        elem(Float.parse(psavert), 0),
-        elem(Float.parse(unempmed), 0),
-        elem(Integer.parse(unemploy), 0)
-      ]
-    end)
-    |> Stream.map(fn line -> Enum.zip(headers, line) end)
-    |> Enum.map(fn list -> Enum.into(list, %{}) end)
-  end
-
-  def economics_long do
-    file_name = Path.join([:code.priv_dir(:ggity), "economics_long.csv"])
-
-    ["" | headers] =
-      File.stream!(file_name)
-      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
-      |> Enum.take(1)
-      |> hd()
-
-    File.stream!(file_name)
-    |> NimbleCSV.RFC4180.parse_stream()
-    |> Stream.map(fn [_row_num, date, variable, value, value01] ->
-      [
-        Date.from_iso8601!(date),
-        variable,
-        elem(Float.parse(value), 0),
-        elem(Float.parse(value01), 0)
-      ]
-    end)
-    |> Stream.map(fn line -> Enum.zip(headers, line) end)
-    |> Enum.map(fn list -> Enum.into(list, %{}) end)
-  end
-
   def mtcars do
     headers = [:model, :mpg, :cyl, :disp, :hp, :drat, :wt, :qsec, :vs, :am, :gear, :carb]
 
@@ -119,85 +40,19 @@ defmodule GGity.Examples do
       ["Volvo 142E", 21.4, 4, 121, 109, 4.11, 2.78, 18.6, 1, 1, 4, 2]
     ]
 
-    Enum.map(data, fn row ->
-      [headers, row]
-      |> Enum.zip()
-      |> Enum.into(%{})
-    end)
+    data
+    |> Enum.map(fn row -> Enum.zip([headers, row]) end)
+    |> Explorer.DataFrame.new()
   end
 
-  def mpg do
-    file_name = Path.join([:code.priv_dir(:ggity), "mpg.csv"])
+  def diamonds, do: load_csv("diamonds.csv")
+  def economics, do: load_csv("economics.csv", parse_dates: true)
+  def economics_long, do: load_csv("economics_long.csv", parse_dates: true)
+  def mpg, do: load_csv("mpg.csv")
+  def tx_housing, do: load_csv("tx_housing.csv")
 
-    headers =
-      file_name
-      |> File.stream!()
-      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
-      |> Enum.take(1)
-      |> hd()
-
-    File.stream!(file_name)
-    |> NimbleCSV.RFC4180.parse_stream()
-    |> Stream.map(fn [manufacturer, model, displ, year, cyl, trans, drv, cty, hwy, fl, class] ->
-      [
-        manufacturer,
-        model,
-        elem(Float.parse(displ), 0),
-        elem(Integer.parse(year), 0),
-        elem(Integer.parse(cyl), 0),
-        trans,
-        drv,
-        elem(Integer.parse(cty), 0),
-        elem(Integer.parse(hwy), 0),
-        fl,
-        class
-      ]
-    end)
-    |> Stream.map(fn line -> Enum.zip(headers, line) end)
-    |> Enum.map(fn list -> Enum.into(list, %{}) end)
-  end
-
-  def tx_housing do
-    file_name = Path.join([:code.priv_dir(:ggity), "tx_housing.csv"])
-
-    headers =
-      File.stream!(file_name)
-      |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
-      |> Enum.take(1)
-      |> hd()
-
-    get_maybe_integer = fn value ->
-      if Integer.parse(value) == :error do
-        value
-      else
-        elem(Integer.parse(value), 0)
-      end
-    end
-
-    get_maybe_float = fn value ->
-      if Float.parse(value) == :error do
-        value
-      else
-        elem(Float.parse(value), 0)
-      end
-    end
-
-    File.stream!(file_name)
-    |> NimbleCSV.RFC4180.parse_stream()
-    |> Stream.map(fn [city, year, month, sales, volume, median, listings, inventory, date] ->
-      [
-        city,
-        elem(Integer.parse(year), 0),
-        elem(Integer.parse(month), 0),
-        get_maybe_integer.(sales),
-        get_maybe_integer.(volume),
-        get_maybe_integer.(median),
-        get_maybe_integer.(listings),
-        get_maybe_float.(inventory),
-        get_maybe_float.(date)
-      ]
-    end)
-    |> Stream.map(fn line -> Enum.zip(headers, line) end)
-    |> Enum.map(fn list -> Enum.into(list, %{}) end)
+  defp load_csv(file_name, options \\ []) do
+    file_path = Path.join([:code.priv_dir(:ggity), file_name])
+    Explorer.DataFrame.from_csv!(file_path, options)
   end
 end

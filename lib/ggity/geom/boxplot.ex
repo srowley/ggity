@@ -38,8 +38,7 @@ defmodule GGity.Geom.Boxplot do
   defp boxplots(%Geom.Boxplot{} = geom_boxplot, data, plot) do
     data
     |> Enum.group_by(fn row -> row[geom_boxplot.mapping[:x]] end)
-    |> Enum.with_index()
-    |> Enum.map(fn {{_x_value, group_values}, group_index} ->
+    |> Enum.with_index(fn {_x_value, group_values}, group_index ->
       boxplot_group(geom_boxplot, group_values, group_index, plot)
     end)
   end
@@ -76,7 +75,7 @@ defmodule GGity.Geom.Boxplot do
                   position_adjust_y(row, plot),
               width: box_width,
               height:
-                (transforms.y.(row[:upper]) - transforms.y.(row[:lower])) / plot.aspect_ratio,
+                (transforms.y.(row["upper"]) - transforms.y.(row["lower"])) / plot.aspect_ratio,
               fill: transforms.fill.(row[mapping[:fill]]),
               fill_opacity: transforms.alpha.(row[mapping[:alpha]]),
               stroke: transforms.color.(row[mapping[:color]]),
@@ -86,7 +85,7 @@ defmodule GGity.Geom.Boxplot do
           draw_median(box_left, box_right, row, transforms, mapping, plot),
           draw_top_whisker(box_middle, row, transforms, mapping, plot),
           draw_bottom_whisker(box_middle, row, transforms, mapping, plot),
-          for outlier <- row.outliers do
+          for outlier <- :erlang.binary_to_term(row["outliers"]) do
             draw_outlier(outlier, box_middle, row, geom_boxplot, transforms, plot)
           end
           | rects
@@ -114,8 +113,8 @@ defmodule GGity.Geom.Boxplot do
     Draw.line(
       x1: box_left,
       x2: box_right,
-      y1: transform_and_adjust_y(row, :middle, plot),
-      y2: transform_and_adjust_y(row, :middle, plot),
+      y1: transform_and_adjust_y(row, "middle", plot),
+      y2: transform_and_adjust_y(row, "middle", plot),
       stroke: transforms.color.(row[mapping[:color]])
     )
   end
@@ -124,8 +123,8 @@ defmodule GGity.Geom.Boxplot do
     Draw.line(
       x1: box_middle,
       x2: box_middle,
-      y1: transform_and_adjust_y(row, :upper, plot),
-      y2: transform_and_adjust_y(row, :ymax, plot),
+      y1: transform_and_adjust_y(row, "upper", plot),
+      y2: transform_and_adjust_y(row, "ymax", plot),
       stroke: transforms.color.(row[mapping[:color]]),
       stroke_width: 0.5
     )
@@ -135,8 +134,8 @@ defmodule GGity.Geom.Boxplot do
     Draw.line(
       x1: box_middle,
       x2: box_middle,
-      y1: transform_and_adjust_y(row, :lower, plot),
-      y2: transform_and_adjust_y(row, :ymin, plot),
+      y1: transform_and_adjust_y(row, "lower", plot),
+      y2: transform_and_adjust_y(row, "ymin", plot),
       stroke: transforms.color.(row[mapping[:color]]),
       stroke_width: 0.5
     )
@@ -183,7 +182,7 @@ defmodule GGity.Geom.Boxplot do
   end
 
   defp position_adjust_y(row, plot) do
-    plot.scales.y.transform.(row[:upper]) / plot.aspect_ratio
+    plot.scales.y.transform.(row["upper"]) / plot.aspect_ratio
   end
 
   defp position_adjust_bar_width(%Geom.Boxplot{position: :dodge} = geom_box, count_rows) do

@@ -27,6 +27,9 @@ defimpl GGity.Layer,
   end
 
   def draw(%geom_type{} = geom, data, plot) do
+    data = Explorer.DataFrame.to_rows(data)
+    geom = %{geom | data: Explorer.DataFrame.to_rows(geom.data)}
+
     apply(geom_type, :draw, [geom, data, plot])
   end
 

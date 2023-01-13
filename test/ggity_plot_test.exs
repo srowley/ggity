@@ -1,16 +1,17 @@
 defmodule GGityPlotTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   import SweetXml
   alias GGity.{Element, Examples, Geom, Labels, Plot, Scale}
 
   setup do
-    data = [
-      %{a: 1, b: 2, c: 3, date: ~D[2001-01-01], datetime: ~N[2001-01-01 00:00:00]},
-      %{a: 2, b: 4, c: 6, date: ~D[2001-01-03], datetime: ~N[2001-01-03 00:00:00]}
-    ]
+    data =
+      Explorer.DataFrame.new([
+        %{a: 1, b: 2, c: 3, date: ~D[2001-01-01], datetime: ~N[2001-01-01 00:00:00]},
+        %{a: 2, b: 4, c: 6, date: ~D[2001-01-03], datetime: ~N[2001-01-03 00:00:00]}
+      ])
 
-    zero_domain_data = [%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3}]
+    zero_domain_data = Explorer.DataFrame.new([%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3}])
     mapping = %{x: :a, y: :b}
 
     plot =
@@ -26,6 +27,17 @@ defmodule GGityPlotTest do
       plot = Plot.new(data, mapping)
       assert plot.mapping == mapping
       assert plot.data == data
+      assert %Geom.Blank{} = hd(plot.layers)
+    end
+
+    test "creates a plot from a list of maps", %{mapping: mapping} do
+      data = [
+        %{a: 1, b: 2, c: 3, date: ~D[2001-01-01], datetime: ~N[2001-01-01 00:00:00]},
+        %{a: 2, b: 4, c: 6, date: ~D[2001-01-03], datetime: ~N[2001-01-03 00:00:00]}
+      ]
+
+      plot = Plot.new(data, mapping)
+      assert is_struct(plot.data, Explorer.DataFrame)
       assert %Geom.Blank{} = hd(plot.layers)
     end
 
@@ -99,9 +111,40 @@ defmodule GGityPlotTest do
       assert plot.limits.y == {0, nil}
     end
 
-    test "adds a bar geom with specified mapping", %{plot: plot} do
-      plot = Plot.geom_bar(plot, %{fill: :c})
-      assert %Geom.Bar{mapping: %{fill: :c}} = hd(plot.layers)
+    test "adds a bar geom with specified mapping" do
+      data =
+        Explorer.DataFrame.new([
+          %{
+            "a" => 10,
+            "b" => 2,
+            "c" => "good",
+            "date" => ~D[2001-01-01],
+            "datetime" => ~N[2001-01-01 00:00:00]
+          },
+          %{
+            "a" => 23,
+            "b" => 3,
+            "c" => "bad",
+            "date" => ~D[2001-01-03],
+            "datetime" => ~N[2001-01-03 00:00:00]
+          },
+          %{
+            "a" => 3,
+            "b" => 4,
+            "c" => "bad",
+            "date" => ~D[2001-01-03],
+            "datetime" => ~N[2001-01-03 00:00:00]
+          }
+        ])
+
+      mapping = %{x: "a", y: "b"}
+
+      plot =
+        data
+        |> Plot.new(mapping)
+        |> Plot.geom_bar(%{fill: "c"})
+
+      assert %Geom.Bar{mapping: %{fill: "c"}} = hd(plot.layers)
     end
 
     test "adds a bar geom with specified stat and dodge options", %{plot: plot} do
@@ -670,6 +713,7 @@ defmodule GGityPlotTest do
   end
 
   describe "to_file/2" do
+    @tag :this
     test "returns an IO List with xml declaration at the top", %{plot: plot} do
       assert hd(Plot.to_xml(plot, 666)) == ~s|<?xml version="1.0" encoding="utf-8"?>|
     end
