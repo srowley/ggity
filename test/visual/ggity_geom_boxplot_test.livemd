@@ -1,0 +1,63 @@
+# Boxplot Geom Examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Kino, Plot}
+```
+
+## Basic boxplot example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"})
+|> Plot.geom_boxplot(
+  custom_attributes: fn _plot, row -> [onclick: "alert('Median: #{row["middle"]}')"] end
+)
+|> Plot.scale_y_continuous(labels: &floor/1)
+|> Kino.render()
+```
+
+## Fixed color example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"})
+|> Plot.geom_boxplot(color: "blue")
+|> Plot.scale_y_continuous(labels: &floor/1)
+|> Kino.render()
+```
+
+## Outlier color example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"})
+|> Plot.geom_boxplot(outlier_color: "red")
+|> Plot.scale_y_continuous(labels: &floor/1)
+|> Kino.render()
+```
+
+## Outlier shape example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"})
+|> Plot.geom_boxplot(outlier_size: 6, outlier_color: "red", outlier_shape: 1)
+|> Plot.scale_y_continuous(labels: &floor/1)
+|> Kino.render()
+```
+
+## Mapped color aesthetic example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"})
+|> Plot.geom_boxplot(%{color: "drv"})
+|> Plot.scale_y_continuous(labels: &floor/1)
+|> Kino.render()
+```

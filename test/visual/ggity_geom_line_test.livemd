@@ -1,0 +1,105 @@
+# Line Geom Examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Kino, Plot}
+```
+
+## Basic example
+
+```elixir
+data = Examples.economics()
+
+data
+|> Explorer.DataFrame.filter_with(fn df ->
+  Explorer.Series.less(df["date"], ~D[1970-12-31])
+end)
+|> Plot.new(%{x: "date", y: "unemploy"})
+|> Plot.geom_line(size: 1)
+|> Plot.labs(title: "Date data")
+|> Plot.scale_x_date(date_labels: "%Y")
+|> Kino.render()
+```
+
+## Fixed line type example
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.labs(title: "Fixed linetype: :twodash", x: "Weight")
+|> Plot.geom_line(linetype: :twodash, size: 1)
+|> Kino.render()
+```
+
+## Fixed aesthetics example
+
+```elixir
+Examples.economics()
+|> Plot.new(%{x: "date", y: "unemploy"})
+|> Plot.geom_line(color: "red", size: 1)
+|> Plot.labs(title: "Fixed color: \"red\"")
+|> Plot.scale_x_date(breaks: 6, date_labels: "%m/%d/%Y")
+|> Plot.theme(axis_text_x: GGity.Element.Text.element_text(angle: 30))
+|> Kino.render()
+```
+
+## Date/time example
+
+```elixir
+[
+  %{date_time: ~N[2001-01-01 00:00:00], price: 0.13},
+  %{date_time: ~N[2001-01-01 03:00:00], price: 0.5},
+  %{date_time: ~N[2001-01-01 06:00:00], price: 0.9},
+  %{date_time: ~N[2001-01-01 09:00:00], price: 0.63},
+  %{date_time: ~N[2001-01-01 12:00:00], price: 0.45},
+  %{date_time: ~N[2001-01-01 15:00:00], price: 0.25},
+  %{date_time: ~N[2001-01-01 18:00:00], price: 0.12},
+  %{date_time: ~N[2001-01-01 21:00:00], price: 0.13},
+  %{date_time: ~N[2001-01-02 00:00:00], price: 0.24},
+  %{date_time: ~N[2001-01-02 03:00:00], price: 0.74},
+  %{date_time: ~N[2001-01-02 06:00:00], price: 0.77},
+  %{date_time: ~N[2001-01-02 09:00:00], price: 0.63},
+  %{date_time: ~N[2001-01-02 12:00:00], price: 0.23},
+  %{date_time: ~N[2001-01-02 15:00:00], price: 0.53},
+  %{date_time: ~N[2001-01-02 21:00:00], price: 0.26},
+  %{date_time: ~N[2001-01-03 00:00:00], price: 0.27},
+  %{date_time: ~N[2001-01-03 03:00:00], price: 0.03},
+  %{date_time: ~N[2001-01-03 06:00:00], price: 0.79},
+  %{date_time: ~N[2001-01-03 09:00:00], price: 0.78},
+  %{date_time: ~N[2001-01-03 12:00:00], price: 0.08},
+  %{date_time: ~N[2001-01-03 18:00:00], price: 0.3},
+  %{date_time: ~N[2001-01-04 00:00:00], price: 0.7}
+]
+|> Plot.new(%{x: :date_time, y: :price})
+|> Plot.geom_line(size: 1)
+|> Plot.scale_x_datetime(date_labels: "%b %d H%H")
+|> Plot.labs(title: "DateTime data")
+|> Kino.render()
+```
+
+## Group by color example
+
+```elixir
+Examples.economics_long()
+|> Plot.new(%{x: "date", y: "value01"})
+|> Plot.labs(title: "Mapped to color")
+|> Plot.geom_line(%{color: "variable"}, linetype: :dotted)
+|> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
+|> Kino.render()
+```
+
+## Group by linetype example
+
+```elixir
+Examples.economics_long()
+|> Plot.new(%{x: "date", y: "value01"})
+|> Plot.labs(title: "Mapped to linetype, custom glyph")
+|> Plot.geom_line(%{linetype: "variable"}, key_glyph: :path, color: "purple")
+|> Plot.scale_x_date(breaks: 6, date_labels: "%Y")
+|> Kino.render()
+```

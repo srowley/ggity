@@ -41,8 +41,7 @@ defmodule GGity.MixProject do
       checks: [
         "compile",
         "credo",
-        "format",
-        "ggity.visual"
+        "format"
       ],
       build_docs: [
         "ggity.docs",

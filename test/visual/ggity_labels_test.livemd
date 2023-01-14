@@ -1,0 +1,58 @@
+# Annotate Examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Kino, Plot}
+
+mt_cars_plot = Plot.new(Examples.mtcars(), %{x: :wt, y: :mpg})
+:ok
+```
+
+## Text annotation
+
+```elixir
+mt_cars_plot
+|> Plot.annotate(:text,
+  x: 4,
+  y: 25,
+  label: "Some text",
+  color: "red"
+)
+|> Plot.geom_point()
+|> Kino.render()
+```
+
+## Box annotation
+
+```elixir
+mt_cars_plot
+|> Plot.annotate(:rect,
+  xmin: 3,
+  xmax: 4.2,
+  ymin: 12,
+  ymax: 21,
+  alpha: 0.2
+)
+|> Plot.geom_point()
+|> Kino.render()
+```
+
+## Line annotation
+
+```elixir
+mt_cars_plot
+|> Plot.annotate(:segment,
+  x: 2.5,
+  xend: 4,
+  y: 15,
+  yend: 26.25,
+  color: "blue"
+)
+|> Plot.geom_point()
+|> Kino.render()
+```

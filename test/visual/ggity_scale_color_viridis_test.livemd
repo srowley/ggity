@@ -1,0 +1,80 @@
+# Color Viridis Scale Examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Labels, Kino, Plot}
+
+sales_for_city_subset_plot = fn ->
+  cities = Explorer.Series.from_list(["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"])
+
+  Examples.tx_housing()
+  |> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
+  |> Plot.new(%{x: "sales", y: "median"})
+end
+```
+
+## Default
+
+```elixir
+sales_for_city_subset_plot.()
+|> Plot.labs(title: "Default - Viridis")
+|> Plot.geom_point(%{color: "city"})
+|> Kino.render()
+```
+
+## Plasma
+
+```elixir
+sales_for_city_subset_plot.()
+|> Plot.labs(title: "Plasma")
+|> Plot.geom_point(%{color: "city"})
+|> Plot.scale_color_viridis(option: :plasma)
+|> Kino.render()
+```
+
+## Inferno
+
+```elixir
+sales_for_city_subset_plot.()
+|> Plot.labs(title: "Inferno")
+|> Plot.geom_point(%{color: "city"})
+|> Plot.scale_color_viridis(option: :inferno)
+|> Kino.render()
+```
+
+## Magma
+
+```elixir
+sales_for_city_subset_plot.()
+|> Plot.labs(title: "Custom labels, fixed alpha")
+|> Plot.geom_point(%{color: "city"}, alpha: 0.4)
+|> Plot.scale_x_continuous(labels: :commas)
+|> Plot.scale_y_continuous(labels: fn value -> "$#{Labels.commas(round(value / 1000))}K" end)
+|> Plot.scale_color_viridis(option: :magma, labels: fn value -> "#{value}!!!" end)
+|> Kino.render()
+```
+
+## Cividis
+
+```elixir
+import GGity.Element.{Line, Rect}
+
+sales_for_city_subset_plot.()
+|> Plot.labs(title: "Cividis, size: 2")
+|> Plot.geom_point(%{color: "city"}, size: 2)
+|> Plot.scale_color_viridis(option: :cividis)
+|> Plot.theme(
+  axis_ticks: nil,
+  legend_key: element_rect(fill: "white", size: 1),
+  panel_background: element_rect(fill: "white"),
+  panel_border: element_line(color: "lightgray", size: 0.5),
+  panel_grid: element_line(color: "lightgray"),
+  panel_grid_major: element_line(size: 0.5)
+)
+|> Kino.render()
+```

@@ -1,0 +1,57 @@
+# Layer Examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Kino, Plot}
+
+german_cars = fn ->
+  germans = Series.from_list(["audi", "volkswagen"])
+  DataFrame.filter_with(Examples.mpg(), &Series.in(&1["manufacturer"], germans))
+end
+
+japanese_cars = fn ->
+  japanese = Series.from_list(["honda", "toyota"])
+  DataFrame.filter_with(Examples.mpg(), &Series.in(&1["manufacturer"], japanese))
+end
+```
+
+## Fixed line and mapped points
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.labs(title: "Different Geoms")
+|> Plot.geom_line(linetype: :twodash, size: 1)
+|> Plot.geom_point(%{color: :cyl})
+|> Plot.labs(color: "Cylinders")
+|> Kino.render()
+```
+
+## Two mappings
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "manufacturer", y: "cty"})
+|> Plot.labs(title: "Different Mappings")
+|> Plot.geom_point(color: "blue")
+|> Plot.geom_point(%{y: "hwy"}, color: "green")
+|> Plot.theme(axis_text_x: GGity.Element.Text.element_text(angle: 90))
+|> Plot.labs(y: "City(blue) vs. Highway(green)")
+|> Kino.render()
+```
+
+## Two datasets
+
+```elixir
+german_cars.()
+|> Plot.new(%{x: "manufacturer", y: "cty"})
+|> Plot.labs(title: "Different Datasets")
+|> Plot.geom_point(color: "gold", shape: :triangle)
+|> Plot.geom_point(data: japanese_cars.(), color: "red", shape: :circle)
+|> Kino.render()
+```

@@ -1,0 +1,118 @@
+# Geom point examples
+
+```elixir
+Mix.install([
+  {:ggity, path: ".", override: true},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias Explorer.{DataFrame, Series}
+alias GGity.{Examples, Kino, Plot}
+```
+
+## Basic
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.labs(title: "Basic Plot")
+|> Plot.geom_point()
+|> Plot.xlab("Weight (lbs)")
+|> Plot.ylab("Miles Per Gallon")
+|> Kino.render()
+```
+
+## Mapped color aesthetic
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.labs(title: "Discrete Color", x: "Weight (lbs)", y: "Miles Per Gallon")
+|> Plot.geom_point(%{color: :cyl})
+|> Plot.labs(color: "Cylinders")
+|> Kino.render()
+```
+
+## Mapped shape aesthetic
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(%{shape: :cyl}, size: 5, color: "blue")
+|> Plot.labs(title: "Shape Aesthetic", shape: "Cylinders")
+|> Kino.render()
+```
+
+## Manual shape aesthetic
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(%{shape: :cyl}, size: 7)
+|> Plot.scale_shape_manual(values: ["🐌", "🤷", "💪"])
+|> Plot.labs(title: "Emoji Support", shape: "Cylinders")
+|> Kino.render()
+```
+
+## Discrete alpha example
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(%{alpha: :cyl}, color: "blue")
+|> Plot.labs(title: "Discrete Alpha")
+|> Plot.scale_alpha_discrete()
+|> Kino.render()
+```
+
+## Mapped size example
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :qsec, y: :mpg})
+|> Plot.geom_point(%{size: :cyl}, alpha: 0.3, color: "blue", shape: :circle)
+|> Plot.geom_point(%{size: :wt}, color: "red", shape: :triangle)
+|> Plot.labs(title: "Size")
+|> Plot.scale_size(range: {1, 10})
+|> Kino.render()
+```
+
+## Fixed fill color example
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(color: "red", size: 6)
+|> Plot.labs(title: "Fixed, color: \"red\"")
+|> Kino.render()
+```
+
+## Fixed alpha example
+
+```elixir
+Examples.diamonds()
+|> Plot.new(%{x: "carat", y: "price"})
+|> Plot.geom_point(alpha: 1 / 20)
+|> Plot.labs(title: "Fixed, alpha: 1 / 20")
+|> Kino.render()
+```
+
+## Two legends example
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg})
+|> Plot.geom_point(%{color: :cyl, shape: :vs})
+|> Plot.labs(title: "Two Category Scales")
+|> Kino.render()
+```
+
+## Discrete scale example
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "manufacturer", y: "cty"})
+|> Plot.geom_point()
+|> Plot.labs(title: "Discrete X")
+|> Kino.render()
+```

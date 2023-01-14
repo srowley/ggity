@@ -2,8 +2,10 @@
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## v0.5.0 - 2023-01-14
 ### Changed
+- `Plot.new/3` now accepts Explorer dataframes, and Explorer is used in most cases
+for transformations leading up to rendering the plot.
 - Replaced `scale_size_discrete` and `scale_size_continuous` with `scale_size`.
 This conforms to the ggplot2 API; previously they were split because
 GGity could not draw a legend for a continuous size scale (`scale_size` is
