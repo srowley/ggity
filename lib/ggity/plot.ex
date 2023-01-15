@@ -603,6 +603,8 @@ defmodule GGity.Plot do
 
   Supported geoms and required aesthetics include:
 
+  * `:rect` - `:xmin`, `:xmax`, `:ymin`, `:ymax`
+  * `:segment` - `:x`, `:xend`, `:y`, `:yend
   * `:text` - `:x`, `:y`, `:label`
   """
   @spec annotate(Plot.t(), atom(), keyword()) :: Plot.t()
