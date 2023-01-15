@@ -97,6 +97,7 @@ and a `phx-value-y` data attribute with the value of the y variable for the shap
 could return a new plot with a dataset filtered to show only points within some specified range of the points clicked.
 
 ## Goals
+
 I am interested in data visualization and after learning a lot from the work being done on [Contex](https://github.com/mindok/contex), I decided that starting to write a basic clone of ggplot2 would help me learn more about the grammar of graphics, ggplot2 and how to develop a reasonably nontrivial library for Elixir.
 
 GGity's core design principle is that, if GGity supports a ggplot2 feature, it should be obvious to someone familiar with ggplot2 how to
@@ -112,6 +113,7 @@ I code as a hobby, so this is not something that is getting used frequently or i
 [Contex](https://github.com/mindok/contex) - Contex is simpler and well-suited for dashboards, for example. GGity is intended to be more oriented towards statistical graphics. Those who just want to draw a simple bar chart and are not familiar with grammar of graphics concepts will likely find Contex easier to use. 
 
 ### Visual tests
+
 GGity has decent unit test coverage, but given the domain, a picture is worth a thousand words. The test suite includes 
 several livebooks that represent the primary testing tools. 
 
@@ -136,7 +138,7 @@ Add `:ggity` to your list of dependencies in mix.exs:
 ```elixir
 def deps do
   [
-    {:ggity, "~> 0.4.0"}
+    {:ggity, "~> 0.5.0"}
   ]
 end
 ```
