@@ -112,7 +112,7 @@ I code as a hobby, so this is not something that is getting used frequently or i
 
 [Contex](https://github.com/mindok/contex) - Contex is simpler and well-suited for dashboards, for example. GGity is intended to be more oriented towards statistical graphics. Those who just want to draw a simple bar chart and are not familiar with grammar of graphics concepts will likely find Contex easier to use. 
 
-### Visual tests
+## Visual tests
 
 GGity has decent unit test coverage, but given the domain, a picture is worth a thousand words. The test suite includes 
 several livebooks that represent the primary testing tools. 
