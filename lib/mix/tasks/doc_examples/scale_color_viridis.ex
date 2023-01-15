@@ -8,35 +8,37 @@ defmodule GGity.Docs.Scale.Color.Viridis do
       """
       # The viridis scale is the default color scale
       Examples.diamonds()
-      |> Enum.take_random(1000)
+      |> Explorer.DataFrame.sample(1000, seed: 100)
       |> Plot.new(%{x: "carat", y: "price"})
       |> Plot.geom_point(%{color: "clarity"})
       """,
       """
       # Use the :option option to select a palette
+      cities = Explorer.Series.from_list([
+        "Houston",
+        "Fort Worth",
+        "San Antonio",
+        "Dallas",
+        "Austin"
+      ])
+
       Examples.tx_housing()
-      |> Enum.filter(fn row -> row["city"] in
-          [
-            "Houston",
-            "Fort Worth",
-            "San Antonio",
-            "Dallas",
-            "Austin"
-          ] end)
+      |> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
       |> Plot.new(%{x: "sales", y: "median"})
       |> Plot.geom_point(%{color: "city"})
       |> Plot.scale_color_viridis(option: :plasma)
       """,
       """
+      cities = Explorer.Series.from_list([
+        "Houston",
+        "Fort Worth",
+        "San Antonio",
+        "Dallas",
+        "Austin"
+      ])
+
       Examples.tx_housing()
-      |> Enum.filter(fn row -> row["city"] in
-          [
-            "Houston",
-            "Fort Worth",
-            "San Antonio",
-            "Dallas",
-            "Austin"
-          ] end)
+      |> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
       |> Plot.new(%{x: "sales", y: "median"})
       |> Plot.geom_point(%{color: "city"})
       |> Plot.scale_color_viridis(option: :inferno)

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-2434" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
-<style type="text/css"><![CDATA[#gg-2434 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-2434 .gg-axis-text-x {} #gg-2434 .gg-axis-ticks {stroke: #000000;} #gg-2434 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-2434 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-2434 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-2434 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-2434 .gg-panel-background {fill: #EEEEEE;} #gg-2434 .gg-panel-border {} #gg-2434 .gg-panel-grid {stroke: #FFFFFF;} #gg-2434 .gg-panel-grid-major {stroke-width: 1;} #gg-2434 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-2434 .gg-plot-background {fill: #FFFFFF;} #gg-2434 .gg-plot-title {font-size: 10px;} #gg-2434 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" id="gg-6594" viewBox="0 0 280 208.33333333333334" height="550" width="825.0">
+<style type="text/css"><![CDATA[#gg-6594 .gg-axis-text {fill: #808080;font-size: 6px;} #gg-6594 .gg-axis-text-x {} #gg-6594 .gg-axis-ticks {stroke: #000000;} #gg-6594 .gg-axis-title {fill: #000000;font-size: 8px;} #gg-6594 .gg-legend-key {stroke: #EEEEEE;fill: #EEEEEE;stroke-width: 0.5;} #gg-6594 .gg-legend-text {fill: #000000;font-size: 6px;} #gg-6594 .gg-legend-title {fill: #000000;font-size: 8px;} #gg-6594 .gg-panel-background {fill: #EEEEEE;} #gg-6594 .gg-panel-border {} #gg-6594 .gg-panel-grid {stroke: #FFFFFF;} #gg-6594 .gg-panel-grid-major {stroke-width: 1;} #gg-6594 .gg-panel-grid-minor {stroke-width: 0.5;} #gg-6594 .gg-plot-background {fill: #FFFFFF;} #gg-6594 .gg-plot-title {font-size: 10px;} #gg-6594 .gg-text {font-family: Helvetica, Arial, sans-serif;} ]]></style><rect class="gg-plot-background" width="100%" height="100%"></rect><g transform="translate(50, 10)">
 <rect x="0" y="0" height="153.33333333333334" width="220" class="gg-panel-background gg-panel-border"></rect>
 <g opacity="1" transform="translate(0, 153.33333333333334)">
 <line x2="220" class="gg-axis-line gg-axis-line-x"></line>
@@ -207,6 +207,6 @@
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
 </svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" x="78.2" y="78.55555555555556" height="6.0" width="6.0">
 <circle cx="5" cy="5" r="4" fill-opacity="1" fill="black"></circle>
-</svg><line x1="70.0" x2="130.0" y1="110.0" y2="65.55555555555554" stroke-opacity="1" stroke="blue" fill="0"></line>
+</svg><line x1="70.0" x2="130.0" y1="110.0" y2="65.55555555555554" stroke-opacity="1" stroke="blue" stroke-width="1"></line>
 </g>
 </svg>

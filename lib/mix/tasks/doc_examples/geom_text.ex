@@ -48,9 +48,9 @@ defmodule GGity.Docs.Geom.Text do
         %{x: "1", y: 3, grp: "b"},
         %{x: "2", y: 2, grp: "a"},
         %{x: "2", y: 1, grp: "b"},]
-      |> Plot.new(%{x: :x, y: :y, group: :grp})
-      |> Plot.geom_col(%{fill: :grp}, position: :dodge)
-      |> Plot.geom_text(%{label: :y}, position: :dodge, size: 6)
+      |> Plot.new(%{x: "x", y: "y", group: "grp"})
+      |> Plot.geom_col(%{fill: "grp"}, position: :dodge)
+      |> Plot.geom_text(%{label: "y"}, position: :dodge, size: 6)
       """,
       """
       # Nudge the label up a bit
@@ -58,9 +58,9 @@ defmodule GGity.Docs.Geom.Text do
         %{x: "1", y: 3, grp: "b"},
         %{x: "2", y: 2, grp: "a"},
         %{x: "2", y: 1, grp: "b"},]
-      |> Plot.new(%{x: :x, y: :y, group: :grp})
-      |> Plot.geom_col(%{fill: :grp}, position: :dodge)
-      |> Plot.geom_text(%{label: :y}, position: :dodge, size: 6, nudge_y: 4)
+      |> Plot.new(%{x: "x", y: "y", group: "grp"})
+      |> Plot.geom_col(%{fill: "grp"}, position: :dodge)
+      |> Plot.geom_text(%{label: "y"}, position: :dodge, size: 6, nudge_y: 4)
       """,
       """
       # Position label in the middle of stacked bars
@@ -68,9 +68,9 @@ defmodule GGity.Docs.Geom.Text do
         %{x: "1", y: 3, grp: "b"},
         %{x: "2", y: 2, grp: "a"},
         %{x: "2", y: 1, grp: "b"},]
-      |> Plot.new(%{x: :x, y: :y, group: :grp})
-      |> Plot.geom_col(%{fill: :grp})
-      |> Plot.geom_text(%{label: :y}, position: :stack, position_vjust: 0.5, size: 6)
+      |> Plot.new(%{x: "x", y: "y", group: "grp"})
+      |> Plot.geom_col(%{fill: "grp"})
+      |> Plot.geom_text(%{label: "y"}, position: :stack, position_vjust: 0.5, size: 6)
       """
     ]
   end
