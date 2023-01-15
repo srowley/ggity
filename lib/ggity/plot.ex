@@ -797,8 +797,7 @@ defmodule GGity.Plot do
   * `:outlier_size` - size of outlier points.
     Defaults to `2`.
 
-  GGity uses method "Type 7" to calculate percentiles, in conformance with
-  [the default used by R](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html).
+  GGity uses "nearest" method from `polars` to calculate percentiles.
   """
   @spec geom_boxplot(Plot.t(), map() | keyword(), keyword()) :: Plot.t()
   def geom_boxplot(plot, mapping \\ [], options \\ [])
