@@ -1,0 +1,403 @@
+# GGity Examples
+
+```elixir
+Mix.install([
+  {:ggity, "~> 0.5.0"},
+  {:kino_ggity, github: "srowley/kino_ggity"}
+])
+
+alias GGity.{Examples, Kino, Plot}
+
+livebook_margins = %{left: 70, top: 25, right: 70, bottom: 25}
+```
+
+## geom_boxplot()
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"}, margins: livebook_margins)
+|> Plot.geom_boxplot()
+|> Kino.render()
+```
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"}, margins: livebook_margins)
+|> Plot.geom_boxplot(fill: "pink", color: "blue")
+|> Kino.render()
+```
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"}, margins: livebook_margins)
+|> Plot.geom_boxplot(outlier_color: "red", outlier_shape: 1)
+|> Kino.render()
+```
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy"}, margins: livebook_margins)
+|> Plot.geom_boxplot(outlier_shape: :na)
+|> Plot.geom_point(size: 3)
+|> Kino.render()
+```
+
+```elixir
+Examples.mpg()
+|> Plot.new(%{x: "class", y: "hwy", color: "drv"}, margins: livebook_margins)
+|> Plot.geom_boxplot()
+|> Kino.render()
+```
+
+## geom_point()
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Kino.render()
+```
+
+Add aesthetic mappings to color:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{color: :cyl})
+|> Kino.render()
+```
+
+Add an aesthetic mapping to shape:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{shape: :cyl})
+|> Kino.render()
+```
+
+Add aesthetic mapping to size (for circles, a bubble chart)
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{size: :qsec})
+|> Kino.render()
+```
+
+Set aesthetics to fixed value
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(color: "red", size: 5)
+|> Kino.render()
+```
+
+## geom_line()
+
+```elixir
+Examples.economics()
+|> Plot.new(%{x: "date", y: "unemploy"}, margins: livebook_margins)
+|> Plot.geom_line()
+|> Kino.render()
+```
+
+```elixir
+Examples.economics_long()
+|> Plot.new(%{x: "date", y: "value01", color: "variable"}, margins: livebook_margins)
+|> Plot.geom_line()
+|> Kino.render()
+```
+
+```elixir
+Examples.economics()
+|> Plot.new(%{x: "date", y: "unemploy"}, margins: livebook_margins)
+|> Plot.geom_line(color: "red")
+|> Kino.render()
+```
+
+## geom_text()
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_text()
+|> Kino.render()
+```
+
+Set the font size for the label:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_text(size: 5)
+|> Kino.render()
+```
+
+Shift positioning:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_point(size: 2)
+|> Plot.geom_text(size: 5, hjust: :left, nudge_x: 3)
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_point(size: 2)
+|> Plot.geom_text(size: 5, vjust: :top, nudge_y: 3)
+|> Kino.render()
+```
+
+Map other aesthetics:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_text(%{color: :cyl}, size: 5)
+|> Kino.render()
+```
+
+Add a text annotation:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg, label: :model}, margins: livebook_margins)
+|> Plot.geom_text(size: 5)
+|> Plot.annotate(:text, label: "plot mpg vs. wt", x: 1.5, y: 15, size: 8, color: "red")
+|> Kino.render()
+```
+
+## scale_color_viridis()
+
+The viridis scale is the default color scale.
+
+```elixir
+Examples.diamonds()
+|> Enum.take_random(1000)
+|> Plot.new(%{x: "carat", y: "price"}, margins: livebook_margins)
+|> Plot.geom_point(%{color: "clarity"})
+|> Kino.render()
+```
+
+Use the :option option to select a palette:
+
+```elixir
+Examples.tx_housing()
+|> Enum.filter(fn row ->
+  row["city"] in [
+    "Houston",
+    "Fort Worth",
+    "San Antonio",
+    "Dallas",
+    "Austin"
+  ]
+end)
+|> Plot.new(%{x: "sales", y: "median"}, margins: livebook_margins)
+|> Plot.geom_point(%{color: "city"})
+|> Plot.scale_color_viridis(option: :plasma)
+|> Kino.render()
+```
+
+```elixir
+Examples.tx_housing()
+|> Enum.filter(fn row ->
+  row["city"] in [
+    "Houston",
+    "Fort Worth",
+    "San Antonio",
+    "Dallas",
+    "Austin"
+  ]
+end)
+|> Plot.new(%{x: "sales", y: "median"}, margins: livebook_margins)
+|> Plot.geom_point(%{color: "city"})
+|> Plot.scale_color_viridis(option: :inferno)
+|> Kino.render()
+```
+
+## theme()
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Kino.render()
+```
+
+```elixir
+import GGity.Element.{Line, Rect, Text}
+
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(plot_title: element_text(size: 6))
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(plot_background: element_rect(fill: "green"))
+|> Kino.render()
+```
+
+Panel formatting:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(panel_background: element_rect(fill: "white", color: "grey"))
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(panel_grid_major: element_line(color: "black"))
+|> Kino.render()
+```
+
+Axis formatting:
+
+```elixir
+# Axis formatting
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(axis_line: element_line(size: 6, color: "grey"))
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(axis_text: element_text(color: "blue"))
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(axis_ticks: element_line(size: 4))
+|> Kino.render()
+```
+
+Turn the x-axis ticks inward:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.labs(title: "Fuel economy declines as weight decreases")
+|> Plot.theme(axis_ticks_length_x: -2)
+|> Kino.render()
+```
+
+GGity does not support legend position, but legend key boxes and text can be styled as you would expect.
+
+Default styling:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{color: :cyl, shape: :vs})
+|> Plot.labs(
+  x: "Weight (1000 lbs)",
+  y: "Fuel economy (mpg)",
+  color: "Cylinders",
+  shape: "Transmission"
+)
+|> Kino.render()
+```
+
+Style the legend keys:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{color: :cyl, shape: :vs})
+|> Plot.labs(
+  x: "Weight (1000 lbs)",
+  y: "Fuel economy (mpg)",
+  color: "Cylinders",
+  shape: "Transmission"
+)
+|> Plot.theme(legend_key: element_rect(fill: "white", color: "black"))
+|> Kino.render()
+```
+
+Style the legend text:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{color: :cyl, shape: :vs})
+|> Plot.labs(
+  x: "Weight (1000 lbs)",
+  y: "Fuel economy (mpg)",
+  color: "Cylinders",
+  shape: "Transmission"
+)
+|> Plot.theme(legend_text: element_text(size: 5, color: "red"))
+|> Kino.render()
+```
+
+Style the legend title:
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point(%{color: :cyl, shape: :vs})
+|> Plot.labs(
+  x: "Weight (1000 lbs)",
+  y: "Fuel economy (mpg)",
+  color: "Cylinders",
+  shape: "Transmission"
+)
+|> Plot.theme(legend_title: element_text(face: "bold"))
+|> Kino.render()
+```
+
+## annotate()
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.annotate(:text, x: 4, y: 25, label: "Some text")
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.annotate(:rect, xmin: 3, xmax: 4.2, ymin: 12, ymax: 21, alpha: 0.2)
+|> Kino.render()
+```
+
+```elixir
+Examples.mtcars()
+|> Plot.new(%{x: :wt, y: :mpg}, margins: livebook_margins)
+|> Plot.geom_point()
+|> Plot.annotate(:segment, x: 2.5, xend: 4, y: 15, yend: 25, color: "blue")
+|> Kino.render()
+```
