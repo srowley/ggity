@@ -1,12 +1,12 @@
 # Roadmap
 
-## v0.5
-* Faceting
+## v0.6
 * Histograms
-* Continuous color scale (including legends)
-* `coord_flip` (support horizontal bar charts)
+* Faceting
 
 ## Later 
+* Continuous color scale (including legends)
+* `coord_flip` (support horizontal bar charts)
 * Implement a method for rendering new points and updating scales only (LiveView optimization)
 * Draw legend on any side of the plot (top/left/bottom/right)
 * Implement x_lim/y_lim
