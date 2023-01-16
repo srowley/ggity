@@ -91,6 +91,7 @@ Examples.mtcars()
 
 ```elixir
 Examples.diamonds()
+|> Explorer.DataFrame.sample(10000, seed: 100)
 |> Plot.new(%{x: "carat", y: "price"})
 |> Plot.geom_point(alpha: 1 / 20)
 |> Plot.labs(title: "Fixed, alpha: 1 / 20")
