@@ -68,9 +68,9 @@ defmodule GGity.Geom.Point do
   end
 
   defp fetch_scale_transforms(mapping, scales) do
-    for aes <- Map.keys(mapping), reduce: %{} do
-      scale_transforms -> Map.put(scale_transforms, aes, scales[aes].transform)
-    end
+    mapping
+    |> Map.keys()
+    |> Map.new(fn aesthetic -> {aesthetic, scales[aesthetic].transform} end)
   end
 
   defp fetch_fixed_aesthetics(geom_point) do
