@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:ggity, "~> 0.5.0"},
+  {:ggity, "0.5.0"},
   {:kino_ggity, github: "srowley/kino_ggity"}
 ])
 
@@ -178,7 +178,7 @@ The viridis scale is the default color scale.
 
 ```elixir
 Examples.diamonds()
-|> Enum.take_random(1000)
+|> Explorer.DataFrame.sample(1000, seed: 100)
 |> Plot.new(%{x: "carat", y: "price"}, margins: livebook_margins)
 |> Plot.geom_point(%{color: "clarity"})
 |> Kino.render()
@@ -187,16 +187,10 @@ Examples.diamonds()
 Use the :option option to select a palette:
 
 ```elixir
+cities = ["Houston", "Fort Worth", "San Antonio", "Dallas", "Austin"]
+
 Examples.tx_housing()
-|> Enum.filter(fn row ->
-  row["city"] in [
-    "Houston",
-    "Fort Worth",
-    "San Antonio",
-    "Dallas",
-    "Austin"
-  ]
-end)
+|> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
 |> Plot.new(%{x: "sales", y: "median"}, margins: livebook_margins)
 |> Plot.geom_point(%{color: "city"})
 |> Plot.scale_color_viridis(option: :plasma)
@@ -205,15 +199,7 @@ end)
 
 ```elixir
 Examples.tx_housing()
-|> Enum.filter(fn row ->
-  row["city"] in [
-    "Houston",
-    "Fort Worth",
-    "San Antonio",
-    "Dallas",
-    "Austin"
-  ]
-end)
+|> Explorer.DataFrame.filter_with(&Explorer.Series.in(&1["city"], cities))
 |> Plot.new(%{x: "sales", y: "median"}, margins: livebook_margins)
 |> Plot.geom_point(%{color: "city"})
 |> Plot.scale_color_viridis(option: :inferno)
