@@ -260,20 +260,15 @@ defmodule GGity.Plot do
 
   defp train_scales(aesthetics, %Plot{} = plot) do
     trained_scales =
-      Enum.reduce(aesthetics, %{}, fn aesthetic, scales_map ->
-        Map.put(scales_map, aesthetic, train_scale(aesthetic, plot))
+      Map.new(aesthetics, fn
+        :y_max ->
+          {:y, train_scale(:y_max, plot)}
+
+        aesthetic ->
+          {aesthetic, train_scale(aesthetic, plot)}
       end)
 
-    scales =
-      if :y_max in aesthetics do
-        trained_scales
-        |> Map.put(:y, trained_scales.y_max)
-        |> Map.delete(:y_max)
-      else
-        trained_scales
-      end
-
-    struct(plot, scales: scales)
+    struct(plot, scales: trained_scales)
   end
 
   defp train_scale(:y_max, plot) do
