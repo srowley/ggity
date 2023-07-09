@@ -27,10 +27,10 @@ defmodule GGity.MixProject do
 
   defp deps do
     [
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:sweet_xml, "~> 0.7", only: :test},
-      {:explorer, "~> 0.5.0"},
+      {:explorer, "~> 0.6.0"},
       {:nimble_csv, "~> 1.2"},
       {:nimble_strftime, "~> 0.1"}
     ]
