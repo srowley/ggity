@@ -49,7 +49,9 @@ defmodule GGityThemeTest do
 
     test "ignores invalid data for rect elements", %{plot: plot} do
       plot =
-        Plot.theme(plot, panel_background: element_rect(fill: "'22'<script>hackety-hack</script>"))
+        Plot.theme(plot,
+          panel_background: element_rect(fill: "'22'<script>hackety-hack</script>")
+        )
 
       stylesheet =
         plot.theme

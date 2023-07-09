@@ -120,7 +120,7 @@ defmodule GGity.Labels do
   end
 
   defp comma_separate([first, second, third | tail], acc) do
-    acc = [',', third, second, first | acc]
+    acc = [~c",", third, second, first | acc]
     comma_separate(tail, acc)
   end
 
