@@ -454,7 +454,7 @@ defmodule GGityPlotTest do
 
     test "sets the shape scale on the plot geom", %{plot: plot} do
       plot = Plot.scale_shape(plot)
-      assert %Scale.Shape{} = plot.scales.shape()
+      assert %Scale.Shape{} = plot.scales.shape
     end
 
     test "labels legend breaks using custom function", %{plot: plot} do
@@ -481,7 +481,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_size()
 
-      assert %Scale.Size{} = plot.scales.size()
+      assert %Scale.Size{} = plot.scales.size
     end
   end
 
@@ -498,7 +498,7 @@ defmodule GGityPlotTest do
         |> Plot.geom_point()
         |> Plot.scale_size_identity()
 
-      assert %Scale.Identity{} = plot.scales.size()
+      assert %Scale.Identity{} = plot.scales.size
     end
   end
 
