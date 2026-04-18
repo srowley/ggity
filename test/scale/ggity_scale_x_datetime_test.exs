@@ -34,7 +34,9 @@ defmodule GGityScaleXDateTimeTest do
 
     test "raises with non-date time values" do
       min_max = {1, 4}
-      assert_raise FunctionClauseError, fn -> X.DateTime.train(X.DateTime.new(), min_max) end
+      assert_raise FunctionClauseError, fn ->
+        apply(X.DateTime, :train, [X.DateTime.new(), min_max])
+      end
     end
   end
 end
