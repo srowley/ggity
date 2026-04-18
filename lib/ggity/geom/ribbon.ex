@@ -15,7 +15,8 @@ defmodule GGity.Geom.Ribbon do
             fill: "black",
             alpha: 1,
             color: nil,
-            size: nil
+            size: nil,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Ribbon.t()
   def new(mapping, options \\ []) do

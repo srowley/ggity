@@ -25,7 +25,8 @@ defmodule GGity.Geom.Line do
             alpha: 1,
             color: "black",
             linetype: "",
-            size: 1
+            size: 1,
+            custom_attributes: nil
 
   @spec new(mapping(), keyword()) :: Geom.Line.t()
   def new(mapping, options \\ []) do
